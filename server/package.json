@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "./app.js",
+  "type": "module",
+  "dependencies": {
+    "connect-redis": "^8.0.1",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "pg": "^8.13.1",
+    "redis": "^4.7.0",
+    "sequelize": "^6.37.5"
+  },
+  "scripts": {
+    "start": "nodemon app.js"
+  }
+}
