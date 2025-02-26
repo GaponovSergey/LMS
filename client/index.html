@@ -2,6 +2,25 @@
 <html>
     <head>
         <title>LMS</title>
+        <script>
+            const sendPost = ()=> {
+                console.log("sending")
+                fetch("http:\\127.0.0.1:3000/users/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8"
+                    },
+                    body: JSON.stringify({
+                        name: "John",
+                        surname: "Doe",
+                        fathername: "Daddy",
+                        mail: "john@example.com",
+                        password: "12345",
+                        rememberMe: true
+                    })
+                })
+            }
+        </script>
     </head>
     <body>
         <header>
@@ -10,6 +29,7 @@
         </header>
         <main>
             Здесь будет описание приложения, его назначение.
+            <button onclick="sendPost()">отправить</button>
         </main>
         <footer>
             

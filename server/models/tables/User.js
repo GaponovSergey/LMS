@@ -13,7 +13,8 @@ export default function defineUser(sequelize, DataTypes, Sequelize) {
             type: DataTypes.STRING
         },
         mail: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            unique: true
         },
         password: {
             type: DataTypes.STRING

@@ -2,6 +2,7 @@ import redis from "redis";
 
 export const client = redis.createClient();
 
+//client.subscribe('__keyevent@0__:expired');
 client.on('error', err => console.log('Redis Client Error', err));
 
 client.connect()
