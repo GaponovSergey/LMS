@@ -14,7 +14,10 @@ export default function defineUser(sequelize, DataTypes, Sequelize) {
         },
         mail: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            validate: {
+                isEmail: true
+            }
         },
         password: {
             type: DataTypes.STRING

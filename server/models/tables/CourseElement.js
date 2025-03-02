@@ -3,14 +3,14 @@
 export default function defineCourseElement(sequelize, DataTypes) {
 
     return sequelize.define("CourseElements", {
-        courseId: {
+        CourseId: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'Courses',
                 key: 'id'
             }
         },
-        elementId: {
+        ElementId: {
             type: DataTypes.INTEGER,
             references: {
                 model: 'Elements',

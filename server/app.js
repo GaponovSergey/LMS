@@ -7,6 +7,7 @@ import { coursesRouter } from "./routers/courses.js";
 import { elementsRouter } from "./routers/elements.js";
 import setSession from "./models/session.js";
 import authentificate from "./controllers/auth.js";
+import checkAccess from "./controllers/checkAccess.js";
 
 const app = express();
 
@@ -21,6 +22,9 @@ app.use(cookieParser());
 app.use(setSession(), authentificate);
 
 app.use("/users", usersRouter);
+
+app.use(checkAccess);
+
 app.use("/courses", coursesRouter);
 app.use("/elements", elementsRouter);
 app.get("/", (req, res)=> {

@@ -1,6 +1,6 @@
 
 
-export default function defineElement(sequelize, DataTypes) {
+export default function defineElement(sequelize, DataTypes, Sequelize) {
 
     return sequelize.define("Element", {
         title: {
@@ -12,11 +12,13 @@ export default function defineElement(sequelize, DataTypes) {
         description: {
             type: DataTypes.STRING
         },
-        adress: {
-            type: DataTypes.STRING
+        uuid: {
+            type: DataTypes.UUID,
+            defaultValue: Sequelize.UUIDV4,
+            unique: true
         },
         authorId: {
             type: DataTypes.INTEGER
         },
-    })
+    }) 
 }
