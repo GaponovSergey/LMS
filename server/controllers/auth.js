@@ -17,6 +17,6 @@ export default function authentificate(req, res, next) {
             name: err.name,
             message: err.message
         });
-    } 
-    
+    }   
+     
 }

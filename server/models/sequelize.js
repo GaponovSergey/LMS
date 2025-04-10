@@ -2,11 +2,9 @@ import {Sequelize, DataTypes} from "sequelize";
 
 import defineUser from "./tables/User.js";
 import defineCourse from "./tables/Course.js";
-import defineElement from "./tables/Element.js";
-import defineTextElement from "./tables/TextElement.js";
-
-import defineCourseElement from "./tables/CourseElement.js";
-import defineLecturerCourse from "./tables/LecturerCourse.js";
+import defineLecture from "./tables/Lecture.js";
+import definePart from "./tables/Part.js";
+import defineFile from "./tables/File.js";
 
 
 export const sequelize = new Sequelize("LMS", "administrator", "12345", { dialect: "postgres"});
@@ -20,36 +18,23 @@ try {
 
 export const User = await defineUser(sequelize, DataTypes, Sequelize);
 export const Course = await defineCourse(sequelize, DataTypes);
-export const Element = await defineElement(sequelize, DataTypes, Sequelize);
-export const TextElement = await defineTextElement(sequelize, DataTypes);
+export const Lecture = await defineLecture(sequelize, DataTypes, Sequelize);
+export const Part = await definePart(sequelize, DataTypes);
+export const File = await defineFile(sequelize, DataTypes, Sequelize);
 
-export const CourseElement = await defineCourseElement(sequelize, DataTypes);
-export const LecturerCourse = await defineLecturerCourse(sequelize, DataTypes);
-
-User.belongsToMany(Course, {through: LecturerCourse});
 User.hasMany(Course, {
   foreignKey: "authorId"
 });
-User.hasMany(Element, {
+User.hasMany(Lecture, {
   foreignKey: "authorId"
 });
-Course.belongsToMany(User, {through: LecturerCourse});
-Element.belongsToMany(Course, {through: CourseElement});
-Course.belongsToMany(Element, {through: CourseElement});
+Course.belongsTo(User);
 
-Element.TextElement = Element.hasOne(TextElement, {
-  sourceKey: "uuid",
-  foreignKey: "uuid"
-});
-Element.CourseElement = Element.hasMany(CourseElement, {
-  sourceKey: "id",
-  foreignKey: "ElementId"
-})
+Lecture.hasMany(Course);
+Course.belongsTo(Lecture, {foreignKey: "courseId"});
 
-TextElement.Element = TextElement.belongsTo(Element, {
-  targetKey: "uuid",
-  foreignKey: "uuid"
-})
+Course.hasMany(Part);
+Part.belongsTo(Course);
 
 sequelize.sync({force: true});
 
