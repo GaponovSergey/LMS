@@ -1,6 +1,6 @@
 
-import { Course } from "../models/sequelize.js";
-import { ValidationError, DataError } from "../models/Errors.js";
+import { Course } from "../../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
 
 
 export default async function setCourse(req, res) {

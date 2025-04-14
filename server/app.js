@@ -8,7 +8,7 @@ import { lecturesRouter } from "./controllers/lectures/lectures.js";
 import { fileRouter } from "./controllers/store/store.js";
 import setSession from "./models/session.js";
 import authentificate from "./controllers/auth.js";
-import checkAccess from "./controllers/checkAccess.js";
+import checkUserAccess from "./controllers/users/checkUserAccess.js";
 
 const app = express();
 

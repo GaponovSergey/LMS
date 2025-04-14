@@ -8,7 +8,7 @@ export default function uploadFile(req, res) {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
 
-    const filePath = join(__dirname, "/../../", "/store/", req.headers["x-file-id"]);
+    const filePath = join(__dirname, "/../../", "/store/", req.params.user, req.headers["x-file-id"]);
     const fileStream = fs.createWriteStream(filePath, {flags: 'a'} );
     req.on("data", ()=> {
 

@@ -1,5 +1,5 @@
 
-import { ValidationError, DataError } from "../models/Errors.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
 import fs from "fs";
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -19,18 +19,17 @@ export default async function deleteFiles(req, res, next) {
             !req.body.files.toDelete[0].storeId) {
             throw new ValidationError("Файлы не указаны");
         }
-        const files = [...req.body.files.toDelete];
-        files.map( file => join(__dirname, "/../", "/store/", req.body.userId, "/", file.storeId));
-        console.log(files);
 
-        for(let file of files) {
-            await fs.unlink(file, err => {
+        for(let file of req.body.files.toDelete) {
+            const path = join(__dirname, "/../../", "/store/", req.body.userId, file.storeId);
+            if (!fs.existsSync(path) ) throw new DataError("файла не существует");
+            await fs.unlink(path, err => {
                     if (err) throw new DataError("ошибка при удалении: " + err);
                 }
-            );
+            ); 
         }
 
-        next();
+        next(); 
 
     } catch(err) {
         res.status(400);

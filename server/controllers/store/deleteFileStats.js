@@ -1,5 +1,5 @@
-import { File } from "../models/sequelize.js";
-import { ValidationError, DataError } from "../models/Errors.js";
+import { File } from "../../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
 import { Op } from "sequelize";
 
 

@@ -1,4 +1,4 @@
-import { Course } from "../models/sequelize.js";
+import { Course } from "../../models/sequelize.js";
 
 
 export default async function getCourses(req, res) {

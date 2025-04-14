@@ -1,6 +1,6 @@
 
-import { DataError } from "../models/Errors.js";
-import { Lecture } from "../models/sequelize.js";
+import { DataError } from "../../models/Errors.js";
+import { Lecture } from "../../models/sequelize.js";
 
 
 export default async function getLecture(req, res) {

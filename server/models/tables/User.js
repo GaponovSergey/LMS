@@ -22,6 +22,10 @@ export default function defineUser(sequelize, DataTypes, Sequelize) {
         password: {
             type: DataTypes.STRING
         },
+        access: {
+            type: DataTypes.INTEGER,
+            defaultValue: 1
+        },
         lastComing: {
             type: DataTypes.DATE,
             defaultValue: Sequelize.NOW

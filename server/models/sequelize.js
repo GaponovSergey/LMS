@@ -28,10 +28,12 @@ User.hasMany(Course, {
 User.hasMany(Lecture, {
   foreignKey: "authorId"
 });
-Course.belongsTo(User);
+Course.belongsTo(User, {
+  foreignKey: "authorId"
+});
 
-Lecture.hasMany(Course);
-Course.belongsTo(Lecture, {foreignKey: "courseId"});
+Course.hasMany(Lecture, {foreignKey: "courseId"});
+Lecture.belongsTo(Course, {foreignKey: "courseId"});
 
 Course.hasMany(Part);
 Part.belongsTo(Course);

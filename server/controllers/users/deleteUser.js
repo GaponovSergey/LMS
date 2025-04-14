@@ -1,6 +1,6 @@
 
-import { ValidationError, DataError } from "../models/Errors.js";
-import { User } from "../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
+import { User } from "../../models/sequelize.js";
 
 
 export default async function deleteUser(req, res) {

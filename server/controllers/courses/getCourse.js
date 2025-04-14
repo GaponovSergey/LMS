@@ -1,6 +1,6 @@
 
-import { ValidationError, DataError } from "../models/Errors.js";
-import { Course, Lecture } from "../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
+import { Course, Lecture } from "../../models/sequelize.js";
 
 
 export default async function getCourse(req, res) {
@@ -12,15 +12,11 @@ export default async function getCourse(req, res) {
 
         const course = await Course.findOne({
             where: {
-                id: +req.params.courseId
+                id: req.params.courseId
             },            
             include: {
-                model: Lecture,
-                through: {
-                    attributes: []
-                }
-            }
-        });
+                model: Lecture
+        }});
 
         if (!course) {
             throw new DataError("Курс не найден")

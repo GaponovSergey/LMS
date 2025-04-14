@@ -1,6 +1,6 @@
 
-import { ValidationError, DataError } from "../models/Errors.js";
-import { Course } from "../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
+import { Course } from "../../models/sequelize.js";
 
 
 export default async function deleteCourse(req, res) {
@@ -14,7 +14,7 @@ export default async function deleteCourse(req, res) {
             {
                 where: {
                     id: req.body.courseId,
-                    authorId: req.session.user.id
+                    authorId: req.body.authorId
                 }
             }
         );

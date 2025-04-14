@@ -1,13 +1,12 @@
-import { Lecture } from "../models/sequelize.js";
-import { ValidationError, DataError } from "../models/Errors.js";
-import fs from "fs";
+import { Lecture } from "../../models/sequelize.js";
+import { ValidationError, DataError } from "../../models/Errors.js";
 
 
 export default async function setLecture(req, res) {
         
     try {
 
-        if ( !req.body.CourseId || !req.body.type) {
+        if ( !req.body.courseId) {
             throw new ValidationError("Поля не заполнены")
         }
  

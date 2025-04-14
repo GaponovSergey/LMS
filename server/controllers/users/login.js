@@ -1,6 +1,6 @@
-import { User } from "../models/sequelize.js";
-import { DataError, ValidationError, SessionError } from "../models/Errors.js";
-import { generateJWT } from "../models/jwt.js";
+import { User } from "../../models/sequelize.js";
+import { DataError, ValidationError, SessionError } from "../../models/Errors.js";
+import { generateJWT } from "../../models/jwt.js";
 import argon2 from "argon2";
 
 
