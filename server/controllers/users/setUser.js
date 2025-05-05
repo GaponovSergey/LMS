@@ -9,6 +9,8 @@ export default async function setUser(req, res) {
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
+
+    console.log(req.body);
     
     try{
 
@@ -18,13 +20,17 @@ export default async function setUser(req, res) {
         if (!req.body || !req.body.mail || !req.body.password) {
             throw new ValidationError("Поля не заполнены");
         }
-        
-        req.body.password = await argon2.hash(req.body.password);
 
-        const user = await User.create({...req.body,
+        const {mail, name, surname, fathername} = req.body;
+        
+        const password = await argon2.hash(req.body.password);
+
+        const user = await User.create({mail, password, name, surname, fathername,
             access: 2
         })
-            .catch(()=> { throw new DataError("такой пользователь уже существует") }); 
+            .catch(()=> { 
+                throw new DataError("такой пользователь уже существует");
+             }); 
 
         
     
@@ -38,6 +44,7 @@ export default async function setUser(req, res) {
         res.sendStatus(201);
 
     } catch(err) {
+        console.log(err);
         res.status(400);
         res.json({
             name: err.name,

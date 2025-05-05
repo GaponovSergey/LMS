@@ -1,8 +1,8 @@
-import { Lecture } from "../../models/sequelize.js";
+import { Task } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
 
 
-export default async function setLecture(req, res) {
+export default async function setTask(req, res) {
         
     try {
 
@@ -11,12 +11,12 @@ export default async function setLecture(req, res) {
         }
  
         const {title = null, description = null, courseId, content = null} = req.body;
-        const lecture = {
+        const task = {
             title, description, content, courseId,
             authorId: req.session.user.id
         };
 
-        await Lecture.create(lecture).catch( err => {
+        await Task.create(task).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
   

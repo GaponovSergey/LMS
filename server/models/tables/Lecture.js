@@ -12,9 +12,6 @@ export default function defineLecture(sequelize, DataTypes) {
         description: {
             type: DataTypes.STRING
         },
-        partId: {
-            type: DataTypes.INTEGER
-        },
         authorId: {
             type: DataTypes.INTEGER
         },

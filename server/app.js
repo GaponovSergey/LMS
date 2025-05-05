@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { usersRouter } from "./controllers/users/users.js";
 import { coursesRouter } from "./controllers/courses/courses.js";
 import { lecturesRouter } from "./controllers/lectures/lectures.js";
+import { tasksRouter } from "./controllers/tasks/tasks.js";
 import { fileRouter } from "./controllers/store/store.js";
 import setSession from "./models/session.js";
 import authentificate from "./controllers/auth.js";
@@ -13,7 +14,7 @@ import checkUserAccess from "./controllers/users/checkUserAccess.js";
 const app = express();
 
 const host = '127.0.0.1';
-const port = 3000;
+const port = 3001;
 
 
 app.set('trust proxy', 1);
@@ -28,6 +29,7 @@ app.use("/users", usersRouter);
 
 app.use("/courses", coursesRouter);
 app.use("/lectures", lecturesRouter);
+app.use("/tasks", tasksRouter);
 
 app.use("/store",  fileRouter)
 

@@ -17,7 +17,7 @@ export default async function login(req, res) {
         
         const {rememberMe, ...signs} = req.body;
         const user = await User.findOne({
-            attributes: ['id', 'mail', 'lastComing','password', 'createdAt'],
+            attributes: ['id', 'mail', 'lastComing','password', 'access', 'name', 'createdAt'],
             where: { mail: signs.mail }
         });
         if (!user) {
@@ -32,6 +32,8 @@ export default async function login(req, res) {
         const body = {
             id: user.id,
             mail: user.mail,
+            level: user.access,
+            name: user.name,
             lastComing: user.lastComing,
             createdAt: user.createdAt
         }

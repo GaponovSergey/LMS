@@ -3,8 +3,9 @@ import {Sequelize, DataTypes} from "sequelize";
 import defineUser from "./tables/User.js";
 import defineCourse from "./tables/Course.js";
 import defineLecture from "./tables/Lecture.js";
-import definePart from "./tables/Part.js";
 import defineFile from "./tables/File.js";
+import defineTask from "./tables/Task.js";
+import defineLectureFile from "./tables/LectureFile.js";
 
 
 export const sequelize = new Sequelize("LMS", "administrator", "12345", { dialect: "postgres"});
@@ -18,9 +19,10 @@ try {
 
 export const User = await defineUser(sequelize, DataTypes, Sequelize);
 export const Course = await defineCourse(sequelize, DataTypes);
-export const Lecture = await defineLecture(sequelize, DataTypes, Sequelize);
-export const Part = await definePart(sequelize, DataTypes);
+export const Lecture = await defineLecture(sequelize, DataTypes);
+export const LectureFile = await defineLectureFile(sequelize, DataTypes);
 export const File = await defineFile(sequelize, DataTypes, Sequelize);
+export const Task = await defineTask(sequelize, DataTypes);
 
 User.hasMany(Course, {
   foreignKey: "authorId"
@@ -35,8 +37,6 @@ Course.belongsTo(User, {
 Course.hasMany(Lecture, {foreignKey: "courseId"});
 Lecture.belongsTo(Course, {foreignKey: "courseId"});
 
-Course.hasMany(Part);
-Part.belongsTo(Course);
 
 sequelize.sync({force: true});
 
