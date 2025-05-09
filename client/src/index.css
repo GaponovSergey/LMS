@@ -5,10 +5,15 @@ body {
 
 header {
   position: fixed;
+  top: 0;
   background-color: #65A42F;
   width: 100vw;
   display: flex;
   justify-content: flex-end;
+}
+
+main {
+  margin-top: 50px;
 }
 
 .header_button {

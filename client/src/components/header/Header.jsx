@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../store/userSlice.js";
 import PopupWindow from "./PopupWindow.jsx";
-import {openLogin, openLogup} from "../../store/popupSlice.js"
+import { open } from "../../store/popupSlice.js"
 
 
 
@@ -15,8 +15,8 @@ export default function Header() {
             { level ?  
                 <button onClick={()=> dispatch(logout())}>выйти</button>  :
                 <>
-                    <button onClick={()=> dispatch(openLogin())} className="header_button-white">Вход</button>
-                    <button onClick={() => dispatch(openLogup())} className="header_button">Регистрация</button>
+                    <button onClick={()=> dispatch(open({form: "login"}))} className="header_button-white">Вход</button>
+                    <button onClick={() => dispatch(open({form: "logup"}))} className="header_button">Регистрация</button>
                 </>
             }
             <PopupWindow />

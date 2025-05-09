@@ -20,7 +20,7 @@ export default function Logup() {
                 <span>Имя: </span><Input field={"name"} state={name} action={setValue} />
                 <span>Отчество: </span><Input field={"fathername"} state={fathername} action={setValue} />
             </div>
-            <button onClick={ ()=> dispatch(fetchLogup({state}))}>Отправить</button>
+            <button onClick={ ()=> dispatch(fetchLogup(state))}>Отправить</button>
         </div>
     )
 }

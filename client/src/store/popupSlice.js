@@ -9,13 +9,9 @@ const slice = createSlice({
     name: "popup",
     initialState, 
     reducers: {
-        openLogin(state) {
+        open(state, action) {
             state.isOpened = true;
-            state.form = "login";
-        },
-        openLogup(state) {
-            state.isOpened = true;
-            state.form = "logup";
+            state.form = action.payload.form;
         },
         close(state) {
             state.isOpened = false;
@@ -24,6 +20,6 @@ const slice = createSlice({
     }
 });
 
-export const { openLogin, openLogup, close } = slice.actions;
+export const { open, close } = slice.actions;
 
 export default slice.reducer;

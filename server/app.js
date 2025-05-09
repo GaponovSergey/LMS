@@ -18,7 +18,7 @@ const port = 3001;
 
 
 app.set('trust proxy', 1);
-app.use(cors({maxAge: 86400}));
+app.use(cors({maxAge: 86400, origin: 'http://localhost:3000', credentials: true, exposedHeaders: ['Set-Cookie', 'Date', 'ETag'] }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(setSession(), authentificate);
