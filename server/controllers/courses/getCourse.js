@@ -22,6 +22,7 @@ export default async function getCourse(req, res) {
             throw new DataError("Курс не найден")
         }
 
+        console.log(course);
         res.json(course);
 
     } catch(err) {

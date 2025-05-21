@@ -1,6 +1,7 @@
 import {Sequelize, DataTypes} from "sequelize";
 
 import defineUser from "./tables/User.js";
+import defineProfile from "./tables/Profile.js";
 import defineCourse from "./tables/Course.js";
 import defineLecture from "./tables/Lecture.js";
 import defineFile from "./tables/File.js";
@@ -22,6 +23,7 @@ export const Course = await defineCourse(sequelize, DataTypes);
 export const Lecture = await defineLecture(sequelize, DataTypes);
 export const LectureFile = await defineLectureFile(sequelize, DataTypes);
 export const File = await defineFile(sequelize, DataTypes, Sequelize);
+export const Profile = await defineProfile(sequelize, DataTypes, Sequelize);
 export const Task = await defineTask(sequelize, DataTypes);
 
 User.hasMany(Course, {
@@ -30,6 +32,8 @@ User.hasMany(Course, {
 User.hasMany(Lecture, {
   foreignKey: "authorId"
 });
+User.hasOne(Profile, {foreignKey: "id"});
+Profile.belongsTo(User, {foreignKey: "id"})
 Course.belongsTo(User, {
   foreignKey: "authorId"
 });

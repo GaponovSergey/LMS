@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
 
+
 export const fetchCourseForm = createAsyncThunk("createCourse/fetchCourseForm",
     
     async (data, { dispatch })=> {
@@ -12,7 +13,11 @@ export const fetchCourseForm = createAsyncThunk("createCourse/fetchCourseForm",
             method: "POST",
             body: JSON.stringify(data)
         });
-    if ( response.ok ) dispatch(close());
+    if ( response.ok ) {
+        dispatch(close());
+        const { id } = await response.json();
+        document.location.href = "/courses/" + id;
+    }
 })
 
 const slice = createSlice({

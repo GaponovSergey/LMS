@@ -10,7 +10,7 @@ export default function CreateCourse() {
 
     
     const { title, description } = useSelector( state => state.createCourse );
-    const authorId = useSelector( state => state.user.id);
+    const authorId = useSelector( state => state.user.account.id);
     const dispatch = useDispatch();
 
     return(

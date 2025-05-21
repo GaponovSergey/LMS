@@ -2,10 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
 
 const initialState = {
-    level: 0,
-    mail: null,
-    id: null,
-    name: "Гость"
+    account: {
+        level: 0,
+        mail: null,
+        id: null
+    },
+    profile: {}
 };
 
 export const fetchUser = createAsyncThunk("user/fetchUser",
@@ -22,14 +24,24 @@ export const fetchUser = createAsyncThunk("user/fetchUser",
             password
         })
     });
-    console.log(await response.headers.get('Set-Cookie'));
     dispatch(login(await response.json()));
     
     dispatch(close());
 })
 
+export const fetchLogout = createAsyncThunk("user/fetchLogout",
+    async (_, { dispatch })=> {
+        await fetch("http://127.0.0.1:3001/users/logout", {
+            credentials: "include",
+            method: "GET"
+        });
+        dispatch(logout());
+})
+
 const getState = () => {
-    return {...JSON.parse(localStorage.getItem('user'))} || {...initialState};
+    const user = localStorage.getItem('user');
+    if (user) return JSON.parse(localStorage.getItem('user'));
+    return initialState;
 }
 
 const slice = createSlice({
@@ -37,17 +49,12 @@ const slice = createSlice({
     initialState: getState(), 
     reducers: {
         login(state, action) {
-            state.level = action.payload.level;
-            state.mail = action.payload.mail;
-            state.name = action.payload.name;
-            state.id = action.payload.id;
-            localStorage.setItem('user', JSON.stringify(state));
+            localStorage.setItem('user', JSON.stringify(action.payload));
+            return action.payload;
         },
         logout(state) {
-            state.level = 0;
-            state.mail = null;
-            state.name = "Гость";
-            localStorage.setItem('user', JSON.stringify(state));
+            localStorage.removeItem('user');
+            return initialState;
         }
     }
     

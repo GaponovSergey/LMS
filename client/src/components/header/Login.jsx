@@ -11,13 +11,13 @@ export default function Login() {
     const dispatch = useDispatch();
 
     return(
-        <div>
+        <div className="popup_form">
             <h3>Вход</h3>
-            <div>
+            <div className="popup_form">
                 <span>e-mail: </span><Input field={"mail"} state={mail} action={setValue} />
                 <span>пароль: </span><Input type={"password"} field={"password"} state={password} action={setValue} />
             </div>
-            <button onClick={ () => dispatch(fetchUser({mail, password})) }>Отправить</button>
+            <button className="header_button" onClick={ () => dispatch(fetchUser({mail, password})) }>Отправить</button>
         </div>
     )
 }

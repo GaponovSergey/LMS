@@ -3,48 +3,19 @@ body {
   background-color: #DCE1E4;
 }
 
-header {
-  position: fixed;
-  top: 0;
-  background-color: #65A42F;
-  width: 100vw;
-  display: flex;
-  justify-content: flex-end;
-}
+
 
 main {
   margin-top: 50px;
 }
 
-.header_button {
-  color: #DCE1E4;
-  background-color: #65A42F;
-  border: 2px #DCE1E4 solid;
-  border-radius: 5px;
-  padding: 7px 10px;
-  margin: 5px;
-  font-family: Arial;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
+
+.main_course {
+  border: 1px black solid;
+  border-radius: 2px;
 }
 
-.header_button-white {
-  color: #65A42F;
-  background-color: #DCE1E4;
-  border: 1px #DCE1E4 solid;
-  border-radius: 5px;
-  padding: 7px 10px;
-  margin: 5px;
-  font-family: Arial;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
+div {
+  margin: 0;
+  padding: 0;
 }
-
-.popup {
-  position: fixed;
-  left: 25vw;
-  top: 25vh;
-  width: 50vw;
-} 

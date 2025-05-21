@@ -25,8 +25,14 @@ export default async function setUser(req, res) {
         
         const password = await argon2.hash(req.body.password);
 
-        const user = await User.create({mail, password, name, surname, fathername,
-            access: 2
+        const user = await User.create({mail, password, 
+            access: 2,
+            Profile: {
+                name, surname, fathername
+            }
+        }, {
+            include:["Profile"
+            ]
         })
             .catch(()=> { 
                 throw new DataError("такой пользователь уже существует");
@@ -35,7 +41,7 @@ export default async function setUser(req, res) {
         
     
         const path = join(__dirname, "/../../", "/store/", String(user.id));
-        console.log(path)
+        console.log(user)
         if (!fs.existsSync(path)) {
             await fs.mkdir(path, (error)=> {if (error) throw new Error(error);});
         }

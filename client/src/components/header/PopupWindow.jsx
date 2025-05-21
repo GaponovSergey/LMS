@@ -15,7 +15,7 @@ export default function PopupWindow() {
         <>
         { isOpened && 
             <div className="popup">
-                <button onClick={()=> dispatch(close())}>Закрыть</button>
+                <button className="closebutton" onClick={()=> dispatch(close())}>&#x2716;</button>
                 { form === "logup" && <Logup /> }
                 { form === "login" && <Login /> }
                 { form === "courseForm" && <CreateCourse /> }

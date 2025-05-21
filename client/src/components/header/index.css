@@ -1,0 +1,70 @@
+header {
+  position: fixed;
+  top: 0;
+  background-color: #65A42F;
+  width: 100vw;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.header_button {
+  color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 7px 10px;
+  margin: 5px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.header_button-white {
+  color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 7px 10px;
+  margin: 5px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.popup {
+  position: fixed;
+  left: 35vw;
+  right: 35vw;
+  top: 15vh;
+  border: 1px black solid;
+  border-radius: 2px;
+  max-width: 500px;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+} 
+
+.closebutton {
+  color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 2px 2px;
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.popup_form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 300px;
+}

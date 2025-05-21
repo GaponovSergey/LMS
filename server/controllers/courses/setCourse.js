@@ -9,7 +9,7 @@ export default async function setCourse(req, res) {
         if (!req.body || !req.body.title || !req.body.description) {
             throw new ValidationError("Поля не заполнены");
         }
-
+        console.log(req.body);
         const course = await Course.create({
             title: req.body.title,
             description: req.body.description,
