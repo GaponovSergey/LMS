@@ -1,26 +1,32 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
+import { setAlert } from "./alertSlice";
 
 export const fetchLogup = createAsyncThunk('user/logup', async ({mail, 
     password, 
     name, 
     surname, 
     fathername}, {dispatch})=> {
-    const response = await fetch("http://127.0.0.1:3001/users/logup/", {
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        method: "POST",
-        body: JSON.stringify({
-            mail, 
-            password, 
-            name, 
-            surname, 
-            fathername
-        })
-    });
-    console.log(response.ok)
-    dispatch(close());
+    try {
+        const response = await fetch("http://127.0.0.1:3001/users/logup/", {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                mail, 
+                password, 
+                name, 
+                surname, 
+                fathername
+            })
+        });
+        
+        dispatch(close());
+    } catch(err) {
+                let content = err.message;
+                dispatch(setAlert({title: "Ошибка", content}));
+            }
 });
 
 const initialState = {

@@ -12,6 +12,9 @@ export default function defineFile(sequelize, DataTypes, Sequelize) {
         size: {
             type: DataTypes.INTEGER
         },
+        lastModified: {
+            type: DataTypes.DATE
+        },
         authorId: {
             type: DataTypes.INTEGER
         },
@@ -20,5 +23,7 @@ export default function defineFile(sequelize, DataTypes, Sequelize) {
             unique: true,
             defaultValue: Sequelize.UUIDV4
         }
+    }, {
+        timestamps: false
     })
 }

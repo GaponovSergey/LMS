@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchLogout } from "../../store/userSlice.js";
 import PopupWindow from "./PopupWindow.jsx";
+import Alert from "./Alert.jsx";
 import { open } from "../../store/popupSlice.js";
 import "./index.css";
 
@@ -23,6 +24,7 @@ export default function Header() {
                 </>
             }
             <PopupWindow />
+            <Alert />
         </header>
     );
 }

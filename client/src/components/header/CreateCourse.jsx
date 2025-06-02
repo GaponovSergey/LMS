@@ -1,6 +1,6 @@
 import React from "react";
-import Input from "../Input";
-import Textarea from "../Textarea";
+import Input from "../Form/Input";
+import Textarea from "../Form/Textarea";
 import { setValue, fetchCourseForm } from "../../store/createCourseSlice";
 import { useSelector, useDispatch } from "react-redux";
 

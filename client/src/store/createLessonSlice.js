@@ -1,9 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toggleCourseLoading } from "./courseSlice";
+import { uploadFiles } from "./uploadSlice";
+import { setAlert } from "./alertSlice";
 
 export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
     
     async ({lessonType, data}, { dispatch })=> {
+        try {
+        const { payload } = await dispatch(uploadFiles());
+
+        data.files = payload.map( file => {return {FileId: file.id};});
         const response = await fetch(`http://127.0.0.1:3001/${lessonType}s/`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'
@@ -16,6 +22,10 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
         dispatch( toggleLessonForm() );
         dispatch( toggleCourseLoading() );
     }
+    } catch(err) {
+        let content = err.message;
+        dispatch(setAlert({title: "Ошибка", content}))
+    }
 })
 
 const slice = createSlice({
@@ -24,6 +34,7 @@ const slice = createSlice({
         title: null,
         content: null,
         lessonType: "lecture",
+        files: [],
         isOpened: false
     }, 
     reducers: {
@@ -37,7 +48,7 @@ const slice = createSlice({
         toggleLessonForm(state) {
             state.isOpened = !state.isOpened;
         }
-    }
+    },
     
 });
 

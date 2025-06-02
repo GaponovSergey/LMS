@@ -1,16 +1,18 @@
 
 export default function defineLectureFile(sequelize, DataTypes) {
 
-    return sequelize.define("LectureFile", {
-        lectureId: {
+    return sequelize.define("ContentFile", {
+        ContentId: {
             type: DataTypes.INTEGER,
+            primaryKey: true,
             references: {
-                model: "Lectures",
+                model: "Contents",
                 key: "id"
             }
         },
-        fileId: {
+        FileId: {
             type: DataTypes.INTEGER,
+            primaryKey: true,
             references: {
                 model: "Files",
                 key: "id"

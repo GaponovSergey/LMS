@@ -6,7 +6,8 @@ import defineCourse from "./tables/Course.js";
 import defineLecture from "./tables/Lecture.js";
 import defineFile from "./tables/File.js";
 import defineTask from "./tables/Task.js";
-import defineLectureFile from "./tables/LectureFile.js";
+import defineContentFile from "./tables/ContentFile.js";
+import defineContent from "./tables/Content.js";
 
 
 export const sequelize = new Sequelize("LMS", "administrator", "12345", { dialect: "postgres"});
@@ -21,10 +22,11 @@ try {
 export const User = await defineUser(sequelize, DataTypes, Sequelize);
 export const Course = await defineCourse(sequelize, DataTypes);
 export const Lecture = await defineLecture(sequelize, DataTypes);
-export const LectureFile = await defineLectureFile(sequelize, DataTypes);
+export const ContentFile = await defineContentFile(sequelize, DataTypes);
 export const File = await defineFile(sequelize, DataTypes, Sequelize);
 export const Profile = await defineProfile(sequelize, DataTypes, Sequelize);
 export const Task = await defineTask(sequelize, DataTypes);
+export const Content = await defineContent(sequelize, DataTypes);
 
 User.hasMany(Course, {
   foreignKey: "authorId"
@@ -34,15 +36,31 @@ User.hasMany(Lecture, {
 });
 User.hasOne(Profile, {foreignKey: "id"});
 Profile.belongsTo(User, {foreignKey: "id"})
-Course.belongsTo(User, {
+Course.belongsTo(Profile, {
   foreignKey: "authorId"
 });
+
+Lecture.belongsTo(Profile, {
+  foreignKey: "authorId"
+});
+
+File.belongsTo(Profile, {
+  foreignKey: "authorId"
+});
+
 
 Course.hasMany(Lecture, {foreignKey: "courseId"});
 Lecture.belongsTo(Course, {foreignKey: "courseId"});
 
+Lecture.belongsTo(Content, {foreignKey: "contentId"});
+Task.belongsTo(Content, {foreignKey: "contentId"});
 
-sequelize.sync({force: true});
+Content.belongsToMany(File, {through: {
+  model: ContentFile,
+foreignKey: "contentId"}});
+File.belongsToMany(Content, {through: ContentFile}); 
+
+sequelize.sync({force: true}); 
 
 /*await User.create({
   name: "vasya",

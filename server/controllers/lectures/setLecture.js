@@ -1,5 +1,6 @@
-import { Lecture } from "../../models/sequelize.js";
+import { Lecture, Content, ContentFile } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+
 
 
 export default async function setLecture(req, res) {
@@ -10,15 +11,29 @@ export default async function setLecture(req, res) {
             throw new ValidationError("Поля не заполнены")
         }
  
-        const {title = null, description = null, courseId, content = null} = req.body;
+        const {title = null, description = null, courseId, content = null, files = []} = req.body;
+
         const lecture = {
-            title, description, content, courseId,
-            authorId: req.session.user.id
+            title, description, courseId,
+            authorId: req.session.user.id,
+            Content: { content }
         };
 
-        await Lecture.create(lecture).catch( err => {
+        const result = await Lecture.create(lecture, {include: [{
+            model: Content
+        }]}).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
+
+        const contentFiles = files.map( file => {
+            file.ContentId = result.Content.id
+            return file;
+        });
+
+        await ContentFile.bulkCreate(contentFiles).catch( err => {
+            throw new DataError(`Создать элемент не удалось: ${err.message}`)
+        });
+
   
         res.sendStatus(201);
 

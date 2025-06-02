@@ -1,6 +1,6 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
-import { Course, Lecture } from "../../models/sequelize.js";
+import { Course, Lecture, Content, File } from "../../models/sequelize.js";
 
 
 export default async function getCourse(req, res) {
@@ -15,7 +15,11 @@ export default async function getCourse(req, res) {
                 id: req.params.courseId
             },            
             include: {
-                model: Lecture
+                model: Lecture,
+                include: [{
+                    model: Content,
+                    include: File
+                }]
         }});
 
         if (!course) {

@@ -1,11 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { setAlert } from "./alertSlice";
 
 export const fetchCourses = createAsyncThunk("courses/fetchCourses",
     
     async (_, { dispatch })=> {
-    const response = await fetch("http://127.0.0.1:3001/courses");
-    dispatch(addCourses(await response.json()));
-    dispatch(toggleCoursesLoading( ) )
+        try {
+            const response = await fetch("http://127.0.0.1:3001/courses");
+            dispatch(addCourses(await response.json()));
+            dispatch(toggleCoursesLoading( ) );
+        } catch(err) {
+            let content = err.message;
+            dispatch(setAlert({title: "Ошибка", content}));
+        }
 })
 
 const slice = createSlice({

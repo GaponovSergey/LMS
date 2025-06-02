@@ -1,7 +1,8 @@
 import React from "react";
-import Input from "../../Input";
-import Textarea from "../../Textarea";
-import Radio from "../../Radio";
+import Input from "../../Form/Input";
+import Textarea from "../../Form/Textarea";
+import Radio from "../../Form/Radio";
+import Files from "../../Form/Files";
 import { useDispatch, useSelector } from "react-redux";
 import { setValue, setType, toggleLessonForm, fetchLessonForm } from "../../../store/createLessonSlice";
 
@@ -30,6 +31,7 @@ export default function CreateLesson() {
                     <p>Содержание:</p>
                     <Textarea field={"content"} state={content} action={setValue} />
                 </div>
+                <Files />
                 <button onClick={()=> dispatch(fetchLessonForm({lessonType, data: {title, content, authorId, courseId}}))}>Создать</button>
             </div>
         }

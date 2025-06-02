@@ -1,0 +1,19 @@
+input[type=file] {
+    position: absolute;
+    z-index: -10;
+    opacity: 0;
+}
+
+.dropField {
+    display: block;
+    width: 250px;
+    height: 250px;
+    border: 3px black;
+    border-style: dashed;
+    background-color: bisque;
+}
+
+.filesField {
+    position: relative;
+    
+}

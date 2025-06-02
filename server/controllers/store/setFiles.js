@@ -9,7 +9,7 @@ export default async function setFiles(req, res) {
         const files = await File.bulkCreate(req.body.files.toCreate).catch((err)=> {
             throw new DataError(`Создать учетную запись файла не удалось: ${err.message}`)
         });
-
+        console.log(files);
         req.session.files = files;
         res.status(201);
         res.json(files);

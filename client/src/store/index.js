@@ -5,18 +5,28 @@ import loginReducer from "./loginSlice.js";
 import popupReducer from "./popupSlice.js";
 import coursesReducer from "./coursesSlice.js";
 import courseReducer from "./courseSlice.js";
+import fileReducer from "./uploadSlice.js";
 import createCourseReducer from "./createCourseSlice.js";
 import createLessonReducer from "./createLessonSlice.js";
+import alertReducer from "./alertSlice.js";
 
 export default configureStore({
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        immutableCheck: false,
+        serializableCheck: false,
+        thunk: true,
+      }),
     reducer: {
         user: userReducer,
         logup: logupReducer,
         login: loginReducer,
         popup: popupReducer,
+        alert: alertReducer,
         courses: coursesReducer,
         course: courseReducer,
         createCourse: createCourseReducer,
-        createLesson: createLessonReducer
+        createLesson: createLessonReducer,
+        upload: fileReducer
     }
 })

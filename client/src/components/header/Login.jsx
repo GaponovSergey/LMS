@@ -2,7 +2,7 @@ import React from "react";
 import { setValue } from "../../store/loginSlice";
 import { fetchUser } from "../../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
-import Input from "../Input";
+import Input from "../Form/Input";
 
 
 export default function Login() {
@@ -14,10 +14,10 @@ export default function Login() {
         <div className="popup_form">
             <h3>Вход</h3>
             <div className="popup_form">
-                <span>e-mail: </span><Input field={"mail"} state={mail} action={setValue} />
-                <span>пароль: </span><Input type={"password"} field={"password"} state={password} action={setValue} />
+                <p><span>e-mail: </span><Input field={"mail"} state={mail} action={setValue} /></p>
+                <p><span>пароль: </span><Input type={"password"} field={"password"} state={password} action={setValue} /></p>
             </div>
-            <button className="header_button" onClick={ () => dispatch(fetchUser({mail, password})) }>Отправить</button>
+            <button className="header_button popup_button" onClick={ () => dispatch(fetchUser({mail, password})) }>Отправить</button>
         </div>
     )
 }

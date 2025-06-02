@@ -20,8 +20,12 @@ export default function defineTask(sequelize, DataTypes) {
                 key: "id"
             }
         },
-        content: {
-            type: DataTypes.TEXT
+        contentId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "Contents",
+                key: "id"
+            }
         },
         timeframe: {
             type: DataTypes.INTEGER
