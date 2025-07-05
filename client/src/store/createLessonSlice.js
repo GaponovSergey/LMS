@@ -9,7 +9,7 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
         try {
         const { payload } = await dispatch(uploadFiles());
 
-        data.files = payload.map( file => {return {FileId: file.id};});
+        data.files = payload.map( file => {return {fileId: file.id};});
         const response = await fetch(`http://127.0.0.1:3001/${lessonType}s/`, {
             headers: {
                 'Content-Type': 'application/json;charset=utf-8'

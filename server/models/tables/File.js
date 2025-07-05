@@ -2,7 +2,7 @@
 
 export default function defineFile(sequelize, DataTypes, Sequelize) {
 
-    return sequelize.define("File", {
+    return sequelize.define("file", {
         name: {
             type: DataTypes.STRING
         },

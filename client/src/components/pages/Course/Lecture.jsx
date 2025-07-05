@@ -3,13 +3,13 @@ import React from "react";
 
 export default function Lecture({data}) {
 
-    const {title, Content} = data;
-    console.log(Content)
+    const {title, content} = data;
+    console.log(content)
 
     return(
         <div>
             <h3>{title}</h3>
-            <div>{Content.content}</div>
+            <div>{content.content}</div>
         </div>
     )
 }

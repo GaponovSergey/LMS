@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCourses } from "../../../store/coursesSlice.js";
 import Course from "./Course.jsx";
+import Redactor from "../../Form/Redactor.jsx";
 import { open } from "../../../store/popupSlice.js";
 import "./index.css";
 
@@ -26,10 +27,11 @@ export default function Main() {
     return(
     <main>
         <div className="coursesList">
-            {
-                coursesList.length ? coursesList : <p>Доступных курсов пока нет</p>
+                {
+                coursesList.length ? coursesList : <p>Доступных курсов <strong>пока</strong> нет</p>
             }
         </div>
+        <Redactor />
         
         {
             level > 1 ? <button onClick={ ()=> dispatch(open({form: "courseForm"}))}>создать курс</button> : null

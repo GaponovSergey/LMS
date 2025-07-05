@@ -2,14 +2,14 @@
 
 export default function defineTask(sequelize, DataTypes) {
 
-    return sequelize.define("Task", {
+    return sequelize.define("task", {
         title: {
             type: DataTypes.STRING
         },
         courseId: {
             type: DataTypes.INTEGER,
             references: {
-                model: "Courses",
+                model: "courses",
                 key: "id"
             }
         },
@@ -23,7 +23,7 @@ export default function defineTask(sequelize, DataTypes) {
         contentId: {
             type: DataTypes.INTEGER,
             references: {
-                model: "Contents",
+                model: "contents",
                 key: "id"
             }
         },

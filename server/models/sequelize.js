@@ -6,8 +6,11 @@ import defineCourse from "./tables/Course.js";
 import defineLecture from "./tables/Lecture.js";
 import defineFile from "./tables/File.js";
 import defineTask from "./tables/Task.js";
+import defineAnswer from "./tables/Answer.js";
+import defineAnswerFile from "./tables/AnswerFile.js";
 import defineContentFile from "./tables/ContentFile.js";
 import defineContent from "./tables/Content.js";
+import defineStudent from "./tables/Student.js";
 
 
 export const sequelize = new Sequelize("LMS", "administrator", "12345", { dialect: "postgres"});
@@ -27,6 +30,9 @@ export const File = await defineFile(sequelize, DataTypes, Sequelize);
 export const Profile = await defineProfile(sequelize, DataTypes, Sequelize);
 export const Task = await defineTask(sequelize, DataTypes);
 export const Content = await defineContent(sequelize, DataTypes);
+export const Answer = await defineAnswer(sequelize, DataTypes);
+export const AnswerFile = await defineAnswerFile(sequelize, DataTypes);
+export const Student = await defineStudent(sequelize, DataTypes);
 
 User.hasMany(Course, {
   foreignKey: "authorId"
@@ -49,16 +55,17 @@ File.belongsTo(Profile, {
 });
 
 
-Course.hasMany(Lecture, {foreignKey: "courseId"});
-Lecture.belongsTo(Course, {foreignKey: "courseId"});
+Course.hasMany(Lecture);
+Lecture.belongsTo(Course);
 
-Lecture.belongsTo(Content, {foreignKey: "contentId"});
-Task.belongsTo(Content, {foreignKey: "contentId"});
+Lecture.belongsTo(Content);
+Task.belongsTo(Content);
 
-Content.belongsToMany(File, {through: {
-  model: ContentFile,
-foreignKey: "contentId"}});
+Content.belongsToMany(File, {through:  ContentFile});
 File.belongsToMany(Content, {through: ContentFile}); 
+
+Student.belongsToMany(Course);
+Student.belongsToMany(User, { foreignKey: "studentId" })
 
 sequelize.sync({force: true}); 
 

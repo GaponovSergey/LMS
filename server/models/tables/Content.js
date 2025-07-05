@@ -2,7 +2,7 @@
 
 export default function defineContent(sequelize, DataTypes) {
 
-    return sequelize.define("Content", {
+    return sequelize.define("content", {
         content: {
             type: DataTypes.TEXT
         }

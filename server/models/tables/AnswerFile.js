@@ -1,12 +1,12 @@
 
-export default function defineLectureFile(sequelize, DataTypes) {
+export default function defineAnswerFile(sequelize, DataTypes) {
 
-    return sequelize.define("ContentFile", {
-        contentId: {
+    return sequelize.define("AnswerFile", {
+        answerId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: "contents",
+                model: "answers",
                 key: "id"
             }
         },

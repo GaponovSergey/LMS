@@ -16,7 +16,7 @@ export default async function setLecture(req, res) {
         const lecture = {
             title, description, courseId,
             authorId: req.session.user.id,
-            Content: { content }
+            сontent: { content }
         };
 
         const result = await Lecture.create(lecture, {include: [{
@@ -26,7 +26,7 @@ export default async function setLecture(req, res) {
         });
 
         const contentFiles = files.map( file => {
-            file.ContentId = result.Content.id
+            file.сontentId = result.сontent.id
             return file;
         });
 

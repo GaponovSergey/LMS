@@ -1,4 +1,4 @@
-import { Task } from "../../models/sequelize.js";
+import { Task, Content, ContentFile } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
 
 
@@ -16,9 +16,20 @@ export default async function setTask(req, res) {
             authorId: req.session.user.id
         };
 
-        await Task.create(task).catch( err => {
+        const result = await Task.create(task,{include: [{
+                    model: Content
+                }]}).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
+
+        const contentFiles = files.map( file => {
+                    file.сontentId = result.сontent.id
+                    return file;
+                });
+        
+                await ContentFile.bulkCreate(contentFiles).catch( err => {
+                    throw new DataError(`Создать элемент не удалось: ${err.message}`)
+                });
   
         res.sendStatus(201);
 

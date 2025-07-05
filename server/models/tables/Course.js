@@ -2,7 +2,7 @@
 
 export default function defineCourse(sequelize, DataTypes) {
 
-    return sequelize.define("Course", {
+    return sequelize.define("course", {
         title: {
             type: DataTypes.STRING
         },
