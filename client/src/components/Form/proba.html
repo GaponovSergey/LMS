@@ -6,10 +6,8 @@
             let range = new Range();
             range.setStart(p.firstChild, 0);
             range.setEnd(p, p.childNodes.length);
-            const modified = document.createElement("span");
-            range.surroundContents(modified);
 
-            console.log(range.toString())
+            console.log(p.tagName)
             console.log(p.lastChild instanceof HTMLElement)
         </script>
     </body>

@@ -1,20 +1,11 @@
 import React from "react";
+import Selected from "./Selected";
 
 
 export default function Redactor() {
-
-    const setUncollapsedRange = (selection) => {
-        const range = new Range();
-        range.setStart(selection.anchorNode, selection.anchorOffset);
-        range.setEnd(selection.focusNode, selection.focusOffset);
-
-        if (range.collapsed) {
-            range.setEnd(selection.anchorNode, selection.anchorOffset);
-            range.setStart(selection.focusNode, selection.focusOffset);
-        }
-        return range;
-    }
-
+    
+    let selected = new Selected(); 
+    
     const wrapIn = (element) => {
         return (range) => {
             const modified = document.createElement(element);
@@ -23,6 +14,41 @@ export default function Redactor() {
         }
     }
 
+    const splitString = (string, index) => {
+        return [string.slice(0, index), string.slice(index) ];
+    }
+
+    const cancelStrong = (range, selection)=> {
+        let node = range.startContainer;
+        let endContainer = range.endContainer;
+        let endOffset = range.endOffset;
+        let fragment = new Range();
+        console.log(range.endContainer)
+        if (node.parentElement.nodeName === "STRONG") {
+            const [firstPart, lastPart] = splitString( node.nodeValue, range.startOffset);
+            let sibling = node.parentElement.nextSibling;
+            if (sibling.nodeName === "#text") {
+                sibling.nodeValue = lastPart + sibling.nodeValue;
+                node.nodeValue = firstPart;
+                range.setStart(sibling, 0);
+                
+                if (sibling === endContainer) {
+                    range.setEnd(endContainer, endOffset + lastPart.length);
+                }
+                
+                selection.removeAllRanges();
+                selection.addRange(range);
+                node = sibling;
+                console.log(range.endContainer)
+            }
+        }
+        while (node.nextSibling !== null && node.nextSibling !== range.endContainer) {
+            node = node.nextSibling;
+            if (node.nodeName === "STRONG") {
+                node.replaceWith(node.innerHTML);
+            }
+        }
+    }
     
     const setStyle = ( range ) => {
 
@@ -40,11 +66,7 @@ export default function Redactor() {
                 fragment.setStart(child.nextSibling, 0)
             }
 
-            if (node.lastChild instanceof HTMLElement) {
-                fragment.setEnd(node, node.childNodes.length);
-            } else {
-                fragment.setEnd(node.lastChild, node.lastChild.length);
-            }
+            fragment.setEnd(node, node.childNodes.length);
             wrapIn("strong")(fragment);
 
             do {
@@ -76,28 +98,41 @@ export default function Redactor() {
 
         }
 
-        if (child.nextSibling !== endChild) {
+        if (child?.nextSibling !== endChild) {
             let elements = Array.from(foundation.childNodes);
             let start = elements.findIndex(element => element === child.nextSibling);
             let end = elements.findIndex(element => element === endChild);
-            fragment.setStart(foundation, start);
-            fragment.setEnd(foundation, end);
-            wrapIn("strong")(fragment);
+            for (let i = start; i < end; i++) {
+                fragment.setStart(elements[i], 0);
+                if (elements[i] instanceof HTMLElement) {
+                    fragment.setEnd(elements[i], elements[i].childNodes.length);
+                } else {
+                    fragment.setEnd(elements[i], elements[i].length)
+                }
+                
+                wrapIn("strong")(fragment);
+            }
+            
         }
         
+    }
+
+    document.onselectionchange = ()=> {
+        selected = new Selected();
     }
 
     return(
         <div>
             <button onClick={()=> { 
-                    const selection = document.getSelection();
-                    const range = setUncollapsedRange(selection);
-                    setStyle(range);
+                    setStyle(selected.range);
                     
                     console.log(document.getSelection())}}>b</button>
-            <div 
+            <button onClick={()=> {
+                    cancelStrong(selected.range, selected.selection);
+            }}>x</button>
+            <div id="redactor"
                 onSelect={ (e)=> {
-                    if (e.target.innerHTML.length === 1) {
+                    if (e.target.innerHTML.length === 0) {
                         const selection = document.getSelection();
                         const range = new Range();
                         range.setStart(selection.anchorNode, 0);
@@ -113,6 +148,7 @@ export default function Redactor() {
                         console.log("enter")
                     }
                 }}
+                
                 style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px" }} 
                 contentEditable onInput={(e)=> console.log(e.target.innerHTML)}>
                 
