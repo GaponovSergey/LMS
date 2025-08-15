@@ -1,13 +1,15 @@
 <html>
     <body>
-        <div id="a"></div><p>ffffuuu <strong>hjkhkhk</strong></p>
+        <div id="a"></div><p>здесь <strong>выделенное</strong> сообщение</p><p>ffffuuu <strong>hjkhkhk</strong>gjgjkhgk</p>
         <script>
             let p = document.querySelector("#a").nextSibling;
             let range = new Range();
-            range.setStart(p.firstChild, 0);
-            range.setEnd(p, p.childNodes.length);
+            range.setStart(p.firstElementChild.firstChild, 4);
+            range.setEnd(p.nextElementSibling, 1);
+            let frag = range.extractContents();
+            p.firstElementChild.after(frag);
 
-            console.log(p.tagName)
+            console.log(range.extractContents())
             console.log(p.lastChild instanceof HTMLElement)
         </script>
     </body>

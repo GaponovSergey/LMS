@@ -5,8 +5,10 @@ export default class Selected  {
         foundationTags = [];
         tags = {
                 STRONG: [],
-                P: []
+                P: [],
+                I: []
             };
+        lastIndex = {};
 
         foundation = null;
         range = null;
@@ -17,7 +19,6 @@ export default class Selected  {
             if (this.selection.toString().length && this.selection.anchorNode.parentElement.closest("#redactor")) {
                 this.range = this.setUncollapsedRange(this.selection);
                 this._setSelectedTags(this.range);
-                console.log(this);
             }
         }
 
@@ -57,7 +58,7 @@ export default class Selected  {
                 this.tags[element.tagName].push(element); 
             }
 
-            let node = this.foundation;
+            let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
             while(node !== redactor) {
                 this.foundationTags.push(node);
                 node = node.parentElement;
@@ -69,6 +70,7 @@ export default class Selected  {
 
             const sibling = ( course === "right" ) ? "nextElementSibling" : "previousElementSibling";
             const tags = ( course === "right" ) ? "startTags" : "endTags";
+            const side = ( course === "right" ) ? "start" : "end";
             let child = null;
 
             while (node !== this.foundation) {
@@ -78,6 +80,9 @@ export default class Selected  {
                 }
                 if (node instanceof HTMLElement) {
                     this[tags].push(node);
+                    this.tags[node.tagName].push(node);
+                    this.lastIndex[node.tagName] = this.lastIndex[node.tagName] || { start: null, end: null};
+                    this.lastIndex[node.tagName][side] = this[tags].length - 1;
                 }
                 child = node;
                 node = node.parentElement;
@@ -91,7 +96,7 @@ export default class Selected  {
             console.log("add " + node)
             while (node) {
                 console.log(node)
-                this.tags[node.tagName].push(node);
+                node.tagName && this.tags[node.tagName].push(node);
                 if (node.children.length) {
                     this._addSiblings(node.firstElementChild);
                 }
