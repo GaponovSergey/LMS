@@ -18,10 +18,25 @@ export default class Selected  {
             this.selection = document.getSelection();
             if (this.selection.toString().length && this.selection.anchorNode.parentElement.closest("#redactor")) {
                 this.range = this.setUncollapsedRange(this.selection);
+                if (this.range.startContainer instanceof HTMLElement) {
+                    const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
+                    this.range.setStart(start, 0)
+                }
+                if (this.range.endContainer instanceof HTMLElement) {
+                    const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
+                    this.range.setEnd(end, end.length)
+                }
                 this._setSelectedTags(this.range);
             }
         }
 
+        findTextNode (node,  isEnd = false) {
+            
+            while (node instanceof HTMLElement) {
+                node = isEnd ? node.lastChild : node.firstChild;
+            }
+            return node;
+        }
         setUncollapsedRange(selection) {
             const range = new Range();
             range.setStart(selection.anchorNode, selection.anchorOffset);
