@@ -13,20 +13,31 @@ export default class Selected  {
         foundation = null;
         range = null;
         selection = null;
+        isCollapsed = false;
+        redactor = null;
 
         constructor(){
             this.selection = document.getSelection();
-            if (this.selection.toString().length && this.selection.anchorNode.parentElement.closest("#redactor")) {
+            this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
+            if ( this.redactor) {
                 this.range = this.setUncollapsedRange(this.selection);
-                if (this.range.startContainer instanceof HTMLElement) {
-                    const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
-                    this.range.setStart(start, 0)
+                this.foundation = this.range.commonAncestorContainer;
+                if (this.selection.toString().length) {
+                    if (this.range.startContainer instanceof HTMLElement) {
+                        const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
+                        this.range.setStart(start, 0)
+                    }
+                    if (this.range.endContainer instanceof HTMLElement) {
+                        const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
+                        this.range.setEnd(end, end.length)
+                    }
+                    this._setSelectedTags();
+                    this._setFoundationTags();
+                } else { 
+                    console.log("hhhhh")
+                    this.isCollapsed = true;
+                    this._setFoundationTags();
                 }
-                if (this.range.endContainer instanceof HTMLElement) {
-                    const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
-                    this.range.setEnd(end, end.length)
-                }
-                this._setSelectedTags(this.range);
             }
         }
 
@@ -50,8 +61,6 @@ export default class Selected  {
         }
 
         _setSelectedTags() {
-            this.foundation = this.range.commonAncestorContainer;
-            const redactor = document.getElementById("redactor");
 
             let startNode = this._addParents(this.range.startContainer, "right");
             let endNode = this._addParents(this.range.endContainer, "left");
@@ -72,13 +81,16 @@ export default class Selected  {
                 }
                 this.tags[element.tagName].push(element); 
             }
+        }
 
+        _setFoundationTags() {
+            
             let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
-            while(node !== redactor) {
+
+            while(node !== this.redactor) {
                 this.foundationTags.push(node);
                 node = node.parentElement;
             }
-
         }
 
         _addParents(node, course = "right") {

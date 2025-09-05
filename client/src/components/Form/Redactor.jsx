@@ -5,15 +5,33 @@ import Selected from "./Selected";
 export default function Redactor() {
     
     let selected = new Selected(); 
-    
-    const wrapIn = (element) => {
-        return (range) => {
-            const modified = document.createElement(element);
-            console.log(range);
-            range.surroundContents(modified);
+
+    const strong = {
+        tag: "STRONG",
+        data: {
+            type: "inline",
+            tag: "STRONG"
+            },
+        style: {
+
+            },
+        attributes: {
+            
+        }
+    };
+
+    const initElement = (props) => {
+
+        return ()=> {
+            const element = document.createElement(props.tag);
+            for (let key in props.data) {
+                element.dataset[key] = props.data[key];
+            }
+
+            return element;
         }
     }
-
+    
     const defineSeparation = (range, isEnd = false) => {
         const side =  {
             offset: isEnd ? "endOffset" : "startOffset", 
@@ -21,7 +39,7 @@ export default function Redactor() {
         }
         let node = range.startContainer;
         const foundation = range.commonAncestorContainer;
-        const redactor = document.getElementById("redactor");
+        const redactor = document.getElementById("redactor");//=======================================
         let child = node;
         let parent = node.parentElement;
         let isSeparated = false; 
@@ -54,8 +72,8 @@ export default function Redactor() {
         return result;
     }
 
-    function closestBlock(node) {
-            const redactor = document.getElementById("redactor");
+    const closestBlock = (node) => {
+            const redactor = document.getElementById("redactor");//================================
             let child = node;
             while (node !== redactor) {
                 child = node;
@@ -102,29 +120,29 @@ export default function Redactor() {
     const cancelStrong = (range)=> {
         console.log(range)
         console.log(selected)
-        const redactor = document.getElementById("redactor");
+        const redactor = document.getElementById("redactor");//================================================
         let node = range.startContainer;
         let foundation = range.commonAncestorContainer;
 
-
-        if (range.startContainer === range.endContainer && 
+        if (selected.isCollapsed || range.startContainer === range.endContainer && 
             range.startOffset !== 0 && 
             range.endOffset !== range.endContainer.data.length) {
             console.log(" cancel step 1")
             separateSelected(range);
-            
         }
                 
         const isBegin = defineSeparation(range);
         const isEnd = defineSeparation(range, true); 
 
         const fragment = range.extractContents();
+        if (selected.isCollapsed) fragment.append(document.createTextNode(""));
         let start = fragment.firstChild;
+        console.log(fragment)
         
         let end = selected.findTextNode(fragment.lastChild, true);
         const endElement = fragment.lastChild;
         let endOffset = range.endOffset;
-        const elements = fragment.querySelectorAll("STRONG");
+        const elements = fragment.querySelectorAll("STRONG"); //=========================================
 
         for (let element of elements) {
             console.log(" cancel step 2")
@@ -140,7 +158,7 @@ export default function Redactor() {
             
                 beforeStart.after(fragment);
                 range.setStart(beforeStart.nextSibling, 0);
-                if(checkToRemove(beforeStart)) {
+                if (checkToRemove(beforeStart)) {
                         console.log(" cancel step 3.1")
                         beforeStart.remove();
                 }
@@ -148,11 +166,10 @@ export default function Redactor() {
             }
             else {
                 console.log(" cancel step 4")
-                console.log(node.nextSibling)
                 node.after(fragment);
+                console.log(node.nextSibling)
                 range.setStart(node.nextSibling, 0);
                 if(node.data === "") {
-                    console.log(" cancel step 4.1")
                     node.remove();
                 }
             }
@@ -168,7 +185,6 @@ export default function Redactor() {
     
         console.log(" cancel step 7")
         endOffset = end.length;
-        
 
         if (foundation === redactor && !isEnd) {
             console.log(" cancel step 8")
@@ -176,15 +192,15 @@ export default function Redactor() {
             endElement.append(...sibling.childNodes);
             sibling.remove();
         }
-        
 
         range.setEnd(end, endOffset)
         changeSelection(range);
 
-        const lastStrong = selected.foundationTags.findLastIndex(tag => tag.tagName === "STRONG");
+        const lastStrong = selected.foundationTags.findLastIndex(tag => tag.tagName === "STRONG"); //==============================
         
         if (!(lastStrong + 1)) return;
         console.log(" cancel step 9")
+        console.log(start, end)
         end = endElement;
 
         const findLimits = (tag, start, end)=> {
@@ -200,51 +216,42 @@ export default function Redactor() {
             return limits;
         }
 
-        let tag = selected.foundationTags[0];
-        let [startIndex, endIndex] = findLimits(tag, start, end);
-        const middleClone = (tag.tagName === "STRONG") ? new DocumentFragment() : tag.cloneNode(false);
-        console.log(" cancel step 10")
-        
-        const children = Array.from(tag.childNodes);
-        const forMiddleClone = children.slice(startIndex, ++endIndex);
-        middleClone.append(...forMiddleClone);
-        tag.after(middleClone);
-
-        if (endIndex !== children.length) {
-            console.log(" cancel step 11")
-            const endClone = tag.cloneNode(false);
-            const forEndClone = children.slice(endIndex);
-            endClone.append(...forEndClone);
-            end = (middleClone instanceof DocumentFragment) ? children[--endIndex] : middleClone;
-            
-            if (!checkToRemove(endClone)) {
-                console.log(" cancel step 11.1.1")
-                end.after(endClone);
-            }  
-        }
-
-        start = tag.nextSibling;
-        
-        if (checkToRemove(tag)) {
-            console.log(" cancel step 12")
-            tag.remove();
-        }
-
-        for (let i = 1; i <= lastStrong; i++) {
-            console.log(" cancel step 13")
+        for (let i = 0; i <= lastStrong; i++) {
             let tag = selected.foundationTags[i];
             let [startIndex, endIndex] = findLimits(tag, start, end);
-
-            const middleClone = (tag.tagName === "STRONG") ? new DocumentFragment() : tag.cloneNode(false);
-            const endClone = tag.cloneNode(false);
+            const middleClone = (tag.tagName === "STRONG") ? new DocumentFragment() : tag.cloneNode(false);//========================
+            console.log(" cancel step 10")
+            console.log(startIndex, endIndex)
+            
             const children = Array.from(tag.childNodes);
             const forMiddleClone = children.slice(startIndex, ++endIndex);
-            const forEndClone = children.slice(endIndex);
+            console.log(forMiddleClone)
             middleClone.append(...forMiddleClone);
-            endClone.append(...forEndClone);
-            tag.after(middleClone, endClone);
+            
+            tag.after(middleClone);
+            console.log(tag)
+            console.log(tag.nextSibling)
+
+            if (endIndex !== children.length) {
+                console.log(" cancel step 11")
+                const endClone = tag.cloneNode(false);
+                const forEndClone = children.slice(endIndex);
+                endClone.append(...forEndClone);
+                end = (middleClone instanceof DocumentFragment) ? children[--endIndex] : middleClone;
+                
+                
+                if (!checkToRemove(endClone)) {
+                    console.log(" cancel step 11.1.1")
+                    end.after(endClone);
+                }  
+            }
+
             start = tag.nextSibling;
-            end = endClone.previousSibling;
+            
+            if (checkToRemove(tag)) {
+                console.log(" cancel step 12")
+                tag.remove();
+            }
         }
 
         range = new Range();
@@ -256,21 +263,35 @@ export default function Redactor() {
             console.log(" cancel step 15")
             console.log(end)
             range.setEnd(end, end.data.length);
+            console.log(range)
+        }
+        if (selected.isCollapsed) {
+            range.setStart(end, 0);
+            range.setEnd(end, 0);
         }
         changeSelection(range);
     }
 
-    const setStyle =( range ) => {
+    const setStyle = ( range, createElement ) => {
         console.log(range)
         console.log(selected)
+        if (selected.isCollapsed) {
+            console.log("step 0")
+            const wrapper = createElement();
+            range.surroundContents(wrapper);
+            console.log(wrapper)
+            range.setStart(wrapper, 0);
+            range.setEnd(wrapper, 0);
+            return changeSelection(range);
+        }
 
-        const redactor = document.getElementById("redactor");
+        const redactor = document.getElementById("redactor");//================================================
         let node = range.startContainer;
         let foundation = range.commonAncestorContainer;
 
         if (range.startContainer === range.endContainer ) {
             console.log("step 1")
-                separateSelected(range);           
+            separateSelected(range);           
         }
 
         const isBegin = defineSeparation(range);
@@ -286,13 +307,13 @@ export default function Redactor() {
             let children = Array.from(fragment.children);
             console.log("step 2")
             for(let element of children) {
-                const wrapper = document.createElement("STRONG");
+                const wrapper = createElement();
                 wrapper.append(...element.childNodes);
                 element.append(wrapper);
             }
         } else {
             console.log("step 3")
-            const wrapper = document.createElement("STRONG");
+            const wrapper = createElement();
             wrapper.append(...fragment.childNodes);
             fragment.append(wrapper)
         }
@@ -351,7 +372,7 @@ export default function Redactor() {
     return(
         <div>
             <button onClick={()=> { 
-                    setStyle(selected.range);
+                    setStyle(selected.range, initElement(strong));
                     
                     console.log(document.getSelection())}}>b</button>
             <button onClick={()=> {
