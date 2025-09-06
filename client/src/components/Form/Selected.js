@@ -18,10 +18,17 @@ export default class Selected  {
 
         constructor(){
             this.selection = document.getSelection();
-            this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
+            if (!this.selection.anchorNode) return;
+            this.range = this.setUncollapsedRange(this.selection);
+            this.foundation = this.range.commonAncestorContainer;
+            if (this.foundation?.id === "redactor") {
+                this.redactor = this.foundation;
+                console.log("redacot")
+            } else {
+                this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
+            }
             if ( this.redactor) {
-                this.range = this.setUncollapsedRange(this.selection);
-                this.foundation = this.range.commonAncestorContainer;
+                
                 if (this.selection.toString().length) {
                     if (this.range.startContainer instanceof HTMLElement) {
                         const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
@@ -85,9 +92,10 @@ export default class Selected  {
 
         _setFoundationTags() {
             
-            let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
+            let node = this.foundation;
 
             while(node !== this.redactor) {
+                console.log(node)
                 this.foundationTags.push(node);
                 node = node.parentElement;
             }

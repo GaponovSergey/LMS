@@ -124,7 +124,7 @@ export default function Redactor() {
         let node = range.startContainer;
         let foundation = range.commonAncestorContainer;
 
-        if (selected.isCollapsed || range.startContainer === range.endContainer && 
+        if (range.startContainer === range.endContainer && 
             range.startOffset !== 0 && 
             range.endOffset !== range.endContainer.data.length) {
             console.log(" cancel step 1")
@@ -200,7 +200,6 @@ export default function Redactor() {
         
         if (!(lastStrong + 1)) return;
         console.log(" cancel step 9")
-        console.log(start, end)
         end = endElement;
 
         const findLimits = (tag, start, end)=> {
@@ -221,16 +220,12 @@ export default function Redactor() {
             let [startIndex, endIndex] = findLimits(tag, start, end);
             const middleClone = (tag.tagName === "STRONG") ? new DocumentFragment() : tag.cloneNode(false);//========================
             console.log(" cancel step 10")
-            console.log(startIndex, endIndex)
             
             const children = Array.from(tag.childNodes);
             const forMiddleClone = children.slice(startIndex, ++endIndex);
-            console.log(forMiddleClone)
             middleClone.append(...forMiddleClone);
             
             tag.after(middleClone);
-            console.log(tag)
-            console.log(tag.nextSibling)
 
             if (endIndex !== children.length) {
                 console.log(" cancel step 11")
@@ -261,14 +256,9 @@ export default function Redactor() {
             range.setEnd(end, end.childNodes.length);
         } else {
             console.log(" cancel step 15")
-            console.log(end)
             range.setEnd(end, end.data.length);
-            console.log(range)
         }
-        if (selected.isCollapsed) {
-            range.setStart(end, 0);
-            range.setEnd(end, 0);
-        }
+        
         changeSelection(range);
     }
 
@@ -367,6 +357,18 @@ export default function Redactor() {
 
     document.onselectionchange = ()=> {
         selected = new Selected();
+        console.log(selected)
+        console.log(selected.redactor?.querySelector("P"))
+        if (selected.redactor && selected.foundation === selected.redactor && selected.isCollapsed) {
+            let wrapper = document.createElement("P");
+            const range = selected.range;
+            if(selected.redactor.querySelector("P")) wrapper = selected.redactor.querySelector("P");
+            else range.surroundContents(wrapper);
+            console.log("ddd")
+            range.setStart(wrapper, 0);
+            range.setEnd(wrapper, 0);
+            changeSelection(range);
+        }
     }
 
     return(
