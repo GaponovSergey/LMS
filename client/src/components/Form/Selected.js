@@ -18,30 +18,35 @@ export default class Selected  {
 
         constructor(){
             this.selection = document.getSelection();
+
             if (!this.selection.anchorNode) return;
+
             this.range = this.setUncollapsedRange(this.selection);
             this.foundation = this.range.commonAncestorContainer;
+
             if (this.foundation?.id === "redactor") {
                 this.redactor = this.foundation;
-                console.log("redacot")
             } else {
                 this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
             }
+
             if ( this.redactor) {
                 
                 if (this.selection.toString().length) {
+
                     if (this.range.startContainer instanceof HTMLElement) {
                         const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
                         this.range.setStart(start, 0)
                     }
+
                     if (this.range.endContainer instanceof HTMLElement) {
                         const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
                         this.range.setEnd(end, end.length)
                     }
+
                     this._setSelectedTags();
                     this._setFoundationTags();
                 } else { 
-                    console.log("hhhhh")
                     this.isCollapsed = true;
                     this._setFoundationTags();
                 }
@@ -55,6 +60,7 @@ export default class Selected  {
             }
             return node;
         }
+
         setUncollapsedRange(selection) {
             const range = new Range();
             range.setStart(selection.anchorNode, selection.anchorOffset);
@@ -73,13 +79,16 @@ export default class Selected  {
             let endNode = this._addParents(this.range.endContainer, "left");
 
             let isBegin = false;
-            let elements = this.foundation.children || [];
+            let elements = this.foundation.childNodes || [];
 
             for(let element of elements) {
+                console.log(element)
+
                 if (element === startNode) {
                     isBegin = true;
                     continue;
                 }
+                if (!(element instanceof HTMLElement) || element.tagName === "BR") continue;
                 if (!isBegin) continue;
                 if (element === endNode) break;
                 let tags = element.querySelectorAll("*");
@@ -87,15 +96,16 @@ export default class Selected  {
                     this.tags[tag.tagName].push(tag); 
                 }
                 this.tags[element.tagName].push(element); 
+                console.log(element)
             }
+            console.log(this.tags.STRONG)
         }
 
         _setFoundationTags() {
             
-            let node = this.foundation;
+            let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
 
             while(node !== this.redactor) {
-                console.log(node)
                 this.foundationTags.push(node);
                 node = node.parentElement;
             }
