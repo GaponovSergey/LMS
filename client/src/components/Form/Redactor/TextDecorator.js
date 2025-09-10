@@ -73,6 +73,7 @@ export default class TextDecorator extends Selected {
     }
 
     _checkToRemove = (node) => {
+        
         if(!node.childNodes.length       || 
             node.childNodes.length === 1 && 
             (!this.findTextNode(node.childNodes[0]) || 
@@ -263,7 +264,7 @@ export default class TextDecorator extends Selected {
         }
     
         console.log(" cancel step 7")
-        endOffset = end.length;
+        endOffset = end.data.length;
 
         if (this.foundation === this.redactor && !isEnd) {
             console.log(" cancel step 8")
@@ -285,7 +286,6 @@ export default class TextDecorator extends Selected {
 
         this.range.setEnd(end, endOffset)
         this._changeSelection();
-        console.log("ttttttttttttttttttttttttttt")
         const lastStrong = this.foundationTags.findLastIndex(tag => tag.dataset.conception === this.tag.data.conception); //==============================
         
         if (!(lastStrong + 1)) return;
@@ -293,49 +293,69 @@ export default class TextDecorator extends Selected {
         end = endElement;
 
         for (let i = 0; i <= lastStrong; i++) {
+            console.log(this.redactor.innerHTML)
+
             let tag = this.foundationTags[i];
+            
+            for(let child of tag.childNodes) {
+                if (child.nodeName === "#text" && child.data === "" && !this.isCollapsed) {
+                    child.remove();
+                }
+            }
+
+            
+            const children = Array.from(tag.childNodes);
             let [startIndex, endIndex] = this._findLimits(tag, start, end);
             console.log(tag, start, end)
             const middleClone = (tag.dataset.conception === this.tag.data.conception) ? new DocumentFragment() : tag.cloneNode(false);//========================
             console.log(" cancel step 10")
             
-            const children = Array.from(tag.childNodes);
+            
+            console.log(startIndex, endIndex, ...children)
+            console.log(middleClone)
             const forMiddleClone = children.slice(startIndex, ++endIndex);
             middleClone.append(...forMiddleClone);
-            
+            console.log(middleClone.childNodes)
             tag.after(middleClone);
-
-            if (endIndex !== children.length) {
+            end = (middleClone instanceof DocumentFragment) ? children[endIndex - 1] : middleClone;
+            if (endIndex !== children.length ) {
                 console.log(" cancel step 11")
                 const endClone = tag.cloneNode(false);
                 const forEndClone = children.slice(endIndex);
                 endClone.append(...forEndClone);
-                end = (middleClone instanceof DocumentFragment) ? children[--endIndex] : middleClone;
+                end = (middleClone instanceof DocumentFragment) ? children[endIndex - 1] : middleClone;
                 
                 
                 if (!this._checkToRemove(endClone)) {
                     console.log(" cancel step 11.1.1")
+                    console.log(...endClone.childNodes)
                     end.after(endClone);
                 }  
             }
 
             start = tag.nextSibling;
+            console.log(start)
+            console.log(this.redactor.innerHTML)
             
             if (this._checkToRemove(tag)) {
                 console.log(" cancel step 12")
                 tag.remove();
             }
         }
-
-        this.range.setStart(start, 0);
+console.log(this.redactor.innerHTML)
+        if (start) {
+            start = this.findTextNode(start)
+            this.range.setStart(start, 0);
+        }
         if (end instanceof HTMLElement) {
-            console.log(" cancel step 14")
-            this.range.setEnd(end, end.childNodes.length);
-        } else if (end) {
+            
+            end = this.findTextNode(end, true)
+        } 
+        
             console.log(" cancel step 15")
             this.range.setEnd(end, end.data.length);
-        }
         
+        console.log(this.range)
         this._changeSelection();
     }
 }

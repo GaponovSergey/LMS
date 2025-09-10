@@ -1,0 +1,25 @@
+.TextDecorButton {
+    color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 7px 10px;
+  margin: 5px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.TextDecorButton-pushed {
+    color: white;
+  background-color: #e3a301;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 7px 10px;
+  margin: 5px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}

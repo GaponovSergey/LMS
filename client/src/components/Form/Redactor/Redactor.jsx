@@ -2,27 +2,21 @@ import React from "react";
 import Selected from "./Selected";
 import TextDecorator from "./TextDecorator";
 import { useState } from "react";
+import TextDecorButton from "./TextDecorButton";
+import Toggler from "./Toggler";
 
 
 export default function Redactor() {
     
     let selected = new Selected(); 
-    let [state, setState] = useState(false);
+    const toggler = new Toggler(selected);
+    let [state, setState] = useState(toggler.state);
 
     document.onselectionchange = ()=> {
         selected = new Selected();
-
-        if (selected.startTags.find(tag => tag.dataset?.conception === "BOLD") ||
-            selected.endTags.find(tag => tag.dataset?.conception === "BOLD")   ||
-            selected.foundationTags.find(tag => tag.dataset?.conception === "BOLD") ||
-            selected.tags.STRONG.length) {
-                setState(true);
-                console.log(state);
-            }
-        else {
-            setState(false)
-            console.log(state);
-        }
+        const toggler = new Toggler(selected);
+        setState(toggler.state);
+        
 
         if (selected.redactor && selected.foundation === selected.redactor && selected.isCollapsed) {
             let wrapper = document.createElement("P");
@@ -30,7 +24,6 @@ export default function Redactor() {
             const range = selected.range;
             if(selected.redactor.querySelector("P")) wrapper = selected.redactor.querySelector("P");
             else range.surroundContents(wrapper);
-            console.log("ddd")
             range.setStart(wrapper, 0);
             range.setEnd(wrapper, 0);
             selected.selection.removeAllRanges();
@@ -40,14 +33,15 @@ export default function Redactor() {
 
     return(
         <div>
-            {!state ? <button onClick={()=> { 
-                    const textDecorator = new TextDecorator("bold");
-                    textDecorator.setDecorator();
-                    }}>b</button> :
-            <button onClick={()=> {
-                    const textDecorator = new TextDecorator("bold");
-                    textDecorator.clearDecorator();
-            }}>x</button>}
+            <TextDecorButton conception="bold" state={state.bold}>
+                <b>b</b>
+            </TextDecorButton>
+            <TextDecorButton conception="italic" state={state.italic}>
+                <i>i</i>
+            </TextDecorButton>
+            <TextDecorButton conception="underline" state={state.underline}>
+                <u>u</u>
+            </TextDecorButton>
             <div id="redactor"
                 onPaste={(e)=>{
                     e.preventDefault();
@@ -62,7 +56,7 @@ export default function Redactor() {
                 style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px" }} 
                 contentEditable onInput={(e)=> console.log(e.target.innerHTML)}>
                 
-                
+                <p data-type="block">1234567890</p>
             </div>
         </div>
     );

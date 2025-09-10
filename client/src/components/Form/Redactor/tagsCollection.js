@@ -11,7 +11,7 @@ const collection = {
         tagName: "EM",
         data: {
             type: "inline",
-            conception: "italic"
+            conception: "ITALIC"
         },
         style: {}
     },
@@ -19,12 +19,20 @@ const collection = {
         tagName: "STRONG",
         data: {
             type: "inline",
-            conception: "underline"
+            conception: "UNDERLINE"
         },
         style: {
-            fontWeight: "normal",
+            fontWeight: "inherit",
             textDecoration: "underline"
         }
+    },
+    paragraph: {
+        tagName: "P",
+        data: {
+            type: "block",
+            conception: "PARAGRAPH"
+        },
+        style: {}
     }
 };
 

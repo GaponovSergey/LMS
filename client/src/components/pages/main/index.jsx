@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCourses } from "../../../store/coursesSlice.js";
 import Course from "./Course.jsx";
-import Redactor from "../../Form/Redactor.jsx";
+import Redactor from "../../Form/Redactor/Redactor.jsx";
 import { open } from "../../../store/popupSlice.js";
 import "./index.css";
 

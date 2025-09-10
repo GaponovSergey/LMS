@@ -4,9 +4,10 @@ export default class Selected  {
         endTags = [];
         foundationTags = [];
         tags = {
-                STRONG: [],
-                P: [],
-                I: []
+                BOLD: [],
+                ITALIC: [],
+                UNDERLINE: [],
+                PARAGRAPH: []
             };
         lastIndex = {};
 
@@ -43,9 +44,20 @@ export default class Selected  {
                         const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
                         this.range.setEnd(end, end.length)
                     }
-
+                    if (!this.range.endOffset) {
+                        let end = this.range.endContainer.parentElement;
+                        while (end !== this.foundation) {
+                            if (end.previousSibling) {
+                                end = this.findTextNode(end.previousSibling, true);
+                                break;
+                            }
+                        }
+                        this.range.setEnd(end, end.length)
+                    }
+console.log(this.range)
                     this._setSelectedTags();
                     this._setFoundationTags();
+                    console.log(this)
                 } else { 
                     this.isCollapsed = true;
                     this._setFoundationTags();
@@ -80,25 +92,26 @@ export default class Selected  {
 
             let isBegin = false;
             let elements = this.foundation.childNodes || [];
-
+            console.log("hjk")
+            console.log(endNode)
             for(let element of elements) {
                 console.log(element)
-
+                if (element === endNode) break;
                 if (element === startNode) {
                     isBegin = true;
                     continue;
                 }
-                if (!(element instanceof HTMLElement) || element.tagName === "BR") continue;
+                
                 if (!isBegin) continue;
-                if (element === endNode) break;
+                
+                if (!(element instanceof HTMLElement) || element.tagName === "BR") continue;
                 let tags = element.querySelectorAll("*");
                 for(let tag of tags) {
-                    this.tags[tag.tagName].push(tag); 
+                    this.tags[tag.dataset.conception].push(tag); 
                 }
-                this.tags[element.tagName].push(element); 
+                this.tags[element.dataset.conception].push(element); 
                 console.log(element)
             }
-            console.log(this.tags.STRONG)
         }
 
         _setFoundationTags() {
@@ -116,7 +129,7 @@ export default class Selected  {
             const sibling = ( course === "right" ) ? "nextElementSibling" : "previousElementSibling";
             const tags = ( course === "right" ) ? "startTags" : "endTags";
             const side = ( course === "right" ) ? "start" : "end";
-            let child = null;
+            let child = node;
 
             while (node !== this.foundation) {
                 
@@ -125,9 +138,9 @@ export default class Selected  {
                 }
                 if (node instanceof HTMLElement) {
                     this[tags].push(node);
-                    this.tags[node.tagName].push(node);
-                    this.lastIndex[node.tagName] = this.lastIndex[node.tagName] || { start: null, end: null};
-                    this.lastIndex[node.tagName][side] = this[tags].length - 1;
+                    this.tags[node.dataset.conception].push(node);
+                    this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};
+                    this.lastIndex[node.dataset.conception][side] = this[tags].length - 1;
                 }
                 child = node;
                 node = node.parentElement;
@@ -141,7 +154,7 @@ export default class Selected  {
             console.log("add " + node)
             while (node) {
                 console.log(node)
-                node.tagName && this.tags[node.tagName].push(node);
+                if (node instanceof HTMLElement && node.tagName !== "BR") this.tags[node.dataset.conception].push(node);
                 if (node.children.length) {
                     this._addSiblings(node.firstElementChild);
                 }
