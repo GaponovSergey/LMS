@@ -5,12 +5,13 @@ export default class TextDecorator extends Selected {
 
     tag = {};
 
-    constructor(tagName) {
+    constructor(tagName, style = {}) {
         super();
         this.tag = collection[tagName];
+        this.tag.style = {...this.tag.style, ...style}
     }
 
-    _createElement() {
+    createElement() {
         const element = document.createElement(this.tag.tagName);
 
         for (let key in this.tag.data) {
@@ -116,7 +117,7 @@ export default class TextDecorator extends Selected {
         console.log(this.range)
         if (this.isCollapsed) {
             console.log("step 0")
-            const wrapper = this._createElement();
+            const wrapper = this.createElement();
             this.range.surroundContents(wrapper);
             console.log(wrapper)
             this.range.setStart(wrapper, 0);
@@ -126,7 +127,7 @@ export default class TextDecorator extends Selected {
 
         let node = this.range.startContainer;
 
-        if (this.range.startContainer === this.range.endContainer ) {
+        if (this.range.startContainer === this.range.endContainer && this.range.startContainer.nodeName === "#text") {
             console.log("step 1")
             this._separateSelected();           
         }
@@ -144,13 +145,13 @@ export default class TextDecorator extends Selected {
             let children = Array.from(fragment.children);
             console.log("step 2")
             for(let element of children) {
-                const wrapper = this._createElement();
+                const wrapper = this.createElement();
                 wrapper.append(...element.childNodes);
                 element.append(wrapper);
             }
         } else {
             console.log("step 3")
-            const wrapper = this._createElement();
+            const wrapper = this.createElement();
             wrapper.append(...fragment.childNodes);
             fragment.append(wrapper)
         }
@@ -159,45 +160,50 @@ export default class TextDecorator extends Selected {
             console.log("step 4")
             if (isBegin || this.startTags.length) {
                 console.log("step 5")
-                const beforeStart = node.parentElement;
+                const beforeStart = this.startTags[this.startTags.length - 1] || node.parentElement;
                 beforeStart.after(fragment);
-                this.range.setStart(beforeStart.nextSibling, 0);
+                start = beforeStart.nextSibling;
                 if(this._checkToRemove(beforeStart)) {
-                    console.log(" cancel step 3.1")
+                    console.log("step 5.1")
                     beforeStart.remove();
                 }
             }
             else {
                 console.log("step 6")
                 node.after(fragment);
-                this.range.setStart(node.nextSibling, 0);
+                start = node.nextSibling;
             }
         } else {
             console.log("step 7")
-            let sibling = this._closestBlock(node); 
-            let offset = sibling.childNodes.length;
+            let sibling = this._closestBlock(node);
+            let firstChild = start.firstChild; 
             sibling.append(...start.childNodes);
             start.remove();
             sibling.after(fragment);
-            this.range.setStart(sibling, offset);
+            start = firstChild;
         }
 
-        if (end instanceof HTMLElement) {
-            console.log("step 8")
-            endOffset = end.childNodes.length;
-        } else {
-            console.log("step 9")
-            endOffset = end.length;
+        if (start) {
+            console.log(" step 9.1")
+            console.log(start)
+            start = this.findTextNode(start);
+            this.range.setStart(start, 0);
         }
+        if (end instanceof HTMLElement) {
+            console.log(" cancel step 9.2")
+            end = this.findTextNode(end, true);
+        } 
+        endOffset = end ? end.length : endOffset;
 
         if (this.foundation === this.redactor && !isEnd) {
             console.log("step 10")
-            let sibling = end.nextSibling;
-            end.append(...sibling.childNodes);
-            sibling.remove();
+            if (end.nextSibling) {
+                end.append(...end.nextSibling.childNodes);
+                end.nextSibling.remove();
+            }
         }
         
-        this.range.setEnd(end, endOffset);
+        if (end) this.range.setEnd(end, endOffset);
         this._changeSelection();
     }
 
@@ -247,7 +253,6 @@ export default class TextDecorator extends Selected {
             else {
                 console.log(" cancel step 4")
                 node.after(fragment);
-                console.log(node.nextSibling)
                 this.range.setStart(node.nextSibling, 0);
                 if(node.data === "") {
                     node.remove();
@@ -286,45 +291,41 @@ export default class TextDecorator extends Selected {
 
         this.range.setEnd(end, endOffset)
         this._changeSelection();
-        const lastStrong = this.foundationTags.findLastIndex(tag => tag.dataset.conception === this.tag.data.conception); //==============================
+        const lastStrong = this.foundationTags.findLastIndex(tag => tag.dataset.conception === this.tag.data.conception); 
         
         if (!(lastStrong + 1)) return;
         console.log(" cancel step 9")
         end = endElement;
 
         for (let i = 0; i <= lastStrong; i++) {
-            console.log(this.redactor.innerHTML)
 
             let tag = this.foundationTags[i];
-            
-            for(let child of tag.childNodes) {
-                if (child.nodeName === "#text" && child.data === "" && !this.isCollapsed) {
-                    child.remove();
+
+            if (!this.isCollapsed) {
+                console.log(" cancel step 9.1")
+                for(let child of tag.childNodes) {
+                    if (child.nodeName === "#text" && child.data === "") {
+                        child.remove();
+                    }
                 }
             }
 
-            
             const children = Array.from(tag.childNodes);
             let [startIndex, endIndex] = this._findLimits(tag, start, end);
-            console.log(tag, start, end)
-            const middleClone = (tag.dataset.conception === this.tag.data.conception) ? new DocumentFragment() : tag.cloneNode(false);//========================
+            const middleClone = (tag.dataset.conception === this.tag.data.conception) ? new DocumentFragment() : tag.cloneNode(false);
             console.log(" cancel step 10")
             
-            
-            console.log(startIndex, endIndex, ...children)
-            console.log(middleClone)
             const forMiddleClone = children.slice(startIndex, ++endIndex);
             middleClone.append(...forMiddleClone);
-            console.log(middleClone.childNodes)
             tag.after(middleClone);
+
             end = (middleClone instanceof DocumentFragment) ? children[endIndex - 1] : middleClone;
+
             if (endIndex !== children.length ) {
                 console.log(" cancel step 11")
                 const endClone = tag.cloneNode(false);
                 const forEndClone = children.slice(endIndex);
-                endClone.append(...forEndClone);
-                end = (middleClone instanceof DocumentFragment) ? children[endIndex - 1] : middleClone;
-                
+                endClone.append(...forEndClone);                
                 
                 if (!this._checkToRemove(endClone)) {
                     console.log(" cancel step 11.1.1")
@@ -334,28 +335,24 @@ export default class TextDecorator extends Selected {
             }
 
             start = tag.nextSibling;
-            console.log(start)
-            console.log(this.redactor.innerHTML)
             
             if (this._checkToRemove(tag)) {
                 console.log(" cancel step 12")
                 tag.remove();
             }
         }
-console.log(this.redactor.innerHTML)
+
         if (start) {
+            console.log(" cancel step 13")
             start = this.findTextNode(start)
             this.range.setStart(start, 0);
         }
         if (end instanceof HTMLElement) {
-            
-            end = this.findTextNode(end, true)
-        } 
-        
             console.log(" cancel step 15")
-            this.range.setEnd(end, end.data.length);
-        
-        console.log(this.range)
+            end = this.findTextNode(end, true);
+        } 
+          
+        this.range.setEnd(end, end.data.length);
         this._changeSelection();
     }
 }

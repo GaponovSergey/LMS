@@ -21,6 +21,7 @@ export default function Redactor() {
         if (selected.redactor && selected.foundation === selected.redactor && selected.isCollapsed) {
             let wrapper = document.createElement("P");
             wrapper.dataset.type = "block";
+            wrapper.dataset.conception = "PARAGRAPH";
             const range = selected.range;
             if(selected.redactor.querySelector("P")) wrapper = selected.redactor.querySelector("P");
             else range.surroundContents(wrapper);
@@ -42,6 +43,27 @@ export default function Redactor() {
             <TextDecorButton conception="underline" state={state.underline}>
                 <u>u</u>
             </TextDecorButton>
+            <div>
+                <select onChange={e => {console.log(e.target.value)
+                    let decorator = new TextDecorator("textColor", {color: e.target.value});
+                    if (state.textColor) {
+                        decorator.clearDecorator();
+                        decorator = new TextDecorator("textColor", {color: e.target.value});
+                    }
+                    decorator.setDecorator();
+                }
+                }>
+                    <option value={"black"}>black</option>
+                    <option value={"gray"}>gray</option>
+                    <option value={"red"}>red</option>
+                    <option value={"orange"}>orange</option>
+                    <option value={"yellow"}>yellow</option>
+                    <option value={"green"}>green</option>
+                    <option value={"blue"}>blue</option>
+                    <option value={"dark-blue"}>dark-blue</option>
+                    <option value={"violet"}>violet</option>
+                </select>
+            </div>
             <div id="redactor"
                 onPaste={(e)=>{
                     e.preventDefault();
@@ -56,7 +78,7 @@ export default function Redactor() {
                 style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px" }} 
                 contentEditable onInput={(e)=> console.log(e.target.innerHTML)}>
                 
-                <p data-type="block">1234567890</p>
+                
             </div>
         </div>
     );

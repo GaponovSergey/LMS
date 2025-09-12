@@ -26,6 +26,16 @@ const collection = {
             textDecoration: "underline"
         }
     },
+    textColor: {
+        tagName: "SPAN",
+        data: {
+            type: "inline",
+            conception: "TEXTCOLOR"
+        },
+        style: {
+            color: "black"
+        }
+    },
     paragraph: {
         tagName: "P",
         data: {

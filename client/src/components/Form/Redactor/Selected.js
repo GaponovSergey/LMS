@@ -7,7 +7,8 @@ export default class Selected  {
                 BOLD: [],
                 ITALIC: [],
                 UNDERLINE: [],
-                PARAGRAPH: []
+                PARAGRAPH: [],
+                TEXTCOLOR: []
             };
         lastIndex = {};
 
@@ -19,39 +20,59 @@ export default class Selected  {
 
         constructor(){
             this.selection = document.getSelection();
-
+            console.log("select 1")
             if (!this.selection.anchorNode) return;
 
             this.range = this.setUncollapsedRange(this.selection);
             this.foundation = this.range.commonAncestorContainer;
 
             if (this.foundation?.id === "redactor") {
+                console.log("select 2")
                 this.redactor = this.foundation;
             } else {
+                console.log("select 3")
                 this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
             }
 
             if ( this.redactor) {
-                
+                console.log("select 4")
                 if (this.selection.toString().length) {
-
+                    console.log("select 5")
+                    console.log(this.range)
                     if (this.range.startContainer instanceof HTMLElement) {
+                        console.log("select 6")
                         const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
                         this.range.setStart(start, 0)
                     }
 
                     if (this.range.endContainer instanceof HTMLElement) {
-                        const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset - 1], true);
+                        console.log("select 7")
+                        const end = this.findTextNode(this.range.endContainer.childNodes[this.range.endOffset ? this.range.endOffset - 1 : 0], true);
                         this.range.setEnd(end, end.length)
                     }
-                    if (!this.range.endOffset) {
-                        let end = this.range.endContainer.parentElement;
-                        while (end !== this.foundation) {
-                            if (end.previousSibling) {
-                                end = this.findTextNode(end.previousSibling, true);
-                                break;
-                            }
+                    if (this.range.startContainer.length === this.range.startOffset ) {
+                        let start;
+
+                        if (this.range.startContainer.parentElement !== this.foundation) {
+                            start = this.findSibling(this.range.startContainer.parentElement);
+                        } else {
+                            start = this.range.startContainer.nextSibling;
                         }
+
+                        start = this.findTextNode(start);
+                        this.range.setStart(start, 0)
+                    }
+                    if (!this.range.endOffset ) {
+                        console.log("select 8")
+                        let end;
+
+                        if (this.range.endContainer.parentElement !== this.foundation) {
+                            end = this.findSibling(this.range.endContainer.parentElement, true);
+                        } else {
+                            end = this.range.endContainer.previousSibling;
+                        }
+                        
+                        end = this.findTextNode(end, true);
                         this.range.setEnd(end, end.length)
                     }
 console.log(this.range)
@@ -59,10 +80,22 @@ console.log(this.range)
                     this._setFoundationTags();
                     console.log(this)
                 } else { 
+                    console.log("select 11")
                     this.isCollapsed = true;
                     this._setFoundationTags();
                 }
             }
+        }
+
+        findSibling(node, isEnd = false) {
+            const sibling = isEnd ? "previousSibling" : "nextSibling";
+            while (node !== this.foundation) {
+                if (node[sibling]) {
+                    node = node[sibling];
+                    break;
+                }
+            }
+            return node;
         }
 
         findTextNode (node,  isEnd = false) {
@@ -136,7 +169,8 @@ console.log(this.range)
                 if (node[sibling] && node.parentElement !== this.foundation) {
                     this._addSiblings(node[sibling], course);
                 }
-                if (node instanceof HTMLElement) {
+                if (node instanceof HTMLElement && node.tagName !== "BR") {
+                    console.log(node)
                     this[tags].push(node);
                     this.tags[node.dataset.conception].push(node);
                     this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};
