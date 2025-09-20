@@ -5,6 +5,7 @@ header {
   width: 100vw;
   display: flex;
   justify-content: flex-end;
+  z-index: 50;
 }
 
 .header_button {

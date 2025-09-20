@@ -51,37 +51,31 @@ export default class Selected  {
                         this.range.setEnd(end, end.length)
                     }
                     if (this.range.startContainer.length === this.range.startOffset ) {
-                        let start;
+                        console.log("select 8")
+                        let start = this.range.startContainer;
 
-                        if (this.range.startContainer.parentElement !== this.foundation) {
-                            start = this.findSibling(this.range.startContainer.parentElement);
-                        } else {
-                            start = this.range.startContainer.nextSibling;
-                        }
-
+                        start = this.findSibling(start);
                         start = this.findTextNode(start);
+
                         this.range.setStart(start, 0)
                     }
                     if (!this.range.endOffset ) {
-                        console.log("select 8")
-                        let end;
+                        console.log("select 9")
+                        let end = this.range.endContainer;
 
-                        if (this.range.endContainer.parentElement !== this.foundation) {
-                            end = this.findSibling(this.range.endContainer.parentElement, true);
-                        } else {
-                            end = this.range.endContainer.previousSibling;
-                        }
-                        
+                        end = this.findSibling(end, true);
                         end = this.findTextNode(end, true);
+
                         this.range.setEnd(end, end.length)
                     }
-console.log(this.range)
+                    console.log(this.range)
                     this._setSelectedTags();
                     this._setFoundationTags();
                     console.log(this)
                 } else { 
-                    console.log("select 11")
+                    console.log("select 10")
                     this.isCollapsed = true;
+
                     this._setFoundationTags();
                 }
             }
@@ -94,6 +88,7 @@ console.log(this.range)
                     node = node[sibling];
                     break;
                 }
+                node = node.parentElement;
             }
             return node;
         }

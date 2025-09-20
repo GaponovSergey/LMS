@@ -1,9 +1,10 @@
 import React from "react";
 import Selected from "./Selected";
-import TextDecorator from "./TextDecorator";
 import { useState } from "react";
 import TextDecorButton from "./TextDecorButton";
 import Toggler from "./Toggler";
+import TextColor from "./TextColor";
+
 
 
 export default function Redactor() {
@@ -34,35 +35,17 @@ export default function Redactor() {
 
     return(
         <div>
-            <TextDecorButton conception="bold" state={state.bold}>
+            <div style={{display: "flex", gap: "3px", margin: "5px"}}>
+            <TextDecorButton conception="bold" isFromRedactor={state.isFromRedactor} state={state.bold}>
                 <b>b</b>
             </TextDecorButton>
-            <TextDecorButton conception="italic" state={state.italic}>
+            <TextDecorButton conception="italic" isFromRedactor={state.isFromRedactor} state={state.italic}>
                 <i>i</i>
             </TextDecorButton>
-            <TextDecorButton conception="underline" state={state.underline}>
+            <TextDecorButton conception="underline" isFromRedactor={state.isFromRedactor} state={state.underline}>
                 <u>u</u>
             </TextDecorButton>
-            <div>
-                <select onChange={e => {console.log(e.target.value)
-                    let decorator = new TextDecorator("textColor", {color: e.target.value});
-                    if (state.textColor) {
-                        decorator.clearDecorator();
-                        decorator = new TextDecorator("textColor", {color: e.target.value});
-                    }
-                    decorator.setDecorator();
-                }
-                }>
-                    <option value={"black"}>black</option>
-                    <option value={"gray"}>gray</option>
-                    <option value={"red"}>red</option>
-                    <option value={"orange"}>orange</option>
-                    <option value={"yellow"}>yellow</option>
-                    <option value={"green"}>green</option>
-                    <option value={"blue"}>blue</option>
-                    <option value={"dark-blue"}>dark-blue</option>
-                    <option value={"violet"}>violet</option>
-                </select>
+            <TextColor isFromRedactor={state.isFromRedactor} state={state.textColor}/>
             </div>
             <div id="redactor"
                 onPaste={(e)=>{
@@ -75,8 +58,8 @@ export default function Redactor() {
                     selection.getRangeAt(0).insertNode(text);
                 }}
                 
-                style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px" }} 
-                contentEditable onInput={(e)=> console.log(e.target.innerHTML)}>
+                style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px", margin: "0" }} 
+                contentEditable onInput={(e)=> console.log(e.target.innerHTML)} >
                 
                 
             </div>

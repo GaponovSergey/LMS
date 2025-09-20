@@ -3,23 +3,56 @@
   background-color: #408d01;
   border: 1px black solid;
   border-radius: 3px;
-  padding: 7px 10px;
-  margin: 5px;
+  padding: 0px 10px;
+  margin: 0px;
+  width: 30px;
+  height: 30px;
   font-family: Arial;
-  font-weight: 700;
+  font-weight: 500;
   font-size: 16px;
   cursor: pointer;
 }
 
-.TextDecorButton-pushed {
-    color: white;
+.TextDecorButton:disabled {
+  background-color: #5e8241;
+}
+
+.SelectButton {
   background-color: #e3a301;
-  border: 1px black solid;
-  border-radius: 3px;
-  padding: 7px 10px;
-  margin: 5px;
+  border: black solid;
+  border-width: 1px;
+  color: white;
   font-family: Arial;
-  font-weight: 700;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 12px;
   cursor: pointer;
+  padding: 0;
+  margin: 0; 
+  width: 25px;
+  height: 30px;
+  
+}
+
+.SelectButtonLeft {
+  border-radius: 3px 0 0 3px;
+  border-right-width: 1px;
+}
+.SelectButtonRight {
+  border-radius: 0 3px 3px 0;
+  border-left-width: 1px;
+  font-size: 8px;
+  width: 15px;
+}
+
+b {
+  font-weight: 900;
+}
+
+u, i {
+  font-weight: inherit
+}
+
+.TextDecorButton-pushed {
+
+  background-color: #e3a301;
 }

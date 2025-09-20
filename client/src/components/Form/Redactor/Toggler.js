@@ -7,6 +7,7 @@ export default class Toggler {
         this.foundationTags = selected.foundationTags;
         this.startTags = selected.startTags;
         this.endTags = selected.endTags;
+        this.isFromRedactor = !!selected.redactor; 
         
     }
 
@@ -32,6 +33,8 @@ export default class Toggler {
         for(let key in collection) {
 
             if (collection[key].data.type === "block") continue;
+
+            result.isFromRedactor = this.isFromRedactor;
 
             result[key] = this._checkSelectedOn(collection[key].data.conception);
         }

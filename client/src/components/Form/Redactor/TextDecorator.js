@@ -197,9 +197,11 @@ export default class TextDecorator extends Selected {
 
         if (this.foundation === this.redactor && !isEnd) {
             console.log("step 10")
-            if (end.nextSibling) {
-                end.append(...end.nextSibling.childNodes);
-                end.nextSibling.remove();
+            console.log(end)
+            let blockElement = end.parentElement.closest('*[data-type="block"]');
+            if (blockElement.nextSibling) {
+                blockElement.append(...blockElement.nextSibling.childNodes);
+                blockElement.nextSibling.remove();
             }
         }
         
@@ -209,6 +211,26 @@ export default class TextDecorator extends Selected {
 
     clearDecorator() {
         console.log(this.range)
+        
+
+        if (this.isCollapsed && 
+            this.range.startContainer instanceof HTMLElement && 
+            this.range.startContainer.childNodes.length >= this.range.startOffset) {
+                console.log(" cancel step 0")
+                const textNode = document.createTextNode("");
+                if (this.range.startOffset - 1 >= 0 ) {
+                    console.log(" cancel step 0.1")
+                    this.range.startContainer.childNodes[this.range.startOffset -1].after(textNode);
+                    
+                } else {
+                    console.log(" cancel step 0.2")
+                    this.range.startContainer.prepend(textNode);
+
+                }
+                this.range.setStart(textNode, 0);
+                this.range.setEnd(textNode, 0);
+        }
+
         let node = this.range.startContainer;
 
         if (this.range.startContainer === this.range.endContainer && 

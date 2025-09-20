@@ -3,11 +3,11 @@ import TextDecorator from "./TextDecorator"
 import "./redactor.css";
 
 
-const TextDecorButton = ({state, conception, children}) => {
+const TextDecorButton = ({state, isFromRedactor = false, conception, children}) => {
 
     return (
         
-        <button className={state? "TextDecorButton-pushed" : "TextDecorButton"} onClick={()=> { 
+        <button disabled = { !isFromRedactor ? "disabled" : false } className={`TextDecorButton ${state && "TextDecorButton-pushed"}`} onClick={()=> { 
                     const textDecorator = new TextDecorator(conception);
                     if (!state) textDecorator.setDecorator();
                     else textDecorator.clearDecorator();
