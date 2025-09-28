@@ -4,6 +4,10 @@ import { useState } from "react";
 import TextDecorButton from "./TextDecorButton";
 import Toggler from "./Toggler";
 import TextColor from "./TextColor";
+import StringColor from "./StringColor";
+import collection from "./tagsCollection";
+import FontFamily from "./FontFamily";
+import FontSize from "./FontSize";
 
 
 
@@ -45,7 +49,10 @@ export default function Redactor() {
             <TextDecorButton conception="underline" isFromRedactor={state.isFromRedactor} state={state.underline}>
                 <u>u</u>
             </TextDecorButton>
-            <TextColor isFromRedactor={state.isFromRedactor} state={state.textColor}/>
+            <TextColor isFromRedactor={state.isFromRedactor} state={state.textColor} concept={collection.textColor} />
+            <StringColor isFromRedactor={state.isFromRedactor} state={state.stringColor} concept={collection.stringColor} />
+            <FontFamily isFromRedactor={state.isFromRedactor} state={state.fontFamily} concept={collection.fontFamily} />
+            <FontSize isFromRedactor={state.isFromRedactor} state={state.fontSize} concept={collection.fontSize} />
             </div>
             <div id="redactor"
                 onPaste={(e)=>{

@@ -1,4 +1,5 @@
 const collection = {
+
     bold: {
         tagName: "STRONG",
         data: {
@@ -7,6 +8,7 @@ const collection = {
         },
         style: {}
     },
+
     italic: {
         tagName: "EM",
         data: {
@@ -15,6 +17,7 @@ const collection = {
         },
         style: {}
     },
+
     underline: {
         tagName: "STRONG",
         data: {
@@ -26,6 +29,7 @@ const collection = {
             textDecoration: "underline"
         }
     },
+
     textColor: {
         tagName: "SPAN",
         data: {
@@ -34,8 +38,85 @@ const collection = {
         },
         style: {
             color: "black"
-        }
+        },
+        keyStyle: "color",
+        defaultValue: "black",
+        values: [
+            "black",
+            "gray",
+            "brown",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "blue",
+            "darkBlue",
+            "purple",
+            "darkViolet"
+        ]
     },
+
+    stringColor: {
+        tagName: "SPAN",
+        data: {
+            type: "inline",
+            conception: "STRINGCOLOR"
+        },
+        style: {
+            backgroundColor: "yellow"
+        },
+        keyStyle: "backgroundColor",
+        defaultValue: "yellow",
+        values: [
+            "white",
+            "gray",
+            "brown",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "blue",
+            "darkBlue",
+            "purple",
+            "darkViolet"
+        ]
+    },
+
+    fontFamily: {
+        tagName: "SPAN",
+        data: {
+            type: "inline",
+            conception: "FONTFAMILY"
+        },
+        style: {
+            fontFamily: "Times New Roman"
+        },
+        keyStyle: "fontFamily",
+        defaultValue: "Times New Roman",
+        values: [
+            "Times New Roman",
+            "Arial",
+            "Calibri",
+            "Cambria"
+        ]
+    },
+
+    fontSize: {
+        tagName: "SPAN",
+        data: {
+            type: "inline",
+            conception: "FONTSIZE"
+        },
+        style: {
+            fontSize: "16px"
+        },
+        keyStyle: "fontSize",
+        defaultValue: "16px",
+        values: [
+            "8px","10px","12px","14px","16px","18px","20px","24px","26px","32px",
+        ]
+    },
+
     paragraph: {
         tagName: "P",
         data: {

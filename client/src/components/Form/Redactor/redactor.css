@@ -33,6 +33,14 @@
   
 }
 
+.FontFamily {
+  background-color: #fff;
+  border: black solid;
+  border-width: 1px;
+  color: #000;
+  width: 150px;
+}
+
 .SelectButtonLeft {
   border-radius: 3px 0 0 3px;
   border-right-width: 1px;

@@ -8,7 +8,10 @@ export default class Selected  {
                 ITALIC: [],
                 UNDERLINE: [],
                 PARAGRAPH: [],
-                TEXTCOLOR: []
+                TEXTCOLOR: [],
+                STRINGCOLOR: [],
+                FONTFAMILY: [],
+                FONTSIZE: []
             };
         lastIndex = {};
 
@@ -96,7 +99,9 @@ export default class Selected  {
         findTextNode (node,  isEnd = false) {
             
             while (node instanceof HTMLElement) {
-                node = isEnd ? node.lastChild : node.firstChild;
+                let child = isEnd ? node.lastChild : node.firstChild;
+                if(!child) break;
+                node = child;
             }
             return node;
         }
@@ -120,8 +125,7 @@ export default class Selected  {
 
             let isBegin = false;
             let elements = this.foundation.childNodes || [];
-            console.log("hjk")
-            console.log(endNode)
+            
             for(let element of elements) {
                 console.log(element)
                 if (element === endNode) break;
@@ -165,7 +169,7 @@ export default class Selected  {
                     this._addSiblings(node[sibling], course);
                 }
                 if (node instanceof HTMLElement && node.tagName !== "BR") {
-                    console.log(node)
+                    
                     this[tags].push(node);
                     this.tags[node.dataset.conception].push(node);
                     this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};

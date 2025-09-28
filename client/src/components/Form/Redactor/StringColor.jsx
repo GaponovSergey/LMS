@@ -5,7 +5,7 @@ import TextDecorator from "./TextDecorator";
 import "./redactor.css";
 
 
-export default function TextColor({isFromRedactor = false, state = null, concept}) {
+export default function StringColor({isFromRedactor = false, state = null, concept}) {
 
     const {defaultValue, values, keyStyle} = concept; 
 
@@ -14,7 +14,7 @@ export default function TextColor({isFromRedactor = false, state = null, concept
     const options = values.map((color, i) => {
         
             return(
-                <Option value={color} isDefault={defaultValue === color} key={"textcolor" + i}>
+                <Option value={color} isDefault={defaultValue === color} key={"stringcolor" + i}>
                     <div style={{width: "30px", height: "30px", backgroundColor: color}}></div>
                 </Option>
             )
@@ -24,14 +24,14 @@ export default function TextColor({isFromRedactor = false, state = null, concept
         <Select style={{display: "inline-flex", gap: "0.2px"}}>
             <SelectButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonLeft" onClick={(color)=> {
                 if (!isFromRedactor) return;
-                let decorator = new TextDecorator("textColor", {[keyStyle]: color});
+                let decorator = new TextDecorator("stringColor", {[keyStyle]: color});
                     if (state) {
                         decorator.clearDecorator();
-                        decorator = new TextDecorator("textColor", {[keyStyle]: color});
+                        decorator = new TextDecorator("stringColor", {[keyStyle]: color});
                     }
                     decorator.setDecorator();
                 }} setValue={setValueState}>
-                    A <div style={{display: "inline-block", width: "7px", height: "7px", backgroundColor: valueState, border: "1px #fff solid"}}></div>
+                    <span style={{backgroundColor: "yellow", color: "black"}}> abc </span> <div style={{display: "inline-block", width: "7px", height: "7px", backgroundColor: valueState, border: "1px #fff solid"}}></div>
             </SelectButton>
             <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonRight"/>
             <div style={{position: "absolute", marginTop: "31px"}}>
