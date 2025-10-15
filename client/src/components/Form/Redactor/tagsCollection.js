@@ -123,7 +123,22 @@ const collection = {
             type: "block",
             conception: "PARAGRAPH"
         },
-        style: {}
+        style: {
+            minHeight: "1em",
+            overflowWrap: "break-word"
+        }
+    },
+
+    header2: {
+        tagName: "H2",
+        data: {
+            type: "block",
+            conception: "HEADER2"
+        },
+        style: {
+            minHeight: "1em",
+            overflowWrap: "break-word"
+        }
     }
 };
 

@@ -8,6 +8,7 @@ export default class Selected  {
                 ITALIC: [],
                 UNDERLINE: [],
                 PARAGRAPH: [],
+                HEADER2: [],
                 TEXTCOLOR: [],
                 STRINGCOLOR: [],
                 FONTFAMILY: [],
