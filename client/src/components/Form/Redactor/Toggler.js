@@ -1,15 +1,18 @@
 import collection from "./tagsCollection";
+import Selected from "./Selected";
+import TextExtractor from "./TextExtractor";
 
-export default class Toggler {
+export default class Toggler extends TextExtractor  {
 
     multipleConceptions = ["FONTFAMILY", "FONTSIZE"];
 
-    constructor(selected) {
-        this.tags = selected.tags;
-        this.foundationTags = selected.foundationTags;
-        this.startTags = selected.startTags;
-        this.endTags = selected.endTags;
-        this.isFromRedactor = !!selected.redactor; 
+    isFromRedactor = false;
+
+    constructor() {
+
+        super();
+    
+        this.isFromRedactor = !!this.redactor; 
         
     }
 
@@ -44,10 +47,15 @@ export default class Toggler {
                     !tags.find( tag => tag.style[keyStyle] !== tags[0].style[keyStyle])) {
                         return tags[0].style[keyStyle];
                 }
-                if (tags.find(tag => tag.style[keyStyle] !== defaultValue)) return null;
-                else return "default";
-            } else return "default";
+                if (tags.find(tag => tag.style[keyStyle] !== this.blockElement.style[keyStyle])) return null;
+                else return this.blockElement?.style[keyStyle] || "default";
+            } else return this.blockElement?.style[keyStyle] || "default";
         }
+    }
+
+    findDefaultValue(keyStyle) {
+        if (this.blockElement) return this.blockElement.style[keyStyle];
+        return null;
     }
 
     get state() {
@@ -62,7 +70,8 @@ export default class Toggler {
             if (this.multipleConceptions.includes(collection[key].data.conception)) {
                 result[key] = {
                     value: this.setMultipleValue(collection[key]),
-                    isSelected: this.checkSelectedOn(collection[key].data.conception)
+                    isSelected: this.checkSelectedOn(collection[key].data.conception),
+                    defaultValue: this.findDefaultValue(collection[key].keyStyle)
                 };
                 continue;
             }

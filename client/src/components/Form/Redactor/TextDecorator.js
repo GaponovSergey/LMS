@@ -12,56 +12,7 @@ export default class TextDecorator extends TextExtractor {
         this.tag.style = {...this.tag.style, ...style}
     }
 
-    createElement(tagName = this.tagName) {
-        const tag = (tagName === this.tagName) ? this.tag : collection[tagName];
-        const element = document.createElement(tag.tagName);
-
-        for (let key in tag.data) {
-            element.dataset[key] = tag.data[key];
-        }
-
-        for (let key in tag.style) {
-            element.style[key] = tag.style[key];
-        }
-
-        return element;
-    }
-
     
-
-    _closestBlock(node) {
-            
-        let child = node;
-        while (node !== this.redactor) {
-            child = node;
-            node = node.parentElement;
-        }
-        return child;
-    }
-
-    _checkToRemove = (node) => {
-        
-        if(!node.childNodes.length       || 
-            node.childNodes.length === 1 && 
-            (!this.findTextNode(node.childNodes[0]) || 
-              this.findTextNode(node.childNodes[0]).data === "")
-        ) {
-                return true;
-        }
-        return false;
-    }
-
-    _findLimits(tag, start, end) {
-        const limits = [0, 0];
-        for (let i = 0; i < tag.childNodes.length; i++) {
-            if (tag.childNodes[i] === start) limits[0] = i;
-            if (tag.childNodes[i] === end) {
-                limits[1] = i;
-                break;
-            }    
-        }
-        return limits;
-    }
 
     setDecorator() {
         console.log(this.range)
@@ -78,7 +29,7 @@ export default class TextDecorator extends TextExtractor {
             console.log(wrapper)
             this.range.setStart(textNode, 0);
             this.range.setEnd(textNode, 0);
-            return this.changeSelection(this.range);
+            return this.changeSelection();
         }
 
         if (this.foundation === this.redactor) {
@@ -103,7 +54,7 @@ export default class TextDecorator extends TextExtractor {
                 const beforeStart = this.startTags[this.startTags.length - 1] || this.begin.parentElement;
                 beforeStart.after(this.fragment);
                 this.start = beforeStart.nextSibling;
-                if(this._checkToRemove(beforeStart)) {
+                if(this.checkToRemove(beforeStart)) {
                     console.log("step 5.1")
                     beforeStart.remove();
                 }
@@ -164,7 +115,7 @@ export default class TextDecorator extends TextExtractor {
             
                 beforeStart.after(this.fragment);
                 this.range.setStart(beforeStart.nextSibling, 0);
-                if (this._checkToRemove(beforeStart)) {
+                if (this.checkToRemove(beforeStart)) {
                     console.log(" cancel step 3.1")
                     beforeStart.remove();
                 }
@@ -199,12 +150,12 @@ export default class TextDecorator extends TextExtractor {
         }
 
         for (let tag of this.startTags) {
-            if (this._checkToRemove(tag)) {
+            if (this.checkToRemove(tag)) {
                 tag.remove();
             }
         }
         for (let tag of this.endTags) {
-            if (this._checkToRemove(tag)) {
+            if (this.checkToRemove(tag)) {
                 tag.remove();
             }
         }
@@ -248,7 +199,7 @@ export default class TextDecorator extends TextExtractor {
                 const forEndClone = children.slice(endIndex);
                 endClone.append(...forEndClone);                
                 
-                if (!this._checkToRemove(endClone)) {
+                if (!this.checkToRemove(endClone)) {
                     console.log(" cancel step 11.1.1")
                     console.log(...endClone.childNodes)
                     end.after(endClone);
@@ -257,7 +208,7 @@ export default class TextDecorator extends TextExtractor {
 
             this.start = tag.nextSibling;
             
-            if (this._checkToRemove(tag)) {
+            if (this.checkToRemove(tag)) {
                 console.log(" cancel step 12")
                 tag.remove();
             }

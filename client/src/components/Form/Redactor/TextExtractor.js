@@ -1,4 +1,5 @@
 import Selected from "./Selected";
+import collection from "./tagsCollection"
 
 
 export default class TextExtractor extends Selected {
@@ -15,7 +16,9 @@ export default class TextExtractor extends Selected {
     constructor() {
 
         super();
-
+        console.log(this.range)
+        if(!this.range) return;
+        
         if (this.isCollapsed && 
             this.range.startContainer instanceof HTMLElement && 
             this.range.startContainer.childNodes.length >= this.range.startOffset) {
@@ -110,6 +113,56 @@ export default class TextExtractor extends Selected {
             if (endNode) middleNode.after(endNode);
             this.range.setStart(middleNode, 0);
             this.range.setEnd(middleNode, middleNode.length);
+    }
+
+    createElement(tagName = this.tagName) {
+        const tag = (tagName === this.tagName) ? this.tag : collection[tagName];
+        const element = document.createElement(tag.tagName);
+
+        for (let key in tag.data) {
+            element.dataset[key] = tag.data[key];
+        }
+
+        for (let key in tag.style) {
+            element.style[key] = tag.style[key];
+        }
+
+        return element;
+    }
+
+    
+
+    _closestBlock(node) {
+            
+        let child = node;
+        while (node !== this.redactor) {
+            child = node;
+            node = node.parentElement;
+        }
+        return child;
+    }
+
+    checkToRemove = (node) => {
+
+        const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+        console.log("treeWalker")
+        while(walker.nextNode()) {
+            if (walker.currentNode.data !== "") return false;
+        }
+        
+        return true;
+    }
+
+    _findLimits(tag, start, end) {
+        const limits = [0, 0];
+        for (let i = 0; i < tag.childNodes.length; i++) {
+            if (tag.childNodes[i] === start) limits[0] = i;
+            if (tag.childNodes[i] === end) {
+                limits[1] = i;
+                break;
+            }    
+        }
+        return limits;
     }
 
     changeSelection() {

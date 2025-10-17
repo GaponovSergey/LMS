@@ -11,170 +11,27 @@ import FontFamily from "./FontFamily";
 import FontSize from "./FontSize";
 import TextExtractor from "./TextExtractor";
 import TextDecorator from "./TextDecorator";
+import Handler from "./Handler";
 
 
 
 export default function Redactor() {
     
-    let selected = new Selected(); 
-    const toggler = new Toggler(selected);
+    const toggler = new Toggler();
     let [state, setState] = useState(toggler.state);
 
-
-
-    const keyHandler = (e)=> {
-        switch(e.code) {
-            case "Enter":
-                keyEnterHandler(e);
-                break;
-            case "ArrowDown":
-                keyArrowDownHandler(e);
-                break;
-            case "ArrowUp":
-                keyArrowUpHandler(e);
-                break;
-            case "ArrowLeft":
-                keyArrowLeftHandler(e);
-                break;
-            case "ArrowRight":
-                keyArrowRightHandler(e);
-                break;
-            default: 
-                return;
-        }
-    };
-
-    
-    
-    const verticalHandler = ( isTop = false)=> {
-
-        const side = isTop ? "previousElementSibling" : "nextElementSibling";
-
-        return (e) => {
-            const selected = new Selected();
-            const blockElement = selected.foundationTags.find( tag => tag.dataset.type === "block");
-            blockElement.style.display = "inline";
-            const lines = blockElement.getClientRects();
-            const controlLine = isTop ? lines[0].y : lines[lines.length - 1].y;
-            const selectedLine = selected.range.getBoundingClientRect().y;
-            const isInControlLine = isTop ? controlLine >= selectedLine : controlLine <= selectedLine;
-            console.log(blockElement.getClientRects())
-            console.log(selected.range.getBoundingClientRect())
-            blockElement.style.display = "block";
-            const sibling = blockElement[side];
-            
-            if (isInControlLine &&
-                sibling) {
-                    const textNode = selected.findTextNode(sibling, isTop);
-
-
-                selected.range.setStart(textNode, isTop ? textNode.length : 0);
-                selected.range.setEnd(textNode, isTop ? textNode.length : 0);
-
-                selected.selection.removeAllRanges();
-                selected.selection.addRange(selected.range);
-                e.preventDefault()
-
-            }
-        };
-        
-    };
-
-    const horisontalHandler = ( isTop = false)=> {
-
-        const side = isTop ? "previousElementSibling" : "nextElementSibling";
-
-        return (e) => {
-            const selected = new Selected();
-            const blockElement = selected.foundationTags.find( tag => tag.dataset.type === "block");
-            const textNodes = document.createTreeWalker(blockElement, NodeFilter.SHOW_TEXT);
-            
-            if(blockElement[side] && ((!isTop && blockElement.dataset.conception === "HEADER2") || isTop) && 
-                ( isTop && textNodes.firstChild() === selected.range.startContainer && !selected.range.startOffset || 
-                !isTop && textNodes.lastChild() === selected.range.endContainer && selected.range.endContainer.length === selected.range.endOffset)
-            ) {
-                
-                const textNode = selected.findTextNode(blockElement[side], isTop);
-                const offset = isTop ? textNode.length : 0;
-
-                selected.range.setStart(textNode, offset);
-                selected.range.setEnd(textNode, offset);
-
-                selected.selection.removeAllRanges();
-                selected.selection.addRange(selected.range);
-                e.preventDefault()
-            }
-        };
-        
-    };
-
-    const keyArrowDownHandler = verticalHandler();
-    const keyArrowUpHandler = verticalHandler(true);
-    const keyArrowLeftHandler = horisontalHandler(true);
-    const keyArrowRightHandler = horisontalHandler();
-
-    const keyEnterHandler = (e)=> {
-        const selected = new Selected();
-        const blockElement = selected.foundationTags.find( tag => tag.dataset.type === "block");
-        
-        switch(blockElement.dataset.conception) {
-            case "HEADER2":
-                headerEnterHandler(e);
-                break;
-            default: 
-                return;
-        }
-    };
-
-    const headerEnterHandler = e => {
-        e.preventDefault();
-        
-        const selected = new TextExtractor();
-        selected.extractContent();
-        const header2 = selected.foundationTags.find( tag => tag.dataset.conception === "HEADER2")
-        console.log("handler")
-            console.log(header2.childNodes)
-        if (selected.isCollapsed) {
-            
-            const textNode = document.createTextNode('');
-            if (!selected.range.endContainer.nextSibling) {
-                selected.range.endContainer.after(document.createElement("br"), textNode, document.createElement("br"));
-            } else {
-                selected.range.endContainer.after(document.createElement("br"), textNode);
-            }
-            
-            selected.range.setEnd(textNode, 0);
-            selected.range.setStart(textNode, 0);
-                            
-            
-        } else {
-            const br = document.createElement("br");
-            const textNode = document.createTextNode('');
-            selected.begin.after(br, textNode);
-            selected.range.setEnd(textNode, 0);
-            selected.range.setStart(textNode, 0);
-        }
-
-        selected.changeSelection();
-        
-    }
-
-    
-
     document.onselectionchange = ()=> {
-        
-        selected = new Selected();
-        const toggler = new Toggler(selected);
+        console.log("selectionchange")
+        const toggler = new Toggler();
         setState(toggler.state);
         
-
-        if (selected.redactor && selected.foundation === selected.redactor && selected.isCollapsed) {
+        if (toggler.redactor && toggler.foundation === toggler.redactor && toggler.isCollapsed) {
             const decorator = new TextDecorator("paragraph");
             const range = decorator.range;
             let wrapper;
 
-            if(selected.redactor.querySelector(`*[data-conception="PARAGRAPH"]`)) {
-                wrapper = selected.redactor.querySelector(`*[data-conception="PARAGRAPH"]`);
+            if(decorator.redactor.querySelector(`*[data-conception="PARAGRAPH"]`)) {
+                wrapper = decorator.redactor.querySelector(`*[data-conception="PARAGRAPH"]`);
             }  else {
                 
                 wrapper = decorator.createElement();
@@ -214,7 +71,10 @@ export default function Redactor() {
             </div>
             <div id="redactor" 
 
-            onKeyDown = {keyHandler}
+            onKeyDown = { e => {
+                const handler = new Handler();
+                handler.keyHandler(e);
+            }}
 
             onPaste={ (e)=>{
                     e.preventDefault();

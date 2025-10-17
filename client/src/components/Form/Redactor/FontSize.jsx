@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState}  from "react";
 import {Select, SelectString, ToggleButton, Options, Option} from "./Select";
 import TextDecorator from "./TextDecorator";
 import "./redactor.css";
@@ -6,16 +6,24 @@ import "./redactor.css";
 
 export default function FontSize({isFromRedactor = false, state = null, concept}) {
     console.log(state)
-    const {defaultValue, values, keyStyle} = concept; 
+    const {values, keyStyle} = concept; 
 
-    const options = values.map((size, i) => {
+    const valuesMap = (size, i) => {
         
             return(
-                <Option value={size} isDefault={defaultValue === size} key={"fontsize" + i}>
+                <Option value={size} isDefault={state.defaultValue === size} key={"fontsize" + i}>
                     <span style={{fontSize: size}}>{size}</span>
                 </Option>
             )
-        })
+        };
+    
+    const [options, setOptions] = useState( () => values.map(valuesMap ))
+        
+    useEffect( ()=> {
+                
+        setOptions((options) => options = values.map(valuesMap ))
+
+    }, [state.defaultValue])
 
     return(
         <Select style={{display: "inline-flex", gap: "0.2px"}}>
@@ -25,8 +33,10 @@ export default function FontSize({isFromRedactor = false, state = null, concept}
                     if (state.isSelected) {
                         
                         decorator.clearDecorator();
+                        if (size === state.defaultValue) return;
                         decorator = new TextDecorator("fontSize", {[keyStyle]: size});
                     }
+                    if (size === state.defaultValue) return;
                     decorator.setDecorator();
                 }}>
                 <span>---</span>  

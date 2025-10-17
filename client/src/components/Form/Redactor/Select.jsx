@@ -7,7 +7,10 @@ export function Select({style = null, children}) {
 
     const value = {
         toggler: useState(false),
-        value: useState(null),
+        value: useState({
+            toggle: false,
+            value: null
+        }),
         options: useState([])
     } 
 
@@ -51,12 +54,13 @@ export function Option({value, className = null, isDefault = false, children}) {
 
    useEffect(()=> {
         setOptions(options => [...options, {value, isDefault, children}] );
-        if(isDefault) setValue(value);
-    }, [])
+        if(isDefault) setValue({toggle: !valueState.toggle, value});
+    }, [isDefault])
 
     return(
         <button className={className} onClick={()=> {
-            setValue(value);
+            
+            setValue({toggle: !valueState.toggle, value});
             setOpened(false);
         }}>
             {children}
@@ -76,12 +80,12 @@ export function SelectButton({
 
 
     useEffect( ()=> {
-        if(setValue) setValue(valueState);
-        if(onClick) onClick(valueState);
-    }, [valueState]);
+        if(setValue) setValue(valueState.value);
+        if(onClick) onClick(valueState.value);
+    }, [valueState.toggle]);
 
     return(
-        <button className={className} onClick={()=> onClick ? onClick(valueState) : null} disabled={disabled}>
+        <button className={className} onClick={()=> onClick ? onClick(valueState.value) : null} disabled={disabled}>
             {children}
         </button>
     )
@@ -92,6 +96,7 @@ export function SelectString({
         outerValue = null, 
         onChange = null, 
         disabled = false, 
+        valueOnly = true,
         children
     }) {
 
@@ -100,7 +105,7 @@ export function SelectString({
     const [options] = useContext(SelectContext).options;
 
     const [content, setContent] = useState(children);
-
+        
     useEffect( ()=> {
 
         if(!onChange) return;
@@ -110,12 +115,12 @@ export function SelectString({
         if(outerValue == "default" && options.length) {
 
             const option = options.find( option => option.isDefault === true);
-            if (option) setContent(option.children);
+            if (option) setContent( valueOnly ? option.value : option.children);
         }
         else {
             if (options.length) {
                 const option = options.find( option => option.value === outerValue);
-                if (option) setContent(option.children);
+                if (option) setContent(valueOnly ? option.value : option.children);
             }
         }
 
@@ -125,13 +130,13 @@ export function SelectString({
 
         if(!onChange) return;
 
-        onChange(innerValue);
+        onChange(innerValue.value);
         if (options.length) {
-            const option = options.find( option => option.value === innerValue);
-            if (option) setContent(option.children);
+            const option = options.find( option => option.value === innerValue.value);
+            if (option) setContent(valueOnly ? option.value : option.children);
         }
 
-    }, [innerValue])
+    }, [innerValue.toggle])
 
     return(
         <button className={className} onClick={()=> setOpened(!isOpened)} disabled={disabled}>

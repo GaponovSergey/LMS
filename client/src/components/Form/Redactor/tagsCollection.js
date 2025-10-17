@@ -125,7 +125,9 @@ const collection = {
         },
         style: {
             minHeight: "1em",
-            overflowWrap: "break-word"
+            overflowWrap: "break-word",
+            fontFamily: "Arial",
+            fontSize: "16px"
         }
     },
 
@@ -137,7 +139,10 @@ const collection = {
         },
         style: {
             minHeight: "1em",
-            overflowWrap: "break-word"
+            overflowWrap: "break-word",
+            fontFamily: "Calibri",
+            fontWeight: "inherit",
+            fontSize: "32px"
         }
     }
 };

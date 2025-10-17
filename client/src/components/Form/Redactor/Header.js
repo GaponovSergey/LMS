@@ -1,11 +1,13 @@
-import TextDecorator from "./TextDecorator";
+import TextExtractor from "./TextExtractor";
+import collection from "./tagsCollection";
 
 
-export default class Header extends TextDecorator  {
+export default class Header extends TextExtractor  {
 
-    
+    tag = collection["header2"];
+
     constructor() {
-        super("header2");
+        super();
     }
 
     setHeader() {
@@ -67,14 +69,14 @@ export default class Header extends TextDecorator  {
                 const forEndClone = children.slice(endIndex);
                 endClone.append(...forEndClone);                
                 
-                if (!this._checkToRemove(endClone)) {
+                if (!this.checkToRemove(endClone)) {
                     console.log(" step 7")
                     console.log(...endClone.childNodes)
                     end.after(endClone);
                 }  
             }
 
-            if (this._checkToRemove(tag)) {
+            if (this.checkToRemove(tag)) {
                 console.log(" step 8")
                 tag.remove();
             }

@@ -21,6 +21,7 @@ export default class Selected  {
         selection = null;
         isCollapsed = false;
         redactor = null;
+        blockElement = null;
 
         constructor(){
             this.selection = document.getSelection();
@@ -150,9 +151,14 @@ export default class Selected  {
         _setFoundationTags() {
             
             let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
-
+            let isBlockFinded = false;
             while(node !== this.redactor) {
                 this.foundationTags.push(node);
+
+                if (!isBlockFinded && node.dataset.type === "block") {
+                    isBlockFinded = true;
+                    this.blockElement = node;
+                }
                 node = node.parentElement;
             }
         }
