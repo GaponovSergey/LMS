@@ -62,6 +62,7 @@ export default class Toggler extends TextExtractor  {
         const result = {};
 
         result.isFromRedactor = this.isFromRedactor;
+        result.blockElement = this.blockElement ? this.blockElement.dataset.conception : null;
 
         for(let key in collection) {
 

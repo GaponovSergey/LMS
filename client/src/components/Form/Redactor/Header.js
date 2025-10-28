@@ -18,31 +18,41 @@ export default class Header extends TextExtractor  {
         let end = this.fragment.lastChild;
        
         let children = Array.from(this.fragment.childNodes);
-        let newFragment = new DocumentFragment();
-            
-        for(let element of children) {
+        const header = this.createElement();
+        const newFragment = new DocumentFragment();
+
+        if (children.length) {
+            if (children[0] instanceof HTMLElement && children[0].dataset.type === "block") {
+                header.append(...children[0].childNodes);
+
+                for (let i = 1; i < children.length; i++) {
+                    header.append(document.createElement("BR"), ...children[i].childNodes);
+                }
                 
-            if (element instanceof HTMLElement && element.dataset.type === "block") {
-
-                console.log("step 2")
-
-                const wrapper = this.createElement();
-                wrapper.append(...element.childNodes);
-                newFragment.append(wrapper)
+                
+                const start = this.findTextNode(header)
+                const end = this.findTextNode(header, true)
+                this.range.setStart(start, 0);
+                this.range.setEnd(end, end.length);
+                
             } else {
-                console.log("step 3")
-                newFragment.append(element)
+                newFragment.append(this.fragment);
             }
         }
 
+
         if(this.startTags.length) {
             console.log("step 4.1")
-            this.startTags[this.startTags.length - 1].after(newFragment);
+            this.startTags[this.startTags.length - 1].after(newFragment.childNodes.length ? newFragment : header);
         }
         else {
             console.log("step 4.2")
-            this.begin.after(newFragment);
+            this.begin.after(newFragment.childNodes.length ? newFragment : header);
         }
+        this.changeSelection()
+        
+        console.log("header")
+        console.log(this.range)
 
         if (!this.foundationTags.length) return;
 
@@ -106,6 +116,7 @@ export default class Header extends TextExtractor  {
         console.log(wrapper.childNodes)
         this.range.setEnd(end, endOffset);
         this.changeSelection();
+
         const p = this.createElement("paragraph");
         p.append(document.createTextNode(""));
         if (this.redactor.lastElementChild === wrapper) wrapper.after(p);

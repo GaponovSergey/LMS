@@ -31,12 +31,22 @@ export default function FontFamily({isFromRedactor = false, state = null, concep
             <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className="FontFamily" onChange={(font)=> {
                 if (!isFromRedactor) return;
                 
-                let decorator = new TextDecorator("fontFamily", {[keyStyle]: font});
+                let decorator = new TextDecorator({
+                                        tagName: "fontFamily",
+                                        style: {
+                                            [keyStyle]: font
+                                        }
+                            });
                     if (state.isSelected) {
                         
                         decorator.clearDecorator();
                         if (font === state.defaultValue) return;
-                        decorator = new TextDecorator("fontFamily", {[keyStyle]: font});
+                        decorator = new TextDecorator({
+                                            tagName: "fontFamily",
+                                            style: {
+                                                [keyStyle]: font
+                                            }
+                            });
                     }
                     if (font === state.defaultValue) return;
                     decorator.setDecorator();

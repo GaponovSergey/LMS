@@ -24,10 +24,20 @@ export default function StringColor({isFromRedactor = false, state = null, conce
         <Select style={{display: "inline-flex", gap: "0.2px"}}>
             <SelectButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonLeft" onClick={(color)=> {
                 if (!isFromRedactor) return;
-                let decorator = new TextDecorator("stringColor", {[keyStyle]: color});
+                let decorator = new TextDecorator({
+                                        tagName: "stringColor",
+                                        style: {
+                                            [keyStyle]: color
+                                        }
+                            });
                     if (state) {
                         decorator.clearDecorator();
-                        decorator = new TextDecorator("stringColor", {[keyStyle]: color});
+                        decorator = new TextDecorator({
+                                        tagName: "stringColor",
+                                        style: {
+                                            [keyStyle]: color
+                                        }
+                            });
                     }
                     decorator.setDecorator();
                 }} setValue={setValueState}>

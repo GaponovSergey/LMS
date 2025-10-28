@@ -8,7 +8,7 @@ const TextDecorButton = ({state, isFromRedactor = false, conception, children}) 
     return (
         
         <button disabled = { !isFromRedactor ? "disabled" : false } className={`TextDecorButton ${state && "TextDecorButton-pushed"}`} onClick={()=> { 
-                    const textDecorator = new TextDecorator(conception);
+                    const textDecorator = new TextDecorator({tagName: conception});
                     if (!state) textDecorator.setDecorator();
                     else textDecorator.clearDecorator();
                 }}>

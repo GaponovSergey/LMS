@@ -5,17 +5,73 @@ export default class TextDecorator extends TextExtractor {
 
     tag = {};
 
-    constructor(tagName, style = {}) {
-        super();
+    constructor({
+                    tagName,
+                    style = {},
+                    range = null
+                }) {
+
+        super(range);
         this.tagName = tagName;
         this.tag = collection[tagName];
-        this.tag.style = {...this.tag.style, ...style}
+        this.tag.style = {...this.tag.style, ...style};
+        this.params = { tagName, style, range};
     }
 
+    mapToRanges(blockElements){
+        return blockElements.map((element, i) =>{
+
+        const range = new Range();
+        const start = this.findTextNode(element);
+        const end = this.findTextNode(element, true);
+        console.log(start, end)
+                        
+        if (i === 0) {
+            range.setStart(this.range.startContainer, this.range.startOffset);
+        } else {
+            range.setStart(start, 0);
+        }
+
+        if (i === (blockElements.length - 1)) {
+            range.setEnd(this.range.endContainer, this.range.endOffset);
+        } else {
+            range.setEnd(end, end.length);
+        }
+        console.log(range.toString())
+        return range;   
+    });
+    } 
     
 
     setDecorator() {
         console.log(this.range)
+
+        const blockElements = this.blockElements;
+        console.log("blockelems")
+        console.log(this.blockElement)
+
+        if (blockElements.length) {
+            
+        
+            const ranges = this.mapToRanges(blockElements);
+            console.log(ranges)
+            for (let range of ranges) {
+
+                const decorator = new TextDecorator({
+                    tagName: this.params.tagName,
+                    style: this.params.style,
+                    range
+                });
+
+                range = decorator.setDecorator();
+            }
+            this.range.setStart(ranges[0].startContainer, ranges[0].startOffset);
+            this.range.setEnd(ranges[ranges.length - 1].endContainer, ranges[ranges.length - 1].endOffset);
+            console.log("final range")
+            console.log(this.range)
+            return this.changeSelection();
+        }
+
 
         this.extractContent();
 
@@ -32,28 +88,20 @@ export default class TextDecorator extends TextExtractor {
             return this.changeSelection();
         }
 
-        if (this.foundation === this.redactor) {
-            let children = Array.from(this.fragment.children);
-            console.log("step 2")
-            for(let element of children) {
-                const wrapper = this.createElement();
-                wrapper.append(...element.childNodes);
-                element.append(wrapper);
-            }
-        } else {
-            console.log("step 3")
-            const wrapper = this.createElement();
-            wrapper.append(...this.fragment.childNodes);
-            this.fragment.append(wrapper)
-        }
         
-        if (this.foundation !== this.redactor || this.isBegin) {
-            console.log("step 4")
-            if (this.isBegin || this.startTags.length) {
+        console.log("step 3")
+        console.log(this.fragment.childNodes)
+        const wrapper = this.createElement();
+        wrapper.append(...this.fragment.childNodes);
+        this.fragment.append(wrapper)
+        
+        
+        
+            if (this.startTags.length) {
                 console.log("step 5")
-                const beforeStart = this.startTags[this.startTags.length - 1] || this.begin.parentElement;
+                const beforeStart = this.startTags[this.startTags.length - 1];
                 beforeStart.after(this.fragment);
-                this.start = beforeStart.nextSibling;
+                this.start = this.findTextNode(wrapper);
                 if(this.checkToRemove(beforeStart)) {
                     console.log("step 5.1")
                     beforeStart.remove();
@@ -61,18 +109,10 @@ export default class TextDecorator extends TextExtractor {
             }
             else {
                 console.log("step 6")
-                this.begin.after(this.fragment);
-                this.start = this.begin.nextSibling;
+                this.begin.after(document.createTextNode(""), this.fragment, document.createTextNode(""));
+                this.start = wrapper;
             }
-        } else {
-            console.log("step 7")
-            let sibling = this._closestBlock(this.begin);
-            let firstChild = this.start.firstChild; 
-            sibling.append(...this.start.childNodes);
-            this.start.remove();
-            sibling.after(this.fragment);
-            this.start = firstChild;
-        }
+        
 
         if (this.start) {
             console.log(" step 9.1")
@@ -81,22 +121,39 @@ export default class TextDecorator extends TextExtractor {
             this.range.setStart(this.start, 0);
         }
 
-        if (this.foundation === this.redactor && !this.isEnd) {
-            console.log("step 10")
-            console.log(this.end)
-            let blockElement = this.end.parentElement.closest('*[data-type="block"]');
-            if (blockElement.nextSibling) {
-                blockElement.append(...blockElement.nextSibling.childNodes);
-                blockElement.nextSibling.remove();
-            }
-        }
-        
         if (this.end) this.range.setEnd(this.end, this.end.length);
         this.changeSelection();
+        return this.range;
     }
 
     clearDecorator() {
         console.log(this.range)
+
+        const blockElements = this.blockElements;
+        console.log("blockelems clear")
+        console.log(blockElements)
+
+        if (blockElements.length) {
+            const ranges = this.mapToRanges(blockElements);
+            console.log(ranges)
+            for (let range of ranges) {
+
+                const decorator = new TextDecorator({
+                    tagName: this.params.tagName,
+                    style: this.params.style,
+                    range
+                });
+
+                decorator.clearDecorator();
+            }
+            this.range.setStart(ranges[0].startContainer, ranges[0].startOffset);
+            this.range.setEnd(ranges[ranges.length - 1].endContainer, ranges[ranges.length - 1].endOffset);
+            console.log("final range clear")
+            console.log(this.range)
+            return this.changeSelection();
+        }
+
+        
 
         this.extractContent();
 
@@ -108,13 +165,13 @@ export default class TextDecorator extends TextExtractor {
             element.remove();
         }
 
-        if (this.foundation !== this.redactor || this.isBegin) {
-            if (this.isBegin || this.startTags.length) {
+        
+            if (this.startTags.length) {
                 console.log(" cancel step 3")
                 const beforeStart = this.startTags[this.startTags.length - 1];
             
                 beforeStart.after(this.fragment);
-                this.range.setStart(beforeStart.nextSibling, 0);
+                this.range.setStart(this.findTextNode(beforeStart.nextSibling), 0);
                 if (this.checkToRemove(beforeStart)) {
                     console.log(" cancel step 3.1")
                     beforeStart.remove();
@@ -124,31 +181,14 @@ export default class TextDecorator extends TextExtractor {
             else {
                 console.log(" cancel step 4")
                 this.begin.after(this.fragment);
-                this.range.setStart(this.begin.nextSibling, 0);
+                this.range.setStart(this.findTextNode(this.begin.nextSibling), 0);
                 if(this.begin.data === "") {
                     this.begin.remove();
                 }
             }
-        } else {
-            console.log(" cancel step 5")
-            let sibling = this._closestBlock(this.begin);
-            let offset = sibling.childNodes.length;
-            sibling.append(...this.start.childNodes);
-            this.start.remove();
-            sibling.after(this.fragment);
-            this.range.setStart(sibling, offset);
-        }
     
         console.log(" cancel step 7")
         
-
-        if (this.foundation === this.redactor && !this.isEnd) {
-            console.log(" cancel step 8")
-            let sibling = this.endElement.nextSibling;
-            this.endElement.append(...sibling.childNodes);
-            sibling.remove();
-        }
-
         for (let tag of this.startTags) {
             if (this.checkToRemove(tag)) {
                 tag.remove();

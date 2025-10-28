@@ -29,12 +29,22 @@ export default function FontSize({isFromRedactor = false, state = null, concept}
         <Select style={{display: "inline-flex", gap: "0.2px"}}>
             <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className="FontFamily" onChange={(size)=> {
                 if (!isFromRedactor) return;
-                let decorator = new TextDecorator("fontSize", {[keyStyle]: size});
+                let decorator = new TextDecorator({
+                                        tagName: "fontSize",
+                                        style: {
+                                            [keyStyle]: size
+                                        }
+                            });
                     if (state.isSelected) {
                         
                         decorator.clearDecorator();
                         if (size === state.defaultValue) return;
-                        decorator = new TextDecorator("fontSize", {[keyStyle]: size});
+                        decorator = new TextDecorator({
+                                        tagName: "fontSize",
+                                        style: {
+                                            [keyStyle]: size
+                                        }
+                            });
                     }
                     if (size === state.defaultValue) return;
                     decorator.setDecorator();

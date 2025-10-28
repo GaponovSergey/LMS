@@ -3,6 +3,18 @@ export default class Selected  {
         startTags = [];
         endTags = [];
         foundationTags = [];
+
+        get blockElements() {
+            const {start, end} = this._blockElements;
+            const reversedEnd = end.reverse();
+            return[...start, ...reversedEnd];
+        }
+
+        _blockElements = {
+            start: [],
+            end: []
+        };
+
         tags = {
                 BOLD: [],
                 ITALIC: [],
@@ -12,9 +24,12 @@ export default class Selected  {
                 TEXTCOLOR: [],
                 STRINGCOLOR: [],
                 FONTFAMILY: [],
-                FONTSIZE: []
+                FONTSIZE: [],
+                UL: [],
+                OL: [],
+                LI: []
             };
-        lastIndex = {};
+        //lastIndex = {};
 
         foundation = null;
         range = null;
@@ -23,12 +38,14 @@ export default class Selected  {
         redactor = null;
         blockElement = null;
 
-        constructor(){
+        constructor(range = null) {
             this.selection = document.getSelection();
             console.log("select 1")
             if (!this.selection.anchorNode) return;
 
-            this.range = this.setUncollapsedRange(this.selection);
+            this.range = range ? range : this.setUncollapsedRange(this.selection);
+            this.startRange = [this.range.startContainer, this.range.startOffset];
+            this.endRange = [this.range.endContainer, this.range.endOffset];
             this.foundation = this.range.commonAncestorContainer;
 
             if (this.foundation?.id === "redactor") {
@@ -36,12 +53,12 @@ export default class Selected  {
                 this.redactor = this.foundation;
             } else {
                 console.log("select 3")
-                this.redactor = this.selection.anchorNode ? this.selection.anchorNode.parentElement.closest("#redactor") : null;
+                this.redactor = this.range.startContainer ? this.range.startContainer.parentElement.closest("#redactor") : null;
             }
 
             if ( this.redactor) {
                 console.log("select 4")
-                if (this.selection.toString().length) {
+                if (this.range.toString().length) {
                     console.log("select 5")
                     console.log(this.range)
                     if (this.range.startContainer instanceof HTMLElement) {
@@ -76,12 +93,14 @@ export default class Selected  {
                     console.log(this.range)
                     this._setSelectedTags();
                     this._setFoundationTags();
+                    
                     console.log(this)
                 } else { 
                     console.log("select 10")
                     this.isCollapsed = true;
 
                     this._setFoundationTags();
+                    
                 }
             }
         }
@@ -139,9 +158,14 @@ export default class Selected  {
                 if (!isBegin) continue;
                 
                 if (!(element instanceof HTMLElement) || element.tagName === "BR") continue;
+
+                if (element instanceof HTMLElement && element.dataset.type === "block") this._blockElements.start.push(element);
+
                 let tags = element.querySelectorAll("*");
                 for(let tag of tags) {
+                    if (tag.tagName === "BR") continue;
                     this.tags[tag.dataset.conception].push(tag); 
+                    if (tag instanceof HTMLElement && tag.dataset.type === "block") this._blockElements.start.push(tag);
                 }
                 this.tags[element.dataset.conception].push(element); 
                 console.log(element)
@@ -172,15 +196,18 @@ export default class Selected  {
 
             while (node !== this.foundation) {
                 
-                if (node[sibling] && node.parentElement !== this.foundation) {
-                    this._addSiblings(node[sibling], course);
-                }
+                
                 if (node instanceof HTMLElement && node.tagName !== "BR") {
                     
                     this[tags].push(node);
                     this.tags[node.dataset.conception].push(node);
-                    this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};
-                    this.lastIndex[node.dataset.conception][side] = this[tags].length - 1;
+                    
+                    if (node.dataset.type === "block") this._blockElements[side].push(node);
+                    //this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};
+                    //this.lastIndex[node.dataset.conception][side] = this[tags].length - 1;
+                }
+                if (node[sibling] && node.parentElement !== this.foundation) {
+                    this._addSiblings(node[sibling], course);
                 }
                 child = node;
                 node = node.parentElement;
@@ -190,11 +217,15 @@ export default class Selected  {
         }
 
         _addSiblings(node, course = "right") {
+
             const sibling = ( course === "right" ) ? "nextElementSibling" : "previousElementSibling";
+            const side = ( course === "right" ) ? "start" : "end";
+            
             console.log("add " + node)
             while (node) {
                 console.log(node)
-                if (node instanceof HTMLElement && node.tagName !== "BR") this.tags[node.dataset.conception].push(node);
+                if (node.tagName !== "BR") this.tags[node.dataset.conception].push(node);
+                if (node.dataset.type === "block") this._blockElements[side].push(node);
                 if (node.children.length) {
                     this._addSiblings(node.firstElementChild);
                 }

@@ -126,7 +126,7 @@ const collection = {
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
-            fontFamily: "Arial",
+            fontFamily: "Times New Roman",
             fontSize: "16px"
         }
     },
@@ -140,9 +140,53 @@ const collection = {
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
-            fontFamily: "Calibri",
+            fontFamily: "Times New Roman",
             fontWeight: "inherit",
             fontSize: "32px"
+        }
+    },
+
+    ul: {
+        tagName: "UL",
+        data: {
+            type: "multiblock",
+            conception: "UL"
+        },
+        style: {
+            minHeight: "1em",
+            overflowWrap: "break-word",
+            fontFamily: "Times New Roman",
+            fontWeight: "inherit",
+            fontSize: "16px"
+        }
+    },
+
+    ol: {
+        tagName: "OL",
+        data: {
+            type: "multiblock",
+            conception: "OL"
+        },
+        style: {
+            minHeight: "1em",
+            overflowWrap: "break-word",
+            fontFamily: "Times New Roman",
+            fontWeight: "inherit",
+            fontSize: "16px"
+        }
+    },
+
+    li: {
+        tagName: "LI",
+        data: {
+            type: "multiblock",
+            conception: "LI"
+        },
+        style: {
+            minHeight: "1em",
+            overflowWrap: "break-word",
+            fontFamily: "Times New Roman",
+            fontWeight: "inherit"
         }
     }
 };

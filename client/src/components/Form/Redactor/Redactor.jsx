@@ -12,6 +12,7 @@ import FontSize from "./FontSize";
 import TextExtractor from "./TextExtractor";
 import TextDecorator from "./TextDecorator";
 import Handler from "./Handler";
+import List from "./List";
 
 
 
@@ -26,7 +27,7 @@ export default function Redactor() {
         setState(toggler.state);
         
         if (toggler.redactor && toggler.foundation === toggler.redactor && toggler.isCollapsed) {
-            const decorator = new TextDecorator("paragraph");
+            const decorator = new TextDecorator({tagName: "paragraph"});
             const range = decorator.range;
             let wrapper;
 
@@ -51,10 +52,16 @@ export default function Redactor() {
         decorator.setHeader();
     }
 
+    const setList = ()=> {
+        const list = new List("ol");
+        list.setList();
+    }
+
     return(
         <div>
             <div style={{display: "flex", gap: "3px", margin: "5px"}}>
-                <button onClick={setHeader}>Заголовок</button>
+                <button onClick={setHeader} disabled = { !state.isFromRedactor || state.blockElement === "HEADER2" ? "disabled" : false }>Заголовок</button>
+                <button onClick={setList}>Нумерованный список</button>
                 <TextDecorButton conception="bold" isFromRedactor={state.isFromRedactor} state={state.bold}>
                     <b>b</b>
                 </TextDecorButton>

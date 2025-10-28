@@ -13,9 +13,9 @@ export default class TextExtractor extends Selected {
     begin = null;
 
 
-    constructor() {
+    constructor(range) {
 
-        super();
+        super(range);
         console.log(this.range)
         if(!this.range) return;
         
@@ -41,11 +41,11 @@ export default class TextExtractor extends Selected {
     }
 
     extractContent() {
+        
         if (this.range.startContainer === this.range.endContainer && this.range.startContainer.nodeName === "#text") {
             console.log(" extractor step 1")
             this._separateSelected();           
         }
-
         /* if (this.range.startContainer === this.range.endContainer && 
             this.range.startOffset !== 0 && 
             this.range.endOffset !== this.range.endContainer.data.length) {
