@@ -142,13 +142,17 @@ export default class TextExtractor extends Selected {
         return child;
     }
 
-    checkToRemove = (node) => {
+    checkToRemove(node) {
 
-        const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
         console.log("treeWalker")
+
+        if( node.textContent !== "") return false;
+
+        /*const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+        
         while(walker.nextNode()) {
             if (walker.currentNode.data !== "") return false;
-        }
+        }*/
         
         return true;
     }

@@ -1,4 +1,5 @@
 import TextExtractor from "./TextExtractor";
+import Selected from "./Selected";
 import collection from "./tagsCollection";
 
 
@@ -11,6 +12,38 @@ export default class Header extends TextExtractor  {
     }
 
     setHeader() {
+
+        const header = this.createElement();
+
+        const blockElements = this.blockElements;
+        
+        if (blockElements.length) {
+            blockElements[0].before(header);
+            header.append(...blockElements[0].childNodes);
+            blockElements[0].remove();
+
+            for (let i = 1; i < blockElements.length; i++) {
+                header.append(document.createElement("BR"), ...blockElements[i].childNodes);
+                blockElements[i].remove();
+            }
+
+        } else {
+            this.blockElement.before(header);
+            header.append(...this.blockElement.childNodes);
+            this.blockElement.remove();
+        }
+
+        this.range.setStart(...this.startRange);
+        this.range.setEnd(...this.endRange);
+
+        this.changeSelection();
+        
+        const p = this.createElement("paragraph");
+        p.append(document.createTextNode(""));
+        if (header.parentElement.lastElementChild === header) header.after(p);
+    }
+
+    setHeader1() {
         console.log(this.range)
         
         this.extractContent();

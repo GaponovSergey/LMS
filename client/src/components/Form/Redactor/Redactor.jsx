@@ -23,6 +23,13 @@ export default function Redactor() {
 
     document.onselectionchange = ()=> {
         console.log("selectionchange")
+
+        const brs = document.querySelectorAll("#redactor > br");
+
+        for (let br of brs) {
+            br.remove();
+        }
+
         const toggler = new Toggler();
         setState(toggler.state);
         
@@ -52,16 +59,20 @@ export default function Redactor() {
         decorator.setHeader();
     }
 
-    const setList = ()=> {
-        const list = new List("ol");
-        list.setList();
+    const setList = (tag)=> {
+
+        return ()=> {
+            const list = new List(tag);
+            list.setList();
+        } 
     }
 
     return(
         <div>
             <div style={{display: "flex", gap: "3px", margin: "5px"}}>
-                <button onClick={setHeader} disabled = { !state.isFromRedactor || state.blockElement === "HEADER2" ? "disabled" : false }>Заголовок</button>
-                <button onClick={setList}>Нумерованный список</button>
+                <button onClick={setHeader} disabled = { !state.isFromRedactor || state.blockElement === "HEADER2" || state.isMultiblockSelected ? "disabled" : false }>Заголовок</button>
+                <button onClick={setList("ol")} disabled = { !state.isFromRedactor  ? "disabled" : false }>Нумерованный список</button>
+                <button onClick={setList("ul")} disabled = { !state.isFromRedactor  ? "disabled" : false }>Ненумерованный список</button>
                 <TextDecorButton conception="bold" isFromRedactor={state.isFromRedactor} state={state.bold}>
                     <b>b</b>
                 </TextDecorButton>
@@ -82,6 +93,7 @@ export default function Redactor() {
                 const handler = new Handler();
                 handler.keyHandler(e);
             }}
+
 
             onPaste={ (e)=>{
                     e.preventDefault();

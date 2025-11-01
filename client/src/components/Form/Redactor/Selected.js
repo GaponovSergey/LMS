@@ -29,7 +29,6 @@ export default class Selected  {
                 OL: [],
                 LI: []
             };
-        //lastIndex = {};
 
         foundation = null;
         range = null;
@@ -37,6 +36,7 @@ export default class Selected  {
         isCollapsed = false;
         redactor = null;
         blockElement = null;
+        multiblockElement = null;
 
         constructor(range = null) {
             this.selection = document.getSelection();
@@ -97,13 +97,29 @@ export default class Selected  {
                     console.log(this)
                 } else { 
                     console.log("select 10")
+                    console.log(this.range.startContainer )
                     this.isCollapsed = true;
+                    if (this.range.startContainer instanceof HTMLElement) {
+                        console.log("select 11")
+                        const node = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
+                        if (node) {
+                            console.log("select 12")
+                            this.range.setStart(node, 0);
+
+                            this.range.setEnd(node, node.length ? 1 : 0);
+                        } 
+                        
+
+                    }
+                    
 
                     this._setFoundationTags();
                     
                 }
             }
         }
+
+        
 
         findSibling(node, isEnd = false) {
             const sibling = isEnd ? "previousSibling" : "nextSibling";
@@ -118,12 +134,12 @@ export default class Selected  {
         }
 
         findTextNode (node,  isEnd = false) {
-            
             while (node instanceof HTMLElement) {
                 let child = isEnd ? node.lastChild : node.firstChild;
                 if(!child) break;
                 node = child;
             }
+
             return node;
         }
 
@@ -176,12 +192,17 @@ export default class Selected  {
             
             let node = this.foundation instanceof HTMLElement ? this.foundation : this.foundation.parentElement;
             let isBlockFinded = false;
+            let isMultiblockFinded = false;
             while(node !== this.redactor) {
                 this.foundationTags.push(node);
 
                 if (!isBlockFinded && node.dataset.type === "block") {
                     isBlockFinded = true;
                     this.blockElement = node;
+                }
+                if (!isMultiblockFinded && node.dataset.type === "multiblock") {
+                    isMultiblockFinded = true;
+                    this.multiblockElement = node;
                 }
                 node = node.parentElement;
             }
@@ -203,8 +224,6 @@ export default class Selected  {
                     this.tags[node.dataset.conception].push(node);
                     
                     if (node.dataset.type === "block") this._blockElements[side].push(node);
-                    //this.lastIndex[node.dataset.conception] = this.lastIndex[node.tagName] || { start: null, end: null};
-                    //this.lastIndex[node.dataset.conception][side] = this[tags].length - 1;
                 }
                 if (node[sibling] && node.parentElement !== this.foundation) {
                     this._addSiblings(node[sibling], course);

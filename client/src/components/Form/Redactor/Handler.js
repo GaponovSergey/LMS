@@ -24,19 +24,224 @@ export default class Handler extends TextExtractor {
             case "ArrowRight":
                 this.keyArrowRightHandler(e);
                 break;
+            case "Backspace":
+                this.keyBackspaceHandler(e);
+                break;
             default: 
-                return;
+                this.defaultHandler(e);
         }
     };
 
-    
+    defaultHandler(e) {
+                    const keys = ["Comma", "Period", "Slash", "Backquote", 
+                        "Semicolon", "Quote", "BracketLeft", "BracketRight",
+                        "Backslash", "Minus", "Equal", "Space"];
+                        console.log("this.foundationTags")
+                        console.log(this.foundationTags)
+                    if( this.isCollapsed && this.range.endContainer.nodeName === "#text" && 
+                        this.foundationTags.find(element => element.dataset.type === "inline") &&
+                        (e.code.match(/Key|Numpad/) || keys.includes(e.code))) {
+
+                        e.preventDefault()
+                        this.range.endContainer.data += e.key;
+                        this.range.setStart(this.startRange[0], this.startRange[1] + 1);
+                        this.range.setEnd(this.endRange[0], this.endRange[1] + 1);
+
+                        this.changeSelection()
+                    }
+                }
+
+    keyBackspaceHandler(e) {
+
+        console.log("backspace -1")
+        console.log(this.multiblockElement)
+
+        if (this.multiblockElement) {
+        
+            switch(this.multiblockElement.dataset.conception){
+                case "LI":
+                    this.backspaceLiHandler(e);
+                    break;
+                case "OL":
+                case "UL":
+                    this.backspaceListHandler(e);
+                    break;
+                default:
+                    return;
+            }
+        }
+        return;
+    }
+
+    backspaceListHandler(e){
+
+        const list = this.multiblockElement;
+
+        console.log("backspace list 0")
+
+        this.extractContent();
+
+        if (this.checkToRemove(list)) {
+
+            console.log("backspace list 1")
+
+            const side = list.previousElementSibling ? "previousElementSibling" : "nextElementSibling";
+            let sibling = list[side];
+            list.remove();
+
+            if (!sibling) {
+
+                console.log("backspace list 2")
+
+                const p = this.createElement("P");
+                const textNode = document.createTextNode("");
+                p.append(textNode);
+                this.redactor.append(p);
+                this.begin = textNode;
+
+                this.range.setStart(this.begin, this.begin.length ? this.begin.length - 1 : 0);
+                this.range.setEnd(this.begin, this.begin.length);
+
+                   
+            } else {
+
+                console.log("backspace list 3")
+
+                let isEnd = (side === "previousElementSibling");
+                this.begin = this.findTextNode(sibling, isEnd);
+                const offset = isEnd ? this.begin.length : 0;
+
+                this.range.setStart(this.begin, offset ? offset - 1 : 0);
+                this.range.setEnd(this.begin, offset);
+            }
+
+        } else {
+
+            console.log("backspace list 4")
+
+            this.range.setStart(this.begin, this.begin.length ? this.begin.length - 1 : 0);
+            this.range.setEnd(this.begin, this.begin.length);
+        }
+
+        e.preventDefault();
+
+        return this.changeSelection();
+    }
+
+    findFirstText(node) {
+        const textNodes = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+        let firstNode;
+        let isFirstChild = false;
+        let firstChild = null;
+        
+        while (textNodes.nextNode()) {
+            if(!isFirstChild) {
+                isFirstChild = true;
+                firstChild = textNodes.currentNode;
+            }
+            if(textNodes.currentNode.data !== "") {
+                firstNode = textNodes.currentNode;
+                break;
+            }
+        }
+
+        firstNode = firstNode ? firstNode : firstChild;
+
+        return firstNode;
+    }
+
+    findLastText(node) {
+        const textNodes = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
+        let lastNode;
+        
+        while (textNodes.nextNode()) {
+            if(textNodes.currentNode.data !== "") {
+                lastNode = textNodes.currentNode;
+                
+            }
+        }
+
+        lastNode = lastNode ? lastNode : textNodes.lastChild();
+
+        return lastNode;
+    }
+
+    backspaceLiHandler(e) {
+
+        console.log("backspace 0")
+
+        if (!this.isCollapsed) return;
+
+        if (this.range.startOffset !== 0) return;
+
+        const li = this.multiblockElement;
+        let firstNode = this.findFirstText(li);
+
+        console.log("backspace 1")
+        console.log(this.blockElement.childNodes)
+
+        
+
+        if (this.blockElement.textContent && this.range.startContainer !== firstNode) {
+
+            if (li.lastChild !== this.blockElement) return;
+
+            firstNode = this.findFirstText(this.blockElement);
+
+            if (this.range.startContainer !== firstNode) return;
+
+            const parentLi = li.parentElement.parentElement; 
+
+            if (parentLi === this.redactor) {
+
+                if(li.parentElement.lastElementChild !== li) return;
+
+                li.parentElement.after(this.blockElement);
+
+                if (!li.children.length) li.remove();
+
+            } else { 
+
+                if (parentLi.dataset.conception !== "LI") return;
+
+                const newLi = this.createElement("li");
+                newLi.append(this.blockElement);
+                parentLi.after(newLi);
+            } 
+        } else {
+
+            console.log("backspace 2")
+
+            const sibling = li.previousElementSibling;
+
+            if (!sibling) {
+                const list = li.parentElement;
+                list.before(...li.children);
+                li.remove();
+                if (!list.children.length) list.remove();
+            } else {
+                sibling.append(...li.children);
+                li.remove();
+            }
+        }
+
+        e.preventDefault()
+
+        this.range.setStart(...this.startRange);
+        this.range.setEnd(...this.endRange);
+
+        this.changeSelection();
+
+    }
     
     verticalHandler( isTop = false) {
 
         const side = isTop ? "previousElementSibling" : "nextElementSibling";
 
         return (e) => {
-        
+            
+            if (!this.blockElement) return;
+
             this.blockElement.style.display = "inline";
             const lines = this.blockElement.getClientRects();
             const controlLine = isTop ? lines[0].y : lines[lines.length - 1].y;
@@ -45,7 +250,7 @@ export default class Handler extends TextExtractor {
             console.log(this.blockElement.getClientRects())
             console.log(this.range.getBoundingClientRect())
             this.blockElement.style.display = "block";
-            const sibling = this.blockElement[side];
+            const sibling = this.findBlockSibling(isTop);
             
             if (isInControlLine && sibling) {
                 const textNode = this.findTextNode(sibling, isTop);
@@ -76,18 +281,21 @@ export default class Handler extends TextExtractor {
 
         return (e) => {
             
+            if (!this.blockElement) return;
+
             this.removeEmptyFoundationTags();
             const textNodes = document.createTreeWalker(this.blockElement, NodeFilter.SHOW_TEXT);
             
-            if(this.blockElement[side]  && 
-                ( isTop && textNodes.firstChild() === this.range.startContainer && !this.range.startOffset || 
-                !isTop && textNodes.lastChild() === this.range.endContainer && this.range.endContainer.length === this.range.endOffset)
+            if( isTop && textNodes.firstChild() === this.range.startContainer && !this.range.startOffset || 
+                !isTop && textNodes.lastChild() === this.range.endContainer && this.range.endContainer.length === this.range.endOffset
             ) {
-                
-                const textNode = this.findTextNode(this.blockElement[side], isTop);
-                const offset = isTop ? textNode.length : 0;
 
+                const sibling = this.findBlockSibling(isTop);
+
+                if (!sibling) return;
                 
+                const textNode = this.findTextNode(sibling, isTop);
+                const offset = isTop ? textNode.length : 0;
 
                 this.range.setStart(textNode, offset);
                 this.range.setEnd(textNode, offset);
@@ -99,36 +307,126 @@ export default class Handler extends TextExtractor {
         
     };
 
+    findBlockSibling(isTop = false, blockElement = this.blockElement) {
+
+        const blockElements = Array.from(this.redactor.querySelectorAll(`*[data-type="block"]`));
+        let blockIndex = blockElements.indexOf(blockElement);
+
+        if (!isTop && blockIndex === blockElements.length - 1 || isTop && !blockIndex) return null;
+
+        const sibling = blockElements[isTop ? --blockIndex : ++blockIndex];
+
+        return sibling;
+    }
+
     keyArrowDownHandler = this.verticalHandler();
     keyArrowUpHandler = this.verticalHandler(true);
     keyArrowLeftHandler = this.horisontalHandler(true);
     keyArrowRightHandler = this.horisontalHandler();
 
     keyEnterHandler(e) {
+
+        if (this.multiblockElement) {
+            switch(this.multiblockElement.dataset.conception){
+                case "LI":
+                    this.liEnterHandler(e);
+                    break;
+                case "OL":
+                case "UL":
+                    this.backspaceListHandler(e);
+                    break;
+                default:
+                    return;
+            }
+
+        } else if (this.blockElement){
+            switch(this.blockElement.dataset.conception) {
+                case "HEADER2":
+                    this.headerEnterHandler(e);
+                    break;
+                default: 
+                    (e => {
+                        if (this.isCollapsed) {
+                            e.preventDefault();
+
+        const lastTextNode = this.findTextNode(this.blockElement, true);
+        this.range.setEnd(lastTextNode, lastTextNode.length);
+        this.extractContent();
+        const newBlock = this.blockElement.cloneNode();
+        newBlock.append(this.fragment);
+        this.blockElement.after(newBlock);
+
+        let textNode = this.findTextNode(newBlock);
+        console.log(textNode)
+
+        this.range.setStart(textNode, 0);
+        this.range.setEnd(textNode, 0);
+
         
-        switch(this.blockElement.dataset.conception) {
-            case "HEADER2":
-                this.headerEnterHandler(e);
-                break;
-            default: 
-                return;
+
+        this.changeSelection()
+                        }
+                    })(e)
+            }
         }
+        return;
+        
     };
 
-    headerEnterHandler (e) {
+    liEnterHandler(e) {
+        console.log("enter li 0")
+        if (!this.isCollapsed) return;
+        
+        console.log("enter li 1")
+
+        const li = this.multiblockElement;
+
+        if (li.lastChild !== this.blockElement) return;
+
+        e.preventDefault();
+
+        const lastTextNode = this.findTextNode(this.blockElement, true);
+        this.range.setEnd(lastTextNode, lastTextNode.length);
+        this.extractContent();
+        const newLi = this.createElement("li");
+        const newBlock = this.createElement("paragraph");
+        newLi.append(newBlock);
+        newBlock.append(this.fragment);
+        li.after(newLi);
+
+        let textNode = this.findTextNode(newBlock);
+        console.log(textNode)
+
+        this.range.setStart(textNode, 0);
+        this.range.setEnd(textNode, 0);
+
+        
+
+        this.changeSelection()
+        console.log(this.selection)
+        
+        
+    }
+
+    headerEnterHandler(e) {
 
         e.preventDefault();
         
         this.extractContent();
+
+        let textNode;
         
         if (this.isCollapsed) {
             
-            const textNode = document.createTextNode('');
-            if (!this.range.endContainer.nextSibling) {
-                this.range.endContainer.after(document.createElement("br"), textNode, document.createElement("br"));
+            textNode = document.createTextNode("");
+            console.log("this.range.endContainer.nextSibling")
+            console.log(this.range.endContainer.nextSibling)
+            if (!this.range.endContainer.nextSibling || !this.range.endContainer.nextSibling.data ) {
+                this.range.endContainer.after(document.createElement("br"), textNode,    document.createElement("br"));
             } else {
                 this.range.endContainer.after(document.createElement("br"), textNode);
             }
+            
             
             this.range.setEnd(textNode, 0);
             this.range.setStart(textNode, 0);
@@ -143,6 +441,8 @@ export default class Handler extends TextExtractor {
         }
 
         this.changeSelection();
+
+        
         
     }
  

@@ -5,6 +5,7 @@ import TextExtractor from "./TextExtractor";
 export default class Toggler extends TextExtractor  {
 
     multipleConceptions = ["FONTFAMILY", "FONTSIZE"];
+    multiblocks = [ "OL", "UL", "LI"];
 
     isFromRedactor = false;
 
@@ -18,18 +19,13 @@ export default class Toggler extends TextExtractor  {
 
     checkSelectedOn(conception) {
 
-        const condition = (tag) => tag.dataset.conception === conception;
-                
-        let isExist = false;   
+        const condition = (tag) => tag.dataset.conception === conception;                
+        
+        if (this.tags[conception].length || this.foundationTags.find(condition)) {
 
-        if (this.tags[conception].length || 
-            this.foundationTags.find(condition) ||
-            this.startTags.find(condition) ||
-            this.endTags.find(condition)) {
-
-                isExist = true;
+            return true;
         }
-        return isExist;
+        return false;
     }
 
     setMultipleValue({data, keyStyle, defaultValue}) {
@@ -53,6 +49,13 @@ export default class Toggler extends TextExtractor  {
         }
     }
 
+    checkOnMultiblocks() {
+        for (let key of this.multiblocks) {
+            if(this.tags[key].length) return true;
+        }
+        return false;
+    }
+
     findDefaultValue(keyStyle) {
         if (this.blockElement) return this.blockElement.style[keyStyle];
         return null;
@@ -63,10 +66,11 @@ export default class Toggler extends TextExtractor  {
 
         result.isFromRedactor = this.isFromRedactor;
         result.blockElement = this.blockElement ? this.blockElement.dataset.conception : null;
+        result.isMultiblockSelected = this.checkOnMultiblocks();
 
         for(let key in collection) {
 
-            if (collection[key].data.type === "block") continue;
+            
 
             if (this.multipleConceptions.includes(collection[key].data.conception)) {
                 result[key] = {
@@ -79,6 +83,9 @@ export default class Toggler extends TextExtractor  {
 
             result[key] = this.checkSelectedOn(collection[key].data.conception);
         }
+
+        console.log("toggler")
+        console.log(result)
         return result;
     }
 }

@@ -37,7 +37,7 @@ export default class List extends TextExtractor {
             li.append(element);
             typedList.append(li);
         }
-
+        console.log(typedList.textContent)
         this.range.setStart(...this.startRange);
         this.range.setEnd(...this.endRange);
 
