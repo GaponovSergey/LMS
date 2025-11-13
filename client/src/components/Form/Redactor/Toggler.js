@@ -67,6 +67,7 @@ export default class Toggler extends TextExtractor  {
         result.isFromRedactor = this.isFromRedactor;
         result.blockElement = this.blockElement ? this.blockElement.dataset.conception : null;
         result.isMultiblockSelected = this.checkOnMultiblocks();
+        result.range = this.range;
 
         for(let key in collection) {
 

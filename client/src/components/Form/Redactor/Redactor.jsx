@@ -11,8 +11,10 @@ import FontFamily from "./FontFamily";
 import FontSize from "./FontSize";
 import TextExtractor from "./TextExtractor";
 import TextDecorator from "./TextDecorator";
+import TextAlign from "./TextAlign";
 import Handler from "./Handler";
 import List from "./List";
+import LinkButton from "./LinkButton";
 
 
 
@@ -67,12 +69,21 @@ export default function Redactor() {
         } 
     }
 
+    const setAlign = (align) => {
+        return ()=> {
+            const textAlign = new TextAlign();
+            textAlign.setAlign(align);
+        }
+    }
+    
+
     return(
         <div>
             <div style={{display: "flex", gap: "3px", margin: "5px"}}>
                 <button onClick={setHeader} disabled = { !state.isFromRedactor || state.blockElement === "HEADER2" || state.isMultiblockSelected ? "disabled" : false }>Заголовок</button>
-                <button onClick={setList("ol")} disabled = { !state.isFromRedactor  ? "disabled" : false }>Нумерованный список</button>
-                <button onClick={setList("ul")} disabled = { !state.isFromRedactor  ? "disabled" : false }>Ненумерованный список</button>
+                <button onClick={setList("ol")} disabled = { !state.isFromRedactor || state.isMultiblockSelected ? "disabled" : false }>Нумерованный список</button>
+                <button onClick={setList("ul")} disabled = { !state.isFromRedactor || state.isMultiblockSelected ? "disabled" : false }>Ненумерованный список</button>
+                <LinkButton state={state.hyperlink} isFromRedactor={state.isFromRedactor} isMultiblockSelected={state.isMultiblockSelected} />
                 <TextDecorButton conception="bold" isFromRedactor={state.isFromRedactor} state={state.bold}>
                     <b>b</b>
                 </TextDecorButton>
@@ -86,6 +97,13 @@ export default function Redactor() {
                 <StringColor isFromRedactor={state.isFromRedactor} state={state.stringColor} concept={collection.stringColor} />
                 <FontFamily isFromRedactor={state.isFromRedactor} state={state.fontFamily} concept={collection.fontFamily} />
                 <FontSize isFromRedactor={state.isFromRedactor} state={state.fontSize} concept={collection.fontSize} />
+                <div>
+                    текст:
+                    <button onClick={setAlign("left")}>слева</button>
+                    <button onClick={setAlign("center")}>по центру</button >
+                    <button onClick={setAlign("right")}>справа</button>
+                    <button onClick={setAlign("justify")}>выровнять</button>
+                </div>
             </div>
             <div id="redactor" 
 
@@ -99,17 +117,48 @@ export default function Redactor() {
                     e.preventDefault();
 
                     let paste = (e.clipboardData || document.clipboardData).getData("text");
-                    const text = document.createTextNode(paste);
-                    const selection = document.getSelection();
-                    selection.deleteFromDocument();
-                    selection.getRangeAt(0).insertNode(text);
+                    
+                    const selected = new TextExtractor();
+
+                    const fragment = document.createElement("span");
+
+                    if (paste.match(/\<*\>/)) {
+                        fragment.append(document.createTextNode(paste));
+                    } else {
+                        const hyperlink = selected.createElement("hyperlink");
+                        hyperlink.href = "$&";
+                        hyperlink.innerHTML = "$&";
+                        const replacement = (hyperlink.outerHTML).replace(/amp;/g, "") + " ";
+
+                        const httpRegExp = new RegExp(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/g);
+                        
+                        const text = paste.replace(httpRegExp, replacement);
+                        fragment.innerHTML = text;
+                    }
+                    
+                    console.log("onPaste")
+                    console.log(fragment)
+                    
+                    selected.extractContent();
+                    selected.selection.getRangeAt(0).insertNode(fragment);
+
+                    const start = selected.findTextNode(fragment);
+                    const end = selected.findTextNode(fragment, true);
+
+                    fragment.replaceWith(...fragment.childNodes);
+
+                    selected.range.setStart(start, 0);
+                    selected.range.setEnd(end, end.data.length);
+                    
+                    selected.changeSelection();
+                    //const selection = document.getSelection();
+                    //selection.deleteFromDocument();
+                    //selection.getRangeAt(0).insertNode(text);
                 }
             }
                 
                 style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px", margin: "0" }} 
                 contentEditable onInput={(e)=> e.preventDefault()} >
-                
-                
             </div>
         </div>
     );

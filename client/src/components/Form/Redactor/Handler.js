@@ -27,6 +27,13 @@ export default class Handler extends TextExtractor {
             case "Backspace":
                 this.keyBackspaceHandler(e);
                 break;
+            case "Delete":
+                this.keyBackspaceHandler(e);
+                break;
+            case "Space":
+                this.linkAutoCreator(e);
+                this.defaultHandler(e);
+                break;
             default: 
                 this.defaultHandler(e);
         }
@@ -43,6 +50,8 @@ export default class Handler extends TextExtractor {
                         (e.code.match(/Key|Numpad/) || keys.includes(e.code))) {
 
                         e.preventDefault()
+                        console.log("defaultHandler")
+                        console.log(this.startRange[0], this.endRange[0])
                         this.range.endContainer.data += e.key;
                         this.range.setStart(this.startRange[0], this.startRange[1] + 1);
                         this.range.setEnd(this.endRange[0], this.endRange[1] + 1);
@@ -119,7 +128,7 @@ export default class Handler extends TextExtractor {
 
             console.log("backspace list 4")
 
-            this.range.setStart(this.begin, this.begin.length ? this.begin.length - 1 : 0);
+            this.range.setStart(this.begin, this.begin.length ? this.begin.length : 0);
             this.range.setEnd(this.begin, this.begin.length);
         }
 
@@ -166,6 +175,34 @@ export default class Handler extends TextExtractor {
         return lastNode;
     }
 
+    linkAutoCreator(e) {
+        if (!this.isCollapsed) return;
+
+        if (this.foundationTags.find(tag => tag.dataset.conception === "HYPERLINK")) return;
+
+        const httpRegExp = new RegExp(/^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/);
+        const match = this.range.startContainer.data.match(httpRegExp);
+
+        if (!match) return;
+
+        const range = new Range();
+        range.setStart(this.range.startContainer, match.index);
+        range.setEnd(this.range.startContainer, match.index + match[0].length);
+
+        const hyperlink = this.createElement("hyperlink");
+        hyperlink.href = match[0];
+
+        range.surroundContents(hyperlink);
+
+        this.range.setStartAfter(hyperlink)
+        this.range.setEndAfter(hyperlink)
+
+        this.changeSelection()
+
+        return;
+
+    }
+
     backspaceLiHandler(e) {
 
         console.log("backspace 0")
@@ -175,16 +212,14 @@ export default class Handler extends TextExtractor {
         if (this.range.startOffset !== 0) return;
 
         const li = this.multiblockElement;
-        let firstNode = this.findFirstText(li);
+        let firstNode = this.findTextNode(li);
 
         console.log("backspace 1")
-        console.log(this.blockElement.childNodes)
+        console.log(this.blockElement?.childNodes)
 
-        
+        if ( this.range.startContainer !== firstNode) {
 
-        if (this.blockElement.textContent && this.range.startContainer !== firstNode) {
-
-            if (li.lastChild !== this.blockElement) return;
+            if (li.lastElementChild !== this.blockElement) return;
 
             firstNode = this.findFirstText(this.blockElement);
 
@@ -214,12 +249,16 @@ export default class Handler extends TextExtractor {
 
             const sibling = li.previousElementSibling;
 
+            if (this.blockElement !== li.lastElementChild) return;
+
             if (!sibling) {
+                console.log("backspace 3")
                 const list = li.parentElement;
                 list.before(...li.children);
                 li.remove();
                 if (!list.children.length) list.remove();
             } else {
+                console.log("backspace 4")
                 sibling.append(...li.children);
                 li.remove();
             }
@@ -326,6 +365,9 @@ export default class Handler extends TextExtractor {
 
     keyEnterHandler(e) {
 
+        this.linkAutoCreator(e);
+
+
         if (this.multiblockElement) {
             switch(this.multiblockElement.dataset.conception){
                 case "LI":
@@ -340,6 +382,8 @@ export default class Handler extends TextExtractor {
             }
 
         } else if (this.blockElement){
+
+            
             switch(this.blockElement.dataset.conception) {
                 case "HEADER2":
                     this.headerEnterHandler(e);
@@ -422,7 +466,7 @@ export default class Handler extends TextExtractor {
             console.log("this.range.endContainer.nextSibling")
             console.log(this.range.endContainer.nextSibling)
             if (!this.range.endContainer.nextSibling || !this.range.endContainer.nextSibling.data ) {
-                this.range.endContainer.after(document.createElement("br"), textNode,    document.createElement("br"));
+                this.range.endContainer.after(document.createElement("br"), textNode, document.createElement("br"));
             } else {
                 this.range.endContainer.after(document.createElement("br"), textNode);
             }

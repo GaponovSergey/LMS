@@ -6,6 +6,7 @@ const collection = {
             type: "inline",
             conception: "BOLD"
         },
+        attributes: {},
         style: {}
     },
 
@@ -15,6 +16,7 @@ const collection = {
             type: "inline",
             conception: "ITALIC"
         },
+        attributes: {},
         style: {}
     },
 
@@ -24,6 +26,7 @@ const collection = {
             type: "inline",
             conception: "UNDERLINE"
         },
+        attributes: {},
         style: {
             fontWeight: "inherit",
             textDecoration: "underline"
@@ -36,6 +39,7 @@ const collection = {
             type: "inline",
             conception: "TEXTCOLOR"
         },
+        attributes: {},
         style: {
             color: "black"
         },
@@ -62,6 +66,7 @@ const collection = {
             type: "inline",
             conception: "STRINGCOLOR"
         },
+        attributes: {},
         style: {
             backgroundColor: "yellow"
         },
@@ -88,6 +93,7 @@ const collection = {
             type: "inline",
             conception: "FONTFAMILY"
         },
+        attributes: {},
         style: {
             fontFamily: "Times New Roman"
         },
@@ -107,6 +113,7 @@ const collection = {
             type: "inline",
             conception: "FONTSIZE"
         },
+        attributes: {},
         style: {
             fontSize: "16px"
         },
@@ -117,12 +124,28 @@ const collection = {
         ]
     },
 
+    hyperlink: {
+        tagName: "a",
+        data: {
+            type: "inline",
+            conception: "HYPERLINK"
+        },
+        attributes: {
+            target: "_blank"
+        },
+        style: {
+            display: "inline"
+        },
+        href: null
+    },
+
     paragraph: {
         tagName: "P",
         data: {
             type: "block",
             conception: "PARAGRAPH"
         },
+        attributes: {},
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
@@ -137,6 +160,7 @@ const collection = {
             type: "block",
             conception: "HEADER2"
         },
+        attributes: {},
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
@@ -152,6 +176,7 @@ const collection = {
             type: "multiblock",
             conception: "UL"
         },
+        attributes: {},
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
@@ -167,6 +192,7 @@ const collection = {
             type: "multiblock",
             conception: "OL"
         },
+        attributes: {},
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
@@ -182,6 +208,7 @@ const collection = {
             type: "multiblock",
             conception: "LI"
         },
+        attributes: {},
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",

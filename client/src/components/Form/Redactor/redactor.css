@@ -68,3 +68,7 @@ u, i {
 
   background-color: #e3a301;
 }
+
+.popupWindow {
+  position: absolute;
+}

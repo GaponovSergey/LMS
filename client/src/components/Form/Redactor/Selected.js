@@ -25,6 +25,7 @@ export default class Selected  {
                 STRINGCOLOR: [],
                 FONTFAMILY: [],
                 FONTSIZE: [],
+                HYPERLINK:[],
                 UL: [],
                 OL: [],
                 LI: []
@@ -64,7 +65,7 @@ export default class Selected  {
                     if (this.range.startContainer instanceof HTMLElement) {
                         console.log("select 6")
                         const start = this.findTextNode(this.range.startContainer.childNodes[this.range.startOffset]);
-                        this.range.setStart(start, 0)
+                        if (start) this.range.setStart(start, 0);
                     }
 
                     if (this.range.endContainer instanceof HTMLElement) {

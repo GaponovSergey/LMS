@@ -127,6 +127,10 @@ export default class TextExtractor extends Selected {
             element.style[key] = tag.style[key];
         }
 
+        for (let key in tag.attributes) {
+            element.setAttribute(key, tag.attributes[key])
+        }
+
         return element;
     }
 
@@ -155,6 +159,25 @@ export default class TextExtractor extends Selected {
         }*/
         
         return true;
+    }
+
+    removeSideTags() {
+        if (this.startTags.length) {
+            for (let tag of this.startTags) {
+                if(this.checkToRemove(tag)) {
+                    console.log("step 5.1")
+                    tag.remove();
+                }
+            } 
+        }
+        if (this.endTags.length) {
+            for (let tag of this.endTags) {
+                if(this.checkToRemove(tag)) {
+                    console.log("step 5.1")
+                    tag.remove();
+                }
+            } 
+        }
     }
 
     _findLimits(tag, start, end) {

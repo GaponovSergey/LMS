@@ -8,13 +8,15 @@ export default class TextDecorator extends TextExtractor {
     constructor({
                     tagName,
                     style = {},
+                    attributes = {},
                     range = null
                 }) {
-
+                    
         super(range);
         this.tagName = tagName;
         this.tag = collection[tagName];
         this.tag.style = {...this.tag.style, ...style};
+        this.tag.attributes = {...this.tag.attributes, ...attributes};
         this.params = { tagName, style, range};
     }
 
@@ -91,37 +93,14 @@ export default class TextDecorator extends TextExtractor {
         
         console.log("step 3")
         console.log(this.fragment.childNodes)
+        
         const wrapper = this.createElement();
-        wrapper.append(...this.fragment.childNodes);
-        this.fragment.append(wrapper)
-        
-        
-        
-            if (this.startTags.length) {
-                console.log("step 5")
-                const beforeStart = this.startTags[this.startTags.length - 1];
-                beforeStart.after(this.fragment);
-                this.start = this.findTextNode(wrapper);
-                if(this.checkToRemove(beforeStart)) {
-                    console.log("step 5.1")
-                    beforeStart.remove();
-                }
-            }
-            else {
-                console.log("step 6")
-                this.begin.after(document.createTextNode(""), this.fragment, document.createTextNode(""));
-                this.start = wrapper;
-            }
-        
+        this.range.insertNode(this.fragment);
+        this.range.surroundContents(wrapper);
+        this.range.selectNodeContents(wrapper);
 
-        if (this.start) {
-            console.log(" step 9.1")
-            console.log(this.start)
-            this.start = this.findTextNode(this.start);
-            this.range.setStart(this.start, 0);
-        }
-
-        if (this.end) this.range.setEnd(this.end, this.end.length);
+        this.removeSideTags();
+        
         this.changeSelection();
         return this.range;
     }
@@ -261,7 +240,12 @@ export default class TextDecorator extends TextExtractor {
         }
         if (end instanceof HTMLElement) {
             console.log(" cancel step 15")
+            const endTag = end;
             end = this.findTextNode(end, true);
+            if (!end) {
+                end = document.createTextNode("");
+                endTag.append(end)
+            }
         } 
           
         this.range.setEnd(end, end.data.length);
