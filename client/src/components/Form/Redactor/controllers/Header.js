@@ -1,6 +1,5 @@
 import TextExtractor from "./TextExtractor";
-import Selected from "./Selected";
-import collection from "./tagsCollection";
+import collection from "../tagsCollection";
 
 
 export default class Header extends TextExtractor  {

@@ -113,9 +113,8 @@ export default class Selected  {
 
                     }
                     
-
                     this._setFoundationTags();
-                    
+                    console.log(this)
                 }
             }
         }

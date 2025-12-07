@@ -1,5 +1,5 @@
 import Selected from "./Selected";
-import collection from "./tagsCollection"
+import collection from "../tagsCollection"
 
 
 export default class TextExtractor extends Selected {
@@ -46,12 +46,6 @@ export default class TextExtractor extends Selected {
             console.log(" extractor step 1")
             this._separateSelected();           
         }
-        /* if (this.range.startContainer === this.range.endContainer && 
-            this.range.startOffset !== 0 && 
-            this.range.endOffset !== this.range.endContainer.data.length) {
-            console.log(" cancel step 1")
-            this._separateSelected();
-        }*/
                 
         this.isBegin = this._defineSeparation();
         this.isEnd = this._defineSeparation(true); 
@@ -151,12 +145,6 @@ export default class TextExtractor extends Selected {
         console.log("treeWalker")
 
         if( node.textContent !== "") return false;
-
-        /*const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
-        
-        while(walker.nextNode()) {
-            if (walker.currentNode.data !== "") return false;
-        }*/
         
         return true;
     }
@@ -195,5 +183,7 @@ export default class TextExtractor extends Selected {
     changeSelection() {
         this.selection.removeAllRanges();
         this.selection.addRange(this.range);
+
+        this.redactor.focus();
     }
 }

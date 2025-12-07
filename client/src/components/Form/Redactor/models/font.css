@@ -1,0 +1,92 @@
+.family-string {
+    width: 130px;
+}
+
+
+
+.size-string {
+    width: 68px;
+}
+
+.font-container {
+    display: inline-flex; 
+}
+
+.font-string {
+    background-color: #fff;
+    border: 1px black solid;
+    border-radius: 4px 0 0 4px;
+    color: #000;
+    font-size: 14px;
+    font-family: 'Times New Roman';
+    height: 30px;
+}
+
+.font-string:disabled {
+    color: gray;
+
+}
+
+.font-toggle {
+    background-color: #e3a301;
+    border: 1px black solid;
+    color: white;
+    font-family: Arial;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin: 0; 
+    height: 30px;
+    border-radius: 0 3px 3px 0;
+    border-left-width: 1px;
+    font-size: 8px;
+    width: 24px;
+}
+
+.font-toggle:disabled {
+    background-color: #cda94d;
+}
+
+.font-options {
+    border: 1px black solid;
+    border-radius: 3px;
+    position: absolute;
+    top: 30px; 
+    padding: 5px;
+    background-color:#DCE1E4;
+}
+
+.font-option {
+    background-color: #fff;
+    border: 1px black solid;
+    border-radius: 2px;
+}
+
+.family-option {
+    height: 30px;
+}
+
+.font-options-inner {
+    display: flex;
+    flex-direction: column;
+    height: 20vh;
+    min-height: 150px;
+    gap: 1px;
+    overflow: auto;
+    scrollbar-width: thin;
+    padding: 0 2px;
+}
+
+.family-options {
+    left: -154px;
+    width: 142px;
+}
+
+.size-options {
+    left: -92px;
+    width: 81px;
+}
+
+.font-options-wrap {
+    position: relative; 
+}

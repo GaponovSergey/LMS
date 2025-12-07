@@ -1,7 +1,7 @@
 import React, {useEffect, useState}  from "react";
 import {Select, SelectString, ToggleButton, Options, Option} from "./Select";
-import TextDecorator from "./TextDecorator";
-import "./redactor.css";
+import TextDecorator from "../controllers/TextDecorator";
+import "./font.css";
 
 
 export default function FontSize({isFromRedactor = false, state = null, concept}) {
@@ -11,8 +11,8 @@ export default function FontSize({isFromRedactor = false, state = null, concept}
     const valuesMap = (size, i) => {
         
             return(
-                <Option value={size} isDefault={state.defaultValue === size} key={"fontsize" + i}>
-                    <span style={{fontSize: size}}>{size}</span>
+                <Option value={size} className={"font-option"} isDefault={state.defaultValue === size} key={"fontsize" + i}>
+                    <span style={{fontSize: size}}>{parseInt(size)}</span>
                 </Option>
             )
         };
@@ -26,8 +26,8 @@ export default function FontSize({isFromRedactor = false, state = null, concept}
     }, [state.defaultValue])
 
     return(
-        <Select style={{display: "inline-flex", gap: "0.2px"}}>
-            <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className="FontFamily" onChange={(size)=> {
+        <Select className={"font-container"}>
+            <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className={"font-string size-string"} onChange={(size)=> {
                 if (!isFromRedactor) return;
                 let decorator = new TextDecorator({
                                         tagName: "fontSize",
@@ -51,17 +51,12 @@ export default function FontSize({isFromRedactor = false, state = null, concept}
                 }}>
                 <span>---</span>  
             </SelectString>
-            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonRight"/>
-            <div style={{position: "absolute", marginTop: "31px"}}>
-                <Options style={
-                        {
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "2px",
-                            border: "1px black solid"
-                        }
-                    }>
-                    {options}
+            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className={"font-toggle"} />
+            <div className={"font-options-wrap"}>
+                <Options className={'font-options size-options'}>
+                    <div className={"font-options-inner"}>
+                        {options}
+                    </div>
                 </Options>
             </div>
         </Select>

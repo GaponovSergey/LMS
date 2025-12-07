@@ -1,4 +1,4 @@
-import collection from "./tagsCollection";
+import collection from "../tagsCollection";
 import TextExtractor from "./TextExtractor";
 
 export default class TextDecorator extends TextExtractor {
@@ -51,6 +51,8 @@ export default class TextDecorator extends TextExtractor {
         const blockElements = this.blockElements;
         console.log("blockelems")
         console.log(this.blockElement)
+
+        
 
         if (blockElements.length) {
             

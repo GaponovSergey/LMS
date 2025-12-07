@@ -1,0 +1,32 @@
+.link-button {
+  color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 6px 6px;
+  font-family: Arial;
+  font-size: 12px;
+  cursor: pointer;
+  height: 30px;
+  width: 100%;
+}
+
+.link-button:disabled {
+  background-color: #5e8241;
+}
+
+.link-popup-form {
+  display: flex;
+  position: absolute;
+  border: 1px black solid;
+  border-radius: 3px; 
+  background-color: #DCE1E4;
+  justify-content: center;
+  padding: 6px;
+}
+
+.link-popup-form input[type="text"] {
+    z-index: 2;
+  height: 25.5px;
+}
+

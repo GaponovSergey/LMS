@@ -2,7 +2,7 @@ header {
   position: fixed;
   top: 0;
   background-color: #65A42F;
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: flex-end;
   z-index: 50;

@@ -1,10 +1,12 @@
 import React from "react";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useRef } from "react";
+import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 
 const SelectContext = createContext();
 
-export function Select({style = null, children}) {
-
+export function Select({style = null, className = null, children}) {
+    
+    
     const value = {
         toggler: useState(false),
         value: useState({
@@ -14,10 +16,11 @@ export function Select({style = null, children}) {
         options: useState([])
     } 
 
-
+    const popupRef = useRef(null);
+    useOnClickOutside(popupRef, ()=> value.toggler[1](false));
 
     return(
-        <div style={style}>
+        <div style={style} onFocus={(e)=> e.preventDefault()} className={className} ref={popupRef}>
             <SelectContext.Provider value={value}>
                 {children}
             </SelectContext.Provider>
@@ -27,11 +30,16 @@ export function Select({style = null, children}) {
 
 export function Options({className = null, style = {display: "block"}, children}) {
 
-    const [isOpened] = useContext(SelectContext).toggler;
+    const [isOpened, setOpen] = useContext(SelectContext).toggler;
+
+    const display = className ? "" : style.display;
+    const stylesheet = {...style};
+    stylesheet.display = isOpened ? display : "none";
+    
 
     return(
         
-        <div className={className} style={isOpened ? style : {display: "none"}}>
+        <div className={className} style={ stylesheet } onFocus={(e)=> e.preventDefault()}>
             {children}
         </div>
        

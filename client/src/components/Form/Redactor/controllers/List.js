@@ -1,4 +1,4 @@
-import collection from "./tagsCollection";
+import collection from "../tagsCollection";
 import TextExtractor from "./TextExtractor";
 
 export default class List extends TextExtractor {

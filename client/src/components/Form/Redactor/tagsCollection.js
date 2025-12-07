@@ -29,7 +29,8 @@ const collection = {
         attributes: {},
         style: {
             fontWeight: "inherit",
-            textDecoration: "underline"
+            textDecoration: "underline",
+            textUnderlineOffset: "3px"
         }
     },
 
@@ -71,9 +72,9 @@ const collection = {
             backgroundColor: "yellow"
         },
         keyStyle: "backgroundColor",
-        defaultValue: "yellow",
+        defaultValue: "#DCE1E4",
         values: [
-            "white",
+            "#DCE1E4",
             "gray",
             "brown",
             "red",
@@ -150,7 +151,9 @@ const collection = {
             minHeight: "1em",
             overflowWrap: "break-word",
             fontFamily: "Times New Roman",
-            fontSize: "16px"
+            fontSize: "16px",
+            textAlign: "justify",
+            textIndent: "2rem"
         }
     },
 
@@ -166,7 +169,8 @@ const collection = {
             overflowWrap: "break-word",
             fontFamily: "Times New Roman",
             fontWeight: "inherit",
-            fontSize: "32px"
+            fontSize: "32px",
+            textAlign: "center"
         }
     },
 

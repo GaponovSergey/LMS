@@ -1,5 +1,4 @@
-import collection from "./tagsCollection";
-import Selected from "./Selected";
+import collection from "../tagsCollection";
 import TextExtractor from "./TextExtractor";
 
 export default class Toggler extends TextExtractor  {
@@ -30,14 +29,16 @@ export default class Toggler extends TextExtractor  {
 
     setMultipleValue({data, keyStyle, defaultValue}) {
         const {conception} = data;
-        const inFoundation = this.foundationTags.find(tag => tag.dataset.conception === conception);
+        const inFoundation = this.foundationTags.find(tag => tag.dataset?.conception === conception);
         const tags = this.tags[conception];
 
         if(inFoundation) {
+            
             if (!tags.length) return inFoundation.style[keyStyle];
             if (tags.find(tag => tag.style[keyStyle] !== inFoundation.style[keyStyle])) return null;
             else return inFoundation.style[keyStyle];
         } else {
+            if (!this.blockElement) return null;
             if(tags.length) {
                 if (tags.length > 1 && 
                     !tags.find( tag => tag.style[keyStyle] !== tags[0].style[keyStyle])) {
@@ -61,6 +62,23 @@ export default class Toggler extends TextExtractor  {
         return null;
     }
 
+    defineTextAlign() {
+
+        if (!this.isFromRedactor) return null;
+
+        if (this.blockElement) return this.blockElement.style.textAlign;
+
+        const blockElements = this.blockElements;
+
+        if(!blockElements.length) return null;
+
+        const textAlign = blockElements[0].style.textAlign;
+
+        const isDifferentValue = blockElements.find( element => element.style.taxtAlign !== textAlign);
+
+        return isDifferentValue ? null : textAlign;
+    }
+
     get state() {
         const result = {};
 
@@ -68,6 +86,7 @@ export default class Toggler extends TextExtractor  {
         result.blockElement = this.blockElement ? this.blockElement.dataset.conception : null;
         result.isMultiblockSelected = this.checkOnMultiblocks();
         result.range = this.range;
+        result.textAlign = this.defineTextAlign();
 
         for(let key in collection) {
 

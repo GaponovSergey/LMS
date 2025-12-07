@@ -1,0 +1,116 @@
+.decorator-container {
+    display: grid;
+    grid-template-columns: repeat(8, 30px);
+    grid-template-rows: 30px 30px;
+    gap: 1px;
+}
+
+.decorator-family-container {
+    grid-column: 1 / 6;
+}
+
+.decorator-size-container {
+    grid-column: 6 / 9;
+}
+
+.decorator-textcolor-container {
+    grid-column: 5 / 7;
+}
+
+.decorator-stringcolor-container {
+    grid-column: 7 / 9;
+}
+
+.blockcreator-container {
+    display: grid;
+    grid-template-columns: repeat(3, 45px);
+    justify-content: space-between;
+    align-items: center;
+
+    width: 141px;
+}
+
+.blockcreator-button {
+    width: 45px;
+    height: 55px;
+    background-color: #0263ff;
+    color:#fff;
+}
+
+.blockcreator-button:disabled {
+    background-color: #2863c2;
+}
+
+.ol-button {
+  font-size: 8px;
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 10px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  
+}
+
+.ol-button-inner {
+  text-decoration: underline;
+  text-decoration-thickness: 1.7px;
+  text-underline-offset: -2px;
+}
+
+.header-button {
+  font-size: 8px;
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 5px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-button-inner {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: -3px;
+}
+
+.header-button-inner-headline {
+  text-decoration: underline;
+  text-decoration-thickness: 5px;
+  text-underline-offset: -6px;
+}
+
+.decorator-toggler {
+    color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 0px 10px;
+  margin: 0px;
+  
+  height: 30px;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+.decorator-toggler:disabled {
+  background-color: #5e8241;
+}
+
+
+b {
+  font-weight: 900;
+}
+
+u, i {
+  font-weight: inherit
+}
+
+.decorator-toggler-pushed {
+
+  background-color: #52b500;
+}

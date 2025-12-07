@@ -43,12 +43,28 @@ export default class Handler extends TextExtractor {
                     const keys = ["Comma", "Period", "Slash", "Backquote", 
                         "Semicolon", "Quote", "BracketLeft", "BracketRight",
                         "Backslash", "Minus", "Equal", "Space"];
+
+                    const secondKeys = ["Control", "Shift", "Alt", "Meta"];
+                        
                         console.log("this.foundationTags")
                         console.log(this.foundationTags)
-                    if( this.isCollapsed && this.range.endContainer.nodeName === "#text" && 
-                        this.foundationTags.find(element => element.dataset.type === "inline") &&
-                        (e.code.match(/Key|Numpad/) || keys.includes(e.code))) {
+                    if (secondKeys.includes(e.key)) return;
 
+                    
+
+                    if (!this.isCollapsed) {
+                        this.extractContent();
+                        this.changeSelection();
+                        return;
+                    }
+
+                    if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) return;
+                    if (!this.range.endContainer.nodeName === "#text") return;
+                    
+                    const lineElement = this.foundationTags.find(element => element.dataset.type === "inline");
+                         
+                    if ( !lineElement || lineElement.textContent !== "" || !(e.code.match(/Key|Numpad/) || keys.includes(e.code))) return;
+                        if (e.ctrlKey) return;
                         e.preventDefault()
                         console.log("defaultHandler")
                         console.log(this.startRange[0], this.endRange[0])
@@ -57,7 +73,7 @@ export default class Handler extends TextExtractor {
                         this.range.setEnd(this.endRange[0], this.endRange[1] + 1);
 
                         this.changeSelection()
-                    }
+                    
                 }
 
     keyBackspaceHandler(e) {

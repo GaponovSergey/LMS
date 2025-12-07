@@ -1,6 +1,7 @@
 import Selected from "./Selected";
+import TextExtractor from "./TextExtractor";
 
-export default class TextAlign extends Selected {
+export default class TextAlign extends TextExtractor {
 
     constructor() {
         super();
@@ -13,6 +14,8 @@ export default class TextAlign extends Selected {
         for (const element of blockElements) {
             element.style.textAlign = align;
         }
+
+        this.changeSelection();
         this.redactor.focus();
     }
 }

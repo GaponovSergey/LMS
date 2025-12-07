@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Select, SelectString, ToggleButton, Options, Option} from "./Select";
-import TextDecorator from "./TextDecorator";
-import "./redactor.css";
+import TextDecorator from "../controllers/TextDecorator";
+import "./font.css";
 
 
 export default function FontFamily({isFromRedactor = false, state = null, concept}) {
@@ -11,7 +11,7 @@ export default function FontFamily({isFromRedactor = false, state = null, concep
     const valuesMap = (font, i) => {
             
             return(
-                <Option value={font} isDefault={state.defaultValue === font} key={"fontfamily" + i}>
+                <Option value={font} className={"font-option family-option"} isDefault={state.defaultValue === font} key={"fontfamily" + i}>
                     <span style={{fontFamily: font}}>{font}</span>
                 </Option>
             )
@@ -27,8 +27,8 @@ export default function FontFamily({isFromRedactor = false, state = null, concep
     
 
     return(
-        <Select style={{display: "inline-flex", gap: "0.2px"}}>
-            <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className="FontFamily" onChange={(font)=> {
+        <Select className={`font-container`}>
+            <SelectString disabled = { !isFromRedactor ? "disabled" : false } outerValue={state.value} className={"font-string family-string"} onChange={(font)=> {
                 if (!isFromRedactor) return;
                 
                 let decorator = new TextDecorator({
@@ -53,17 +53,12 @@ export default function FontFamily({isFromRedactor = false, state = null, concep
                 }}>
                 <span>---</span>  
             </SelectString>
-            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonRight"/>
-            <div style={{position: "absolute", marginTop: "31px"}}>
-                <Options style={
-                        {
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "2px",
-                            border: "1px black solid"
-                        }
-                    }>
-                    {options}
+            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className={"font-toggle"} />
+            <div className={"font-options-wrap"}>
+                <Options className={'font-options family-options'}>
+                    <div className={"font-options-inner"}>
+                        {options}
+                    </div>
                 </Options>
             </div>
         </Select>

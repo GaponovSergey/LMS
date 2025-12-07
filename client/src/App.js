@@ -13,7 +13,9 @@ function App() {
       <Route path="/courses/:courseId" element={<Course />} />
       <Route path="/" element={<Main />} />
     </Routes>
+    <footer></footer>
     </BrowserRouter>
+
   );
 }
 

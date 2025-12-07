@@ -1,8 +1,8 @@
 import React from "react";
 import {useState} from "react";
 import {Select, SelectButton, ToggleButton, Options, Option} from "./Select";
-import TextDecorator from "./TextDecorator";
-import "./redactor.css";
+import TextDecorator from "../controllers/TextDecorator";
+import "./color.css";
 
 
 export default function TextColor({isFromRedactor = false, state = null, concept}) {
@@ -14,15 +14,15 @@ export default function TextColor({isFromRedactor = false, state = null, concept
     const options = values.map((color, i) => {
         
             return(
-                <Option value={color} isDefault={defaultValue === color} key={"textcolor" + i}>
+                <Option value={color} className={"color-option"} isDefault={defaultValue === color} key={"textcolor" + i}>
                     <div style={{width: "30px", height: "30px", backgroundColor: color}}></div>
                 </Option>
             )
         })
 
     return(
-        <Select style={{display: "inline-flex", gap: "0.2px"}}>
-            <SelectButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonLeft" onClick={(color)=> {
+        <Select className={"color-container"}>
+            <SelectButton disabled = { !isFromRedactor ? "disabled" : false }  className={"color-button"} onClick={(color)=> {
                 if (!isFromRedactor) return;
                 let decorator = new TextDecorator({
                                         tagName: "textColor",
@@ -41,19 +41,14 @@ export default function TextColor({isFromRedactor = false, state = null, concept
                     }
                     decorator.setDecorator();
                 }} setValue={setValueState}>
-                    A <div style={{display: "inline-block", width: "7px", height: "7px", backgroundColor: valueState, border: "1px #fff solid"}}></div>
+                    Ab <div style={{display: "inline-block", width: "7px", height: "7px", backgroundColor: valueState, border: "1px #fff solid"}}></div>
             </SelectButton>
-            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className="SelectButton SelectButtonRight"/>
-            <div style={{position: "absolute", marginTop: "31px"}}>
-                <Options style={
-                        {
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "2px",
-                            border: "1px black solid"
-                        }
-                    }>
-                    {options}
+            <ToggleButton disabled = { !isFromRedactor ? "disabled" : false } className={"color-toggle"}/>
+            <div className={"color-wrap"}>
+                <Options className={"color-options"}>
+                    <div className={"color-options-inner"}>
+                        {options}
+                    </div>
                 </Options>
             </div>
         </Select>

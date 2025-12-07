@@ -1,20 +1,10 @@
-import React from "react";
-import Selected from "./Selected";
-import Header from "./Header";
-import { useState } from "react";
-import TextDecorButton from "./TextDecorButton";
-import Toggler from "./Toggler";
-import TextColor from "./TextColor";
-import StringColor from "./StringColor";
-import collection from "./tagsCollection";
-import FontFamily from "./FontFamily";
-import FontSize from "./FontSize";
-import TextExtractor from "./TextExtractor";
-import TextDecorator from "./TextDecorator";
-import TextAlign from "./TextAlign";
-import Handler from "./Handler";
-import List from "./List";
-import LinkButton from "./LinkButton";
+import React, { useState, useRef } from "react";
+import Toggler from "./controllers/Toggler";
+import TextExtractor from "./controllers/TextExtractor";
+import TextDecorator from "./controllers/TextDecorator";
+import Handler from "./controllers/Handler";
+import Menu from "./models/Menu";
+import "./redactor.css";
 
 
 
@@ -23,13 +13,17 @@ export default function Redactor() {
     const toggler = new Toggler();
     let [state, setState] = useState(toggler.state);
 
+    const redactorRef = useRef(null);
+
+    console.log("REDACTOR")
+
     document.onselectionchange = ()=> {
         console.log("selectionchange")
 
-        const brs = document.querySelectorAll("#redactor > br");
+        const brs = document.querySelectorAll("#redactor br");
 
         for (let br of brs) {
-            br.remove();
+            if(!br.closest(`*[data-conception="HEADER2"]`)) br.remove();
         }
 
         const toggler = new Toggler();
@@ -56,56 +50,12 @@ export default function Redactor() {
         }
     }
 
-    const setHeader = ()=> {
-        const decorator = new Header();
-        decorator.setHeader();
-    }
-
-    const setList = (tag)=> {
-
-        return ()=> {
-            const list = new List(tag);
-            list.setList();
-        } 
-    }
-
-    const setAlign = (align) => {
-        return ()=> {
-            const textAlign = new TextAlign();
-            textAlign.setAlign(align);
-        }
-    }
     
 
     return(
-        <div>
-            <div style={{display: "flex", gap: "3px", margin: "5px"}}>
-                <button onClick={setHeader} disabled = { !state.isFromRedactor || state.blockElement === "HEADER2" || state.isMultiblockSelected ? "disabled" : false }>Заголовок</button>
-                <button onClick={setList("ol")} disabled = { !state.isFromRedactor || state.isMultiblockSelected ? "disabled" : false }>Нумерованный список</button>
-                <button onClick={setList("ul")} disabled = { !state.isFromRedactor || state.isMultiblockSelected ? "disabled" : false }>Ненумерованный список</button>
-                <LinkButton state={state.hyperlink} isFromRedactor={state.isFromRedactor} isMultiblockSelected={state.isMultiblockSelected} />
-                <TextDecorButton conception="bold" isFromRedactor={state.isFromRedactor} state={state.bold}>
-                    <b>b</b>
-                </TextDecorButton>
-                <TextDecorButton conception="italic" isFromRedactor={state.isFromRedactor} state={state.italic}>
-                    <i>i</i>
-                </TextDecorButton>
-                <TextDecorButton conception="underline" isFromRedactor={state.isFromRedactor} state={state.underline}>
-                    <u>u</u>
-                </TextDecorButton>
-                <TextColor isFromRedactor={state.isFromRedactor} state={state.textColor} concept={collection.textColor} />
-                <StringColor isFromRedactor={state.isFromRedactor} state={state.stringColor} concept={collection.stringColor} />
-                <FontFamily isFromRedactor={state.isFromRedactor} state={state.fontFamily} concept={collection.fontFamily} />
-                <FontSize isFromRedactor={state.isFromRedactor} state={state.fontSize} concept={collection.fontSize} />
-                <div>
-                    текст:
-                    <button onClick={setAlign("left")}>слева</button>
-                    <button onClick={setAlign("center")}>по центру</button >
-                    <button onClick={setAlign("right")}>справа</button>
-                    <button onClick={setAlign("justify")}>выровнять</button>
-                </div>
-            </div>
-            <div id="redactor" 
+        <div className={"redactor-wrap"}>
+            <Menu state={state} className={"menu"}/>
+            <div id="redactor" spellCheck={false} ref={redactorRef}
 
             onKeyDown = { e => {
                 const handler = new Handler();
@@ -138,8 +88,8 @@ export default function Redactor() {
                     
                     console.log("onPaste")
                     console.log(fragment)
-                    
-                    selected.extractContent();
+                    if (!selected.isCollapsed) selected.extractContent();
+
                     selected.selection.getRangeAt(0).insertNode(fragment);
 
                     const start = selected.findTextNode(fragment);
@@ -157,8 +107,7 @@ export default function Redactor() {
                 }
             }
                 
-                style={{borderSize: "2px", borderColor: "black", borderStyle: "solid", width: "300px", height: "300px", margin: "0" }} 
-                contentEditable onInput={(e)=> e.preventDefault()} >
+                contentEditable={"plaintext-only"} onInput={(e)=> e.preventDefault()} >
             </div>
         </div>
     );
