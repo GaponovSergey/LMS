@@ -64,8 +64,8 @@ Task.belongsTo(Content);
 Content.belongsToMany(File, {through:  ContentFile});
 File.belongsToMany(Content, {through: ContentFile}); 
 
-Student.belongsToMany(Course);
-Student.belongsToMany(User, { foreignKey: "studentId" })
+Student.hasMany(Course);
+Student.hasMany(User, { foreignKey: "studentId" })
 
 sequelize.sync({force: true}); 
 

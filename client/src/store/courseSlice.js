@@ -32,7 +32,7 @@ const slice = createSlice({
             state.description = action.payload.description;
             state.authorId = action.payload.authorId;
             state.id = action.payload.id;
-            state.lectures = [...action.payload.Lectures];
+            state.lectures = [...action.payload.lectures];
 
         },
         toggleCourseLoading( state ) {

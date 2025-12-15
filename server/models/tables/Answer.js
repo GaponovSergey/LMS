@@ -6,7 +6,7 @@ export default function defineAnswer(sequelize, DataTypes) {
         taskId: {
             type: DataTypes.INTEGER,
             references: {
-                model: "Tasks",
+                model: "tasks",
                 key: "id"
             }
         },

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Toggler from "./controllers/Toggler";
 import TextExtractor from "./controllers/TextExtractor";
 import TextDecorator from "./controllers/TextDecorator";
@@ -8,12 +8,26 @@ import "./redactor.css";
 
 
 
-export default function Redactor() {
+export default function Redactor({redactorRef, html = ""}) {
     
     const toggler = new Toggler();
     let [state, setState] = useState(toggler.state);
 
-    const redactorRef = useRef(null);
+    useEffect(()=>{
+            redactorRef.current.innerHTML = html;
+            const observer = new MutationObserver(records => {
+                console.log("records")
+                console.log(records)
+
+                const record = records[0];
+                const data = record.target.data;
+                const oldValue = record.oldValue;
+                let test = data.split(oldValue);
+                test = test.join("")
+                
+            })
+            observer.observe(redactorRef.current, {characterData: true, characterDataOldValue: true, subtree: true})
+        }, [])
 
     console.log("REDACTOR")
 
@@ -28,6 +42,7 @@ export default function Redactor() {
 
         const toggler = new Toggler();
         setState(toggler.state);
+        
         
         if (toggler.redactor && toggler.foundation === toggler.redactor && toggler.isCollapsed) {
             const decorator = new TextDecorator({tagName: "paragraph"});
@@ -56,10 +71,12 @@ export default function Redactor() {
         <div className={"redactor-wrap"}>
             <Menu state={state} className={"menu"}/>
             <div id="redactor" spellCheck={false} ref={redactorRef}
-
-            onKeyDown = { e => {
+            
+            onKeyDown = { e => { 
                 const handler = new Handler();
-                handler.keyHandler(e);
+                if (!e.code) {
+                    handler.virtualKeyboardHandler(e);
+                } else  handler.keyHandler(e);
             }}
 
 

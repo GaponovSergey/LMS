@@ -39,6 +39,14 @@ export default class Handler extends TextExtractor {
         }
     };
 
+    virtualKeyboardHandler(e) {
+        switch(e.keyCode) {
+            case 13:
+                this.keyEnterHandler(e);
+                break;
+        }
+    }
+
     defaultHandler(e) {
                     const keys = ["Comma", "Period", "Slash", "Backquote", 
                         "Semicolon", "Quote", "BracketLeft", "BracketRight",

@@ -19,7 +19,7 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
             body: JSON.stringify(data)
         });
     if ( response.ok ) {
-        dispatch( toggleLessonForm() );
+        
         dispatch( toggleCourseLoading() );
     }
     } catch(err) {
@@ -44,9 +44,6 @@ const slice = createSlice({
         setType(state, action) {
             state.lessonType = action.payload.value;
             console.log(state.lessonType);
-        },
-        toggleLessonForm(state) {
-            state.isOpened = !state.isOpened;
         }
     },
     

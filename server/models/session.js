@@ -18,7 +18,7 @@ export default function setSession() {
         rolling: true,
         cookie: {
             maxAge: 600000,
-            partitioned: true
+            
         },
         saveUninitialized: true
     });

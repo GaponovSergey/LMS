@@ -150,7 +150,7 @@ const collection = {
         style: {
             minHeight: "1em",
             overflowWrap: "break-word",
-            fontFamily: "Times New Roman",
+            fontFamily: 'Times New Roman',
             fontSize: "16px",
             textAlign: "justify",
             textIndent: "2rem"

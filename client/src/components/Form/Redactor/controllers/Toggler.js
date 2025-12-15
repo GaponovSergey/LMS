@@ -32,21 +32,33 @@ export default class Toggler extends TextExtractor  {
         const inFoundation = this.foundationTags.find(tag => tag.dataset?.conception === conception);
         const tags = this.tags[conception];
 
+        const unquot = (text) => {
+            text = text.split('"');
+            text = text.join("");
+            return text;
+        };
+
         if(inFoundation) {
             
-            if (!tags.length) return inFoundation.style[keyStyle];
+            if (!tags.length) return unquot(inFoundation.style[keyStyle]);
             if (tags.find(tag => tag.style[keyStyle] !== inFoundation.style[keyStyle])) return null;
-            else return inFoundation.style[keyStyle];
+            else return (inFoundation.style[keyStyle]);
         } else {
             if (!this.blockElement) return null;
             if(tags.length) {
                 if (tags.length > 1 && 
                     !tags.find( tag => tag.style[keyStyle] !== tags[0].style[keyStyle])) {
-                        return tags[0].style[keyStyle];
+                        return unquot(tags[0].style[keyStyle]);
                 }
                 if (tags.find(tag => tag.style[keyStyle] !== this.blockElement.style[keyStyle])) return null;
-                else return this.blockElement?.style[keyStyle] || "default";
-            } else return this.blockElement?.style[keyStyle] || "default";
+                else {
+                    const result = this.blockElement?.style[keyStyle] || "default";
+                    return unquot(result)
+                }
+            } else {
+                    const result = this.blockElement?.style[keyStyle] || "default";
+                    return unquot(result)
+                }
         }
     }
 
@@ -58,7 +70,12 @@ export default class Toggler extends TextExtractor  {
     }
 
     findDefaultValue(keyStyle) {
-        if (this.blockElement) return this.blockElement.style[keyStyle];
+        const unquot = (text) => {
+            text = text.split('"');
+            text = text.join("");
+            return text;
+        };
+        if (this.blockElement) return unquot(this.blockElement.style[keyStyle]);
         return null;
     }
 

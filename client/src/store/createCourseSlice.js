@@ -15,6 +15,7 @@ export const fetchCourseForm = createAsyncThunk("createCourse/fetchCourseForm",
                 method: "POST",
                 body: JSON.stringify(data)
             });
+            console.log(data)
             if ( response.ok ) {
                 dispatch(close());
                 const { id } = await response.json();

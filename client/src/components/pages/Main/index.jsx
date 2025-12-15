@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCourses } from "../../../store/coursesSlice.js";
 import Course from "./Course.jsx";
-import Redactor from "../../Form/Redactor/Redactor.jsx";
 import { open } from "../../../store/popupSlice.js";
 import "./index.css";
+
+import Redactor from "../../Form/Redactor/index.jsx";
 
 
 export default function Main() {
@@ -12,6 +13,10 @@ export default function Main() {
     const dispatch = useDispatch();
     const level= useSelector( state => state.user.account.level);
     const {courses, isCoursesLoaded } = useSelector( state => state.courses);
+
+    const redactorRef = useRef(null)
+    
+    
 
     useEffect( ()=> {
         if (!isCoursesLoaded) {
@@ -31,8 +36,7 @@ export default function Main() {
                 coursesList.length ? coursesList : <p>Доступных курсов <strong>пока</strong> нет</p>
             }
         </div>
-        <Redactor />
-        
+        <Redactor redactorRef={redactorRef} />
         {
             level > 1 ? <button onClick={ ()=> dispatch(open({form: "courseForm"}))}>создать курс</button> : null
         }

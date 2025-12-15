@@ -1,41 +1,52 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import Input from "../../Form/Input";
-import Textarea from "../../Form/Textarea";
-import Radio from "../../Form/Radio";
+import Redactor from "../../Form/Redactor"
 import Files from "../../Form/Files";
 import { useDispatch, useSelector } from "react-redux";
-import { setValue, setType, toggleLessonForm, fetchLessonForm } from "../../../store/createLessonSlice";
+import { setValue, setType, fetchLessonForm } from "../../../store/createLessonSlice";
 
 
 export default function CreateLesson() {
 
-    const {title, content, lessonType, isOpened} = useSelector( state => state.createLesson);
+    const {title} = useSelector( state => state.createLesson);
     const authorId = useSelector( state => state.user.account.id);
     const courseId = useSelector( state => state.course.id);
+    const taskList = useSelector( state => state.course.lesson.tasks);
     const dispatch = useDispatch();
+    const lectureRef = useRef(null);
+    const [isLectureOpened, setLectureOpened] = useState(true);
+    
 
     return(
-        <>
-        <button onClick={()=> dispatch(toggleLessonForm())}>{isOpened ? "закрыть" : "добавить запись"}</button>
-        {isOpened && 
+        
+        <div>
             <div>
-                <div>
-                    <p>Тип записи:</p>
-                    <p><Radio name={"lessonType"} value={"lecture"} action={setType} checked={lessonType} /> лекция</p>
-                    <p><Radio name={"lessonType"} value={"task"} action={setType} checked={lessonType} /> задание для самостоятельной работы</p>
-                    <p><Radio name={"lessonType"} value={"test"} action={setType} checked={lessonType}/> тест</p>
-                </div>
-                <div>
+                <button onClick={()=> setLectureOpened(!isLectureOpened)}>Добавить лекцию</button>
+                <div style={isLectureOpened ? {} : {display: "none"}}>
                     <p>Название:</p>
                     <Input field={"title"} state={title} action={setValue} />
-                    <p>Содержание:</p>
-                    <Textarea field={"content"} state={content} action={setValue} />
-                </div>
+                    
+                    <Redactor ref={lectureRef} />
+                
                 <Files />
-                <button onClick={()=> dispatch(fetchLessonForm({lessonType, data: {title, content, authorId, courseId}}))}>Создать</button>
+                <button onClick={()=> {
+                    dispatch(setValue({
+                        field: "content",
+                        value: lectureRef.current.textContent
+                    }));
+                    dispatch(setValue({
+                        field: "html",
+                        value: lectureRef.current.innerHTML
+                    }));
+                    dispatch(fetchLessonForm({data: {title, authorId, courseId}}))}}>Создать</button>
+                </div>
             </div>
-        }
+            
+            <div>
+                {taskList}
+                <button>Добавить задание</button>
+            </div>
+        </div>
         
-        </>
     )
 }
