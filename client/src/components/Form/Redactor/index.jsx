@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Toggler from "./controllers/Toggler";
 import TextExtractor from "./controllers/TextExtractor";
 import TextDecorator from "./controllers/TextDecorator";
@@ -8,25 +8,15 @@ import "./redactor.css";
 
 
 
-export default function Redactor({redactorRef, html = ""}) {
+export default function Redactor({ref, html = ""}) {
+    
+
     
     const toggler = new Toggler();
     let [state, setState] = useState(toggler.state);
 
     useEffect(()=>{
-            redactorRef.current.innerHTML = html;
-            const observer = new MutationObserver(records => {
-                console.log("records")
-                console.log(records)
-
-                const record = records[0];
-                const data = record.target.data;
-                const oldValue = record.oldValue;
-                let test = data.split(oldValue);
-                test = test.join("")
-                
-            })
-            observer.observe(redactorRef.current, {characterData: true, characterDataOldValue: true, subtree: true})
+        ref.current.innerHTML = html;
         }, [])
 
     console.log("REDACTOR")
@@ -34,7 +24,7 @@ export default function Redactor({redactorRef, html = ""}) {
     document.onselectionchange = ()=> {
         console.log("selectionchange")
 
-        const brs = document.querySelectorAll("#redactor br");
+        const brs = document.querySelectorAll('div[data-type="redactor"] br');
 
         for (let br of brs) {
             if(!br.closest(`*[data-conception="HEADER2"]`)) br.remove();
@@ -70,7 +60,7 @@ export default function Redactor({redactorRef, html = ""}) {
     return(
         <div className={"redactor-wrap"}>
             <Menu state={state} className={"menu"}/>
-            <div id="redactor" spellCheck={false} ref={redactorRef}
+            <div data-type="redactor" spellCheck={false} ref={ref}
             
             onKeyDown = { e => { 
                 const handler = new Handler();

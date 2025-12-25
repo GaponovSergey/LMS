@@ -22,7 +22,7 @@
   margin-bottom: 50px;
 }
 
-#redactor {
+div[data-type="redactor"] {
   min-width: 385px;
   width: 60%;
   min-height: 500px;
@@ -31,7 +31,7 @@
   box-sizing: border-box;
 }
 
-#redactor:focus {
+div[data-type="redactor"]:focus {
   outline: 2px dashed black;
   outline-offset: 1px;
 }

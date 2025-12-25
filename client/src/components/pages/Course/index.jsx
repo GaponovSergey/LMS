@@ -24,7 +24,7 @@ export default function Course() {
             
         }, [state.isCourseLoaded, courseId, dispatch]);
 
-    const lessons = state.lectures.map( lecture => <Lecture data={lecture} key={lecture.id} />)
+    const lessons = state.lessons.map( lecture => <Lecture data={lecture} key={lecture.id} />)
 
     
     return(

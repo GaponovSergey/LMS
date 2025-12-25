@@ -1,22 +1,23 @@
 
 
-export default function defineLecture(sequelize, DataTypes) {
+export default function defineLesson(sequelize, DataTypes) {
 
-    return sequelize.define("lecture", {
+    return sequelize.define("lesson", {
         title: {
             type: DataTypes.STRING
         },
         courseId: {
             type: DataTypes.INTEGER
         },
-        description: {
-            type: DataTypes.STRING
-        },
         authorId: {
             type: DataTypes.INTEGER
         },
         contentId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            references: {
+                model: "contents",
+                key: "id"
+            }
         },
     }) 
 }

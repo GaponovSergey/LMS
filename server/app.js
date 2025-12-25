@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 
 import { usersRouter } from "./controllers/users/users.js";
 import { coursesRouter } from "./controllers/courses/courses.js";
-import { lecturesRouter } from "./controllers/lectures/lectures.js";
+import { lessonsRouter } from "./controllers/lessons/lessons.js";
 import { tasksRouter } from "./controllers/tasks/tasks.js";
 import { fileRouter } from "./controllers/store/store.js";
 import setSession from "./models/session.js";
@@ -28,7 +28,7 @@ app.use("/users", usersRouter);
 //app.use(checkAccess);
 
 app.use("/courses", coursesRouter);
-app.use("/lectures", lecturesRouter);
+app.use("/lessons", lessonsRouter);
 app.use("/tasks", tasksRouter);
 
 app.use("/store",  fileRouter)

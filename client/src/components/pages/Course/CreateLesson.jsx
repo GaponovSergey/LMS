@@ -1,51 +1,43 @@
-import React, {useRef, useState} from "react";
-import Input from "../../Form/Input";
-import Redactor from "../../Form/Redactor"
-import Files from "../../Form/Files";
+import React, { useState } from "react";
+import LectureForm from "./LectureForm";
+import TaskForm from "./TaskForm";
 import { useDispatch, useSelector } from "react-redux";
-import { setValue, setType, fetchLessonForm } from "../../../store/createLessonSlice";
 
 
 export default function CreateLesson() {
 
-    const {title} = useSelector( state => state.createLesson);
+    
     const authorId = useSelector( state => state.user.account.id);
     const courseId = useSelector( state => state.course.id);
-    const taskList = useSelector( state => state.course.lesson.tasks);
+    const {id, lecture, tasks} = useSelector( state => state.createLesson);
     const dispatch = useDispatch();
-    const lectureRef = useRef(null);
     const [isLectureOpened, setLectureOpened] = useState(true);
-    
+    const [isTaskOpened, setTaskOpened] = useState(false);
+    console.log("lessonid")
+    console.log(id)
 
     return(
         
         <div>
             <div>
-                <button onClick={()=> setLectureOpened(!isLectureOpened)}>Добавить лекцию</button>
-                <div style={isLectureOpened ? {} : {display: "none"}}>
-                    <p>Название:</p>
-                    <Input field={"title"} state={title} action={setValue} />
-                    
-                    <Redactor ref={lectureRef} />
-                
-                <Files />
-                <button onClick={()=> {
-                    dispatch(setValue({
-                        field: "content",
-                        value: lectureRef.current.textContent
-                    }));
-                    dispatch(setValue({
-                        field: "html",
-                        value: lectureRef.current.innerHTML
-                    }));
-                    dispatch(fetchLessonForm({data: {title, authorId, courseId}}))}}>Создать</button>
+                <button onClick={()=> {setLectureOpened(!isLectureOpened)}}>{!isLectureOpened ? `${ lecture ? "Редактировать" : "Добавить" } лекцию` : "Свернуть"}</button>
+                { isLectureOpened &&
+                    <LectureForm data={
+                        lecture && {...lecture, authorId, courseId} || {lessonId: id, authorId, courseId} 
+                    } close={()=> setLectureOpened(false)} />
+                }
+            </div>                  
+            {id &&
+                <div>
+                    {tasks}
+                    <button onClick={()=> setTaskOpened(!isTaskOpened)}>Добавить задание</button>
+                    { isTaskOpened &&
+                        <TaskForm data={
+                            {authorId, courseId} 
+                        } />
+                    }
                 </div>
-            </div>
-            
-            <div>
-                {taskList}
-                <button>Добавить задание</button>
-            </div>
+            }
         </div>
         
     )

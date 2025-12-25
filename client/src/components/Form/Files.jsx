@@ -1,28 +1,26 @@
 import React from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setFiles } from "../../store/uploadSlice";
+import { setFiles, uploadFiles } from "../../store/uploadSlice";
 import File from "./File";
 
 
-export default function Files() {
+export default function Files({to}) {
 
     const dispatch = useDispatch();
-    const {files, toCreate, toDelete} = useSelector(state => state.upload);
-
-    console.log(toDelete);
-    
+    const upload = useSelector(state => state.upload);
 
     const getDroped = (e)=> {
         e.preventDefault();
-        dispatch(setFiles({files: Array.from(e.dataTransfer.files)}));
-        
+        dispatch(setFiles({to, files: Array.from(e.dataTransfer.files)}));
+        dispatch(uploadFiles({to}));
     };
 
     const getInputed = (e)=> {
         e.preventDefault();
         
-        dispatch(setFiles({files: Array.from(e.target.files)}));
+        dispatch(setFiles({to, files: Array.from(e.target.files)}));
+        dispatch(uploadFiles({to}));
         e.target.value = null;
     };
 
@@ -40,8 +38,8 @@ export default function Files() {
             </label>
         </div>
         <div>
-            {toCreate.map( (file, index) => <File data={file} key={"file" + index}/>) || null}
-            {files.map( (file, index)  => <File data={file} key={"file" + index}/>) || null}
+            {upload[to].toCreate.map( (file, index) => <File data={{to, ...file}} key={"file" + index}/>) || null}
+            {upload[to].files.map( (file, index)  => <File data={{to, ...file}} key={"file" + index}/>) || null}
         </div>
         </>
     )

@@ -1,14 +1,12 @@
 import React, {useRef, useState} from "react";
-import Redactor from "../../Form/Redactor"
-import Files from "../../Form/Files";
+import Redactor from "../../Form/Redactor";
 
 
-export default function ContentForm({redactorRef, title, html, handler, children}) {
+export default function ContentForm({title, html, handler, children}) {
 
-    const [title, setTitle] = useState("");
-    const redactorRef = useRef(null);
+    const [titleState, setTitle] = useState(title);
     
-
+    const redactorRef = useRef(null);
     return(
         <div >
             <p>Название:</p>
@@ -16,12 +14,12 @@ export default function ContentForm({redactorRef, title, html, handler, children
                     
             <Redactor ref={redactorRef} html={html} />
                 
-            <Files />
+            
 
             {children}
 
             <button onClick={() => handler({
-                    title,
+                    title: titleState,
                     content: redactorRef.current.textContent,
                     html: redactorRef.current.innerHTML
             })}>Создать</button>

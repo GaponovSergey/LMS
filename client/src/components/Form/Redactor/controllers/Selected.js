@@ -49,12 +49,12 @@ export default class Selected  {
             this.endRange = [this.range.endContainer, this.range.endOffset];
             this.foundation = this.range.commonAncestorContainer;
 
-            if (this.foundation?.id === "redactor") {
+            if (this.foundation?.dataset?.type === "redactor") {
                 console.log("select 2")
                 this.redactor = this.foundation;
             } else {
                 console.log("select 3")
-                this.redactor = this.range.startContainer ? this.range.startContainer.parentElement.closest("#redactor") : null;
+                this.redactor = this.range.startContainer ? this.range.startContainer.parentElement.closest('div[data-type="redactor"]') : null;
             }
 
             if ( this.redactor) {

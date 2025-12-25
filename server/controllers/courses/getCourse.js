@@ -1,6 +1,6 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
-import { Course, Lecture, Content, File } from "../../models/sequelize.js";
+import { Course, Lesson, Content, File, Task } from "../../models/sequelize.js";
 
 
 export default async function getCourse(req, res) {
@@ -15,12 +15,17 @@ export default async function getCourse(req, res) {
                 id: req.params.courseId
             },            
             include: {
-                model: Lecture,
+                model: Lesson,
                 include: [{
                     model: Content,
                     include: File
+                }, {
+                    model: Task
                 }]
         }});
+
+        console.log("course");
+        console.log(course);
 
         if (!course) {
             throw new DataError("Курс не найден")

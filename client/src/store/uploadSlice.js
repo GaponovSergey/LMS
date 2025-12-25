@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
 
 export const uploadFiles = createAsyncThunk(
-    "upload/uploadFiles", async (_, {dispatch, getState}) => {
+    "upload/uploadFiles", async ({to}, {dispatch, getState}) => {
         try {
             const { upload, user } = getState();
 
-            const files = upload.toCreate;
+            const files = upload[to].toCreate;
             const authorId = user.account.id;
 
             const body = {
@@ -47,6 +47,8 @@ export const uploadFiles = createAsyncThunk(
                 }); 
             }
 
+            dispatch(reloadFiles({to, files: ids}))
+
             return ids;
         } catch(err) {
             let content = err.message;
@@ -58,20 +60,39 @@ export const uploadFiles = createAsyncThunk(
 const slice = createSlice({
     name: "upload",
     initialState: {
-        files: [],
-        toCreate: [],
-        toDelete: []
+        lecture: {
+            files: [],
+            toCreate: [],
+            toDelete: []
+        },
+        task: {
+            files: [],
+            toCreate: [],
+            toDelete: []
+        }
     },
     reducers: {
         setFiles(state, action) {
-            state.toCreate = [].concat(state.toCreate, action.payload.files);
+
+            const to = action.payload.to;
+
+            state[to].toCreate = [].concat(state[to].toCreate, action.payload.files);
+        },
+        reloadFiles(state, action) {
+
+            const to = action.payload.to;
+
+            state[to].toCreate = action.payload.files;
         },
         deleteFile(state, action) {
+
+            const to = action.payload.to;
+
             if(action.payload.storeId) {
-               state.files = state.files.filter( file => file.storeId !== action.payload.storeId);
-               state.toDelete.push(action.payload); 
+               state[to].files = state[to].files.filter( file => file.storeId !== action.payload.storeId);
+               state[to].toDelete.push(action.payload); 
             } else {
-                state.toCreate = state.toCreate.filter( file => file.name !== action.payload.name || 
+                state[to].toCreate = state[to].toCreate.filter( file => file.name !== action.payload.name || 
                                         file.lastModified !== action.payload.lastModified)
             }
             
@@ -79,6 +100,6 @@ const slice = createSlice({
     }
 })
 
-export const { setFiles, deleteFile } = slice.actions;
+export const { setFiles, reloadFiles, deleteFile } = slice.actions;
 
 export default slice.reducer;

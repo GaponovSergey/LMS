@@ -36,7 +36,7 @@ export default function Main() {
                 coursesList.length ? coursesList : <p>Доступных курсов <strong>пока</strong> нет</p>
             }
         </div>
-        <Redactor redactorRef={redactorRef} />
+        <Redactor ref={redactorRef} />
         {
             level > 1 ? <button onClick={ ()=> dispatch(open({form: "courseForm"}))}>создать курс</button> : null
         }

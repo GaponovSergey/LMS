@@ -3,7 +3,7 @@ import {Sequelize, DataTypes} from "sequelize";
 import defineUser from "./tables/User.js";
 import defineProfile from "./tables/Profile.js";
 import defineCourse from "./tables/Course.js";
-import defineLecture from "./tables/Lecture.js";
+import defineLesson from "./tables/Lesson.js";
 import defineFile from "./tables/File.js";
 import defineTask from "./tables/Task.js";
 import defineAnswer from "./tables/Answer.js";
@@ -24,7 +24,7 @@ try {
 
 export const User = await defineUser(sequelize, DataTypes, Sequelize);
 export const Course = await defineCourse(sequelize, DataTypes);
-export const Lecture = await defineLecture(sequelize, DataTypes);
+export const Lesson = await defineLesson(sequelize, DataTypes);
 export const ContentFile = await defineContentFile(sequelize, DataTypes);
 export const File = await defineFile(sequelize, DataTypes, Sequelize);
 export const Profile = await defineProfile(sequelize, DataTypes, Sequelize);
@@ -37,7 +37,7 @@ export const Student = await defineStudent(sequelize, DataTypes);
 User.hasMany(Course, {
   foreignKey: "authorId"
 });
-User.hasMany(Lecture, {
+User.hasMany(Lesson, {
   foreignKey: "authorId"
 });
 User.hasOne(Profile, {foreignKey: "id"});
@@ -46,7 +46,7 @@ Course.belongsTo(Profile, {
   foreignKey: "authorId"
 });
 
-Lecture.belongsTo(Profile, {
+Lesson.belongsTo(Profile, {
   foreignKey: "authorId"
 });
 
@@ -55,11 +55,18 @@ File.belongsTo(Profile, {
 });
 
 
-Course.hasMany(Lecture);
-Lecture.belongsTo(Course);
+Course.hasMany(Lesson);
+Lesson.belongsTo(Course);
 
-Lecture.belongsTo(Content);
+Lesson.belongsTo(Content);
+Content.hasOne(Lesson)
 Task.belongsTo(Content);
+
+
+Lesson.hasMany(Task);
+Task.belongsTo(Lesson);
+
+
 
 Content.belongsToMany(File, {through:  ContentFile});
 File.belongsToMany(Content, {through: ContentFile}); 
@@ -69,10 +76,3 @@ Student.hasMany(User, { foreignKey: "studentId" })
 
 sequelize.sync({force: true}); 
 
-/*await User.create({
-  name: "vasya",
-  surname: "pupkin",
-  fathername: "frankovich",
-  mail: "hhh@mail.ru",
-  password: "123"
-})*/

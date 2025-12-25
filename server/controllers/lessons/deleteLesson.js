@@ -1,25 +1,25 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
-import { Lecture } from "../../models/sequelize.js";
+import { Lesson } from "../../models/sequelize.js";
 
 
-export default async function deleteLecture(req, res) {
+export default async function deleteLesson(req, res) {
     try {
 
-        if (!req.body.lectureId) {
+        if (!req.body.lessonId) {
             throw new ValidationError("Нет id урока")
         }
 
-        const lecture = await Lecture.destroy(
+        const lesson = await Lesson.destroy(
             {
                 where: {
-                    id: req.body.lectureId,
+                    id: req.body.lessonId,
                     authorId: req.body.authorId
                 }
             }
         );
 
-        if (!lecture) {
+        if (!lesson) {
             throw new DataError("Курс не найден")
         }
 

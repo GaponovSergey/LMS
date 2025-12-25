@@ -1,23 +1,23 @@
 
 import { DataError } from "../../models/Errors.js";
-import { Lecture } from "../../models/sequelize.js";
+import { Lesson } from "../../models/sequelize.js";
 
 
-export default async function getLecture(req, res) {
+export default async function getLesson(req, res) {
     try {
 
-        const lecture = await Lecture.findOne({
+        const lesson = await Lesson.findOne({
             where: {
-                id: +req.params.lectureId
+                id: +req.params.lessonId
             }
         });
 
         
-        if (!lecture) {
+        if (!lesson) {
             throw new DataError("Элемент не найден")
         }
 
-        res.json(lecture);
+        res.json(lesson);
 
     } catch(err) {
         res.status(400);

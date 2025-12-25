@@ -7,7 +7,7 @@ export const fetchCourse = createAsyncThunk("course/fetchCourse",
         try {
             const response = await fetch("http://127.0.0.1:3001/courses/" + courseId);
             const data = await response.json();
-
+            console.log(data)
             dispatch(setCourse(data));
             dispatch(toggleCourseLoading() );
         } catch(err) {
@@ -23,7 +23,7 @@ const slice = createSlice({
         title: "",
         description: "",
         authorId: null,
-        lectures: [],
+        lessons: [],
         isCourseLoaded: false
     }, 
     reducers: {
@@ -32,7 +32,7 @@ const slice = createSlice({
             state.description = action.payload.description;
             state.authorId = action.payload.authorId;
             state.id = action.payload.id;
-            state.lectures = [...action.payload.lectures];
+            state.lessons = [...action.payload.lessons];
 
         },
         toggleCourseLoading( state ) {
