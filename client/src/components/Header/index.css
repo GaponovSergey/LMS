@@ -5,6 +5,8 @@ header {
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  border-bottom: 1px black solid;
+  box-sizing: border-box;
   z-index: 50;
 }
 

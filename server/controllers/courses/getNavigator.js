@@ -1,37 +1,34 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
-import { Course, Lesson, Content, File, Task } from "../../models/sequelize.js";
+import { Course, Lesson, Task } from "../../models/sequelize.js";
 
 
-export default async function getCourse(req, res) {
+export default async function getNavigator(req, res) {
     try {
 
-        if (typeof +req.params.courseId != "number") {
+        if (typeof +req.query.courseId != "number") {
             throw new ValidationError("Некорректный id курса")
         }
 
         const course = await Course.findOne({
             where: {
-                id: req.params.courseId
-            },            
+                id: req.query.courseId
+            }, 
+            attributes: ["id", "authorId"],           
             include: {
                 model: Lesson,
+                attributes: ["id", "title"],
+                
                 include: [{
-                    model: Content,
-                    include: File
-                }, {
                     model: Task,
-                    include: [{
-                        model: Content,
-                        include: File
-                    }]
+                    attributes: ["id", "lessonId", "title"]
+                    
                 }],
-                order: [[Task, "id", "ASC"], ],
+                order: [Task, "id", "ASC"]
             },
-            order: [[Lesson, "id", "ASC"], ]
-        });
+            order: [[Lesson, "id", "ASC"], ], });
 
-        console.log("course");
+        console.log("navigator");
         console.log(course.toJSON());
 
         if (!course) {

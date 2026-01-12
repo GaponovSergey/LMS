@@ -9,6 +9,7 @@ import fileReducer from "./uploadSlice.js";
 import createCourseReducer from "./createCourseSlice.js";
 import createLessonReducer from "./createLessonSlice.js";
 import alertReducer from "./alertSlice.js";
+import navigatorReducer from "./navigatorSlice.js";
 
 export default configureStore({
     middleware: (getDefaultMiddleware) =>
@@ -27,6 +28,7 @@ export default configureStore({
         course: courseReducer,
         createCourse: createCourseReducer,
         createLesson: createLessonReducer,
-        upload: fileReducer
+        upload: fileReducer,
+        navigator: navigatorReducer
     }
 })

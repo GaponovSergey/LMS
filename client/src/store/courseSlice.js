@@ -35,6 +35,17 @@ const slice = createSlice({
             state.lessons = [...action.payload.lessons];
 
         },
+        pushLesson(state, action) {
+            state.lessons.push(action.payload);
+        },
+        pushTask(state, action) {
+            const lesson = state.lessons.find(lesson => lesson.id === action.payload.lessonId);
+
+            if (lesson) {
+                if (!lesson.tasks) lesson.tasks = [action.payload];
+                else lesson.tasks.push(action.payload);
+            }
+        },
         toggleCourseLoading( state ) {
             state.isCourseLoaded = !state.isCourseLoaded;
         }
@@ -44,6 +55,6 @@ const slice = createSlice({
 
 
 
-export const { setCourse, toggleCourseLoading } = slice.actions;
+export const { setCourse, toggleCourseLoading, pushLesson, pushTask } = slice.actions;
 
 export default slice.reducer;

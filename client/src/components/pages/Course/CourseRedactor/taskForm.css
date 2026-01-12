@@ -1,0 +1,73 @@
+.task-form-files-container {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    padding: 20px;
+    align-self: center;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.task-form-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+  align-items: center;
+    border: 1px black solid;
+    border-radius: 3px;
+}
+
+.task-form-title {
+    font-family: Arial;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    min-width: 300px;
+    width: 80%;
+    align-self: center;
+    box-sizing: border-box;
+}
+
+.task-form-title * {
+    max-width: 300px;
+}
+
+.task-form-redactor {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.task-form-title input[type="text"] {
+    height: 24px;
+    border: 2px black solid;
+    border-radius: 3px;
+}
+
+.task-form-title input[type="text"]:focus {
+  outline: 2px dashed black;
+  outline-offset: 1px;
+}
+
+.task-form-create-button {
+  color: white;
+  background-color: #408d01;
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 7px 10px;
+  margin: 5px;
+  font-family: Arial;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.task-form-button-container {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 60%;
+    min-width: 300px;
+    align-self: center;
+    padding: 20px;
+}

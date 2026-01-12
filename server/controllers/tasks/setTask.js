@@ -13,7 +13,7 @@ export default async function setTask(req, res, next) {
         const {title = null, lessonId, content = null, html = null, files = []} = req.body;
         const task = {
             title, lessonId,
-            content: {content, html},
+            content: {content, html, files},
             authorId: req.session.user.id
         };
 
@@ -23,31 +23,31 @@ export default async function setTask(req, res, next) {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
 
-        const contentId = result.сontent.id;
 
-        const contentFiles = files.map( file => {
-                    file.сontentId = contentId;
-                    return file;
-                });
-        
-        await ContentFile.bulkCreate(contentFiles).catch( err => {
-            throw new DataError(`Создать элемент не удалось: ${err.message}`)
-        });
-  
-        if(!files.length) {
-            res.status(201);
-            res.json(result)
+        if (files.length) {
+            
+            const contentId = result.content.id;
 
-        } else {
+            const contentFiles = files.map( file => {
+                        file.contentId = contentId;
+                        return file;
+                    });
+            
+            await ContentFile.bulkCreate(contentFiles).catch( err => {
+                throw new DataError(`Создать элемент не удалось: ${err.message}`)
+            });
+
             req.body.result = result.get({plain: true});
             next();
+
+        }  else {
+            res.status(201);
+            res.json(result); 
         }
 
     } catch(err) {
         res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        console.log(err);
+        res.json(err);
     }
 }

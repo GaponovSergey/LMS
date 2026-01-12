@@ -1,0 +1,26 @@
+.file-link-container {
+    max-width: 350px;
+    min-width: 300px;
+    width: 28%;
+    border: 2px black solid;
+    border-radius: 8px;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.file-link-container p {
+    margin: 4px;
+    font-family: Arial;
+    font-size: 14px;
+}
+
+.file-link {
+    text-decoration: underline dashed;
+    text-underline-offset: 4px;
+
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+}

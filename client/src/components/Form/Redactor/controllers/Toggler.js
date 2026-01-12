@@ -27,7 +27,10 @@ export default class Toggler extends TextExtractor  {
         return false;
     }
 
-    setMultipleValue({data, keyStyle, defaultValue}) {
+    setMultipleValue({data, keyStyle}) {
+
+        if (!this.isFromRedactor) return null;
+
         const {conception} = data;
         const inFoundation = this.foundationTags.find(tag => tag.dataset?.conception === conception);
         const tags = this.tags[conception];
@@ -38,27 +41,35 @@ export default class Toggler extends TextExtractor  {
             return text;
         };
 
+        let defaultValue;
+
+        if (this.blockElement) defaultValue = unquot(this.blockElement.style[keyStyle]);
+        else {
+
+            const blockElements = this.blockElements;
+
+            if(!blockElements.length) return null;
+
+            const controlValue = unquot(blockElements[0].style[keyStyle]);
+            const isDifferentValue = blockElements.find( element => unquot(element.style[keyStyle]) !== controlValue);
+            defaultValue = isDifferentValue ? null : controlValue;
+        }
+
         if(inFoundation) {
             
             if (!tags.length) return unquot(inFoundation.style[keyStyle]);
             if (tags.find(tag => tag.style[keyStyle] !== inFoundation.style[keyStyle])) return null;
-            else return (inFoundation.style[keyStyle]);
+            else return unquot(inFoundation.style[keyStyle]);
         } else {
-            if (!this.blockElement) return null;
             if(tags.length) {
-                if (tags.length > 1 && 
-                    !tags.find( tag => tag.style[keyStyle] !== tags[0].style[keyStyle])) {
-                        return unquot(tags[0].style[keyStyle]);
-                }
-                if (tags.find(tag => tag.style[keyStyle] !== this.blockElement.style[keyStyle])) return null;
-                else {
-                    const result = this.blockElement?.style[keyStyle] || "default";
-                    return unquot(result)
+                if (defaultValue === null || tags.find( tag => unquot(tag.style[keyStyle]) !== defaultValue)) {
+                    return null;
+                } else {
+                    return defaultValue;
                 }
             } else {
-                    const result = this.blockElement?.style[keyStyle] || "default";
-                    return unquot(result)
-                }
+                return defaultValue;
+            }
         }
     }
 
@@ -91,8 +102,10 @@ export default class Toggler extends TextExtractor  {
 
         const textAlign = blockElements[0].style.textAlign;
 
-        const isDifferentValue = blockElements.find( element => element.style.taxtAlign !== textAlign);
+        console.log("textAlign")
+        console.log(textAlign)
 
+        const isDifferentValue = blockElements.find( element =>  element.style.textAlign !== textAlign);
         return isDifferentValue ? null : textAlign;
     }
 

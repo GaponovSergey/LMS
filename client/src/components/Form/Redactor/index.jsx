@@ -24,6 +24,8 @@ export default function Redactor({ref, html = ""}) {
     document.onselectionchange = ()=> {
         console.log("selectionchange")
 
+        
+
         const brs = document.querySelectorAll('div[data-type="redactor"] br');
 
         for (let br of brs) {
@@ -34,7 +36,7 @@ export default function Redactor({ref, html = ""}) {
         setState(toggler.state);
         
         
-        if (toggler.redactor && toggler.foundation === toggler.redactor && toggler.isCollapsed) {
+        if (toggler.redactor && !toggler.foundationTags.find(elem => elem.dataset?.type === "block") && toggler.isCollapsed) {
             const decorator = new TextDecorator({tagName: "paragraph"});
             const range = decorator.range;
             let wrapper;
@@ -53,6 +55,21 @@ export default function Redactor({ref, html = ""}) {
             range.setEnd(textNode, 0);
             decorator.changeSelection();
         }
+
+        if (toggler.redactor) {
+            const selection = document.getSelection().getRangeAt(0);
+            let y = selection.getBoundingClientRect().y;
+            const windowHeight = document.documentElement.clientHeight;
+
+            if (y < 100) {
+                y = y >= 0 ? 0 - y : y; 
+                window.scrollBy( 0, y - 150);
+            }
+            if (y > windowHeight - 50) {
+                window.scrollBy(0, y - windowHeight + 50);
+            }
+        }
+        
     }
 
     

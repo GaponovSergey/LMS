@@ -1,7 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toggleCourseLoading } from "./courseSlice";
+import { toggleCourseLoading, pushLesson, pushTask } from "./courseSlice";
 import { uploadFiles } from "./uploadSlice";
 import { setAlert } from "./alertSlice";
+import { triggerNavLoading } from "./navigatorSlice";
 
 export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
     
@@ -29,8 +30,8 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
             console.log("fetchlesson")
             console.log(payload)
 
-            dispatch(setValue({field: "id", value: payload.id}));
-            dispatch(setValue({field: "lecture", value: payload.content}))
+            dispatch(pushLesson(payload));
+            dispatch(triggerNavLoading());
 
             return payload;
         } catch(err) {
@@ -46,9 +47,11 @@ export const fetchTaskForm = createAsyncThunk("createLesson/fetchTaskForm",
 
         try {
 
-            const {upload} = getState();
+            const { upload } = getState();
 
-            data.files = upload.task.toCreate.map(({id}) => {return {fileId: id};})
+            
+            
+            data.files = upload.task.toCreate.map(({id}) => {return {fileId: id};});
 
             const response = await fetch(`http://127.0.0.1:3001/tasks/`, {
                 headers: {
@@ -64,61 +67,19 @@ export const fetchTaskForm = createAsyncThunk("createLesson/fetchTaskForm",
             console.log("fetchtask")
             console.log(payload)
 
-            dispatch(setTask(payload));
+            dispatch(pushTask(payload));
+            dispatch(triggerNavLoading());
 
             return payload;
         } catch(err) {
             let content = err.message;
+            console.log(err)
             dispatch(setAlert({title: "Ошибка", content}))
         }
     }
 );
 
 
-
-export const fetchForm = createAsyncThunk("createLesson/fetchForm",
-    
-    async ({ to, title, content, html, authorId, courseId, lessonId, taskId = null}, { dispatch, getState })=> {
-        try {
-
-            if(!lessonId) {
-                const { payload } = await dispatch(fetchLessonForm({authorId, courseId}));
-                lessonId = payload.lessonId;
-            }
-
-            const { payload } = await dispatch(uploadFiles(to));
-            const files = payload.map( file => {return {fileId: file.id};});
-
-            const { createLesson } = getState();
-            const state = to === "task" && taskId ? createLesson.tasks[taskId] :  to === "task" ? null : createLesson.lecture;
-
-
-            const data = {title, content, html, authorId, lessonId, files};
-
-            if (to === "task" && taskId) data.taskId = taskId;
-
-            const response = await fetch(`http://127.0.0.1:3001/${to}s/`, {
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                credentials: 'include', 
-                method: "POST",
-                body: JSON.stringify(data)
-            });
-
-            if ( response.ok ) {
-                const lesson = await response.json();
-
-                for(let field in lesson) {
-                    dispatch(setValue({field, value: lesson[field]}))
-                }
-            }
-        } catch(err) {
-            let content = err.message;
-            dispatch(setAlert({title: "Ошибка", content}))
-        }
-    }
-);
 
 const slice = createSlice({
     name: "createLesson",
@@ -131,8 +92,13 @@ const slice = createSlice({
         setValue(state, action) {
             state[action.payload.field] = action.payload.value;
         },
+        setValues(state, {payload}) {
+            for (let key in payload) {
+                state[key] = payload[key];
+            }
+        },
         setTask(state, action) {
-            return state.tasks.push(action.payload);
+            state.tasks.push(action.payload);
         }
     },
     

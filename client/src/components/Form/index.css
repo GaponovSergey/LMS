@@ -5,12 +5,16 @@ input[type=file] {
 }
 
 .dropField {
-    display: block;
-    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60vw;
+    min-width: 280px;
     height: 250px;
     border: 3px black;
     border-style: dashed;
     background-color: bisque;
+    box-sizing: border-box;
 }
 
 .filesField {

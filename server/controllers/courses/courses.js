@@ -5,9 +5,11 @@ import getCourses from "./getCourses.js";
 import changeCourse from "./changeCourse.js";
 import deleteCourse from "./deleteCourse.js";
 import checkAccess from "../checkAccess.js";
+import getNavigator from "./getNavigator.js";
 
 export const coursesRouter = Router();
 
+coursesRouter.get("/navigator", getNavigator );
 coursesRouter.get("/:courseId", getCourse);
 coursesRouter.get("/", getCourses);
 

@@ -1,0 +1,53 @@
+.course-title {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 28px;
+    color: white;
+}
+
+
+.course-title-container, .course-description-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+
+.course-title-container {
+    background-color: darkgreen;
+    border-bottom: 1px black solid;
+    
+    
+}
+
+.course-description-container {
+    background-color: #65A42F;
+}
+
+.course-description {
+    min-width: 300px;
+    background-color: #b2d296;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    padding: 12px;
+    border: 1px black solid;
+    border-radius: 5px;
+}
+
+.course-lessons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 84%;
+    margin: 0px 0;
+}
+
+.course-container {
+    display: flex;
+    margin-top: 45px;
+}
+
+.course-navigator {
+    display: block;
+    width: 16%;
+}

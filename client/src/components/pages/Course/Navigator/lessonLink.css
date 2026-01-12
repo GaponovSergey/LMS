@@ -1,0 +1,86 @@
+.lesson-link-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    gap: 1px;
+}
+
+.lesson-link-button {
+    display: flex;
+    background-color: darkgreen;
+    border-width: 0;
+    border-radius: 0;
+    padding: 0;
+    width: 85%;
+}
+
+.lesson-link-wrap {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+    border: 1px black solid;
+}
+
+.lesson-link-button-title {
+    display: block;
+    color: #fff;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    
+    padding: 8px 5px 8px 15px;
+}
+
+.lesson-link-toggle-button {
+    color: #fff;
+    background-color: rgb(1, 85, 1);
+    font-family: Arial;
+    font-size: 12px;
+    padding: 2px;
+    width: 15%;
+    align-self: stretch;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.lesson-link-toggle-button:disabled {
+    color: rgb(0, 103, 0);
+}
+
+.lesson-link-tasks-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+}
+
+.task-link-button {
+    background-color: rgb(165, 143, 29);
+    color: #fff;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    padding: 5px;
+    padding-left: 15px;
+    min-height: 30px;
+    border-radius: 0;
+    width: 85%;
+}
+
+.task-create-link-button {
+    background-color: rgb(218, 210, 168);
+    color: #000;
+    font-family: Arial;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: left;
+    padding: 5px;
+    padding-left: 15px;
+    min-height: 30px;
+    border-radius: 0;
+    width: 85%;
+}

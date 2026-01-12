@@ -58,9 +58,12 @@ File.belongsTo(Profile, {
 Course.hasMany(Lesson);
 Lesson.belongsTo(Course);
 
-Lesson.belongsTo(Content);
-Content.hasOne(Lesson)
 Task.belongsTo(Content);
+Content.hasOne(Task);
+
+Lesson.belongsTo(Content);
+Content.hasOne(Lesson);
+
 
 
 Lesson.hasMany(Task);
@@ -72,7 +75,9 @@ Content.belongsToMany(File, {through:  ContentFile});
 File.belongsToMany(Content, {through: ContentFile}); 
 
 Student.hasMany(Course);
-Student.hasMany(User, { foreignKey: "studentId" })
+Student.hasMany(User, { foreignKey: "studentId" });
 
-sequelize.sync({force: true}); 
+sequelize.sync({alter: true}); 
+File.sync({force: true});
+ContentFile.sync({force: true});
 
