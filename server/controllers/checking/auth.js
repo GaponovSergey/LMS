@@ -1,5 +1,5 @@
-import { verifyJWT } from "../models/jwt.js";
-import { SessionError } from "../models/Errors.js";
+import { verifyJWT } from "../../models/jwt.js";
+import { SessionError } from "../../models/Errors.js";
 
 export default function authentificate(req, res, next) {
     try {

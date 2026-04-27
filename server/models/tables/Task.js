@@ -27,8 +27,10 @@ export default function defineTask(sequelize, DataTypes) {
                 key: "id"
             }
         },
-        timeframe: {
-            type: DataTypes.INTEGER
+        deadline: {
+            type: DataTypes.DATE,
+            allowNull: true,
+            defaultValue: null
         }
     }) 
 }

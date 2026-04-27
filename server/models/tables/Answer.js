@@ -10,19 +10,27 @@ export default function defineAnswer(sequelize, DataTypes) {
                 key: "id"
             }
         },
-        authorId: {
+        courseId: {
             type: DataTypes.INTEGER,
             references: {
-                model: "Users",
+                model: "courses",
                 key: "id"
             }
         },
-        accepted: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false
+        studentId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "Profiles",
+                key: "id"
+            }
+        },
+        status: {
+            type: DataTypes.STRING,
+            defaultValue: "pending"
         },
         grade: {  // Оценка
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            defaultValue: null
         }
     })
 }

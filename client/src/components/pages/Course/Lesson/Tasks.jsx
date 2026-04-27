@@ -1,34 +1,29 @@
-import React, {useState, useRef} from "react";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { shallowEqual, useSelector } from "react-redux";
 import Task from "./Task";
-import TaskForm from "../CourseRedactor/TaskForm";
-import useScrollTo from "../../../../hooks/useScrollTo";
+import CreateTask from "../CourseRedactor/CreateTask";
 import "./tasks.css";
 
 
-export default function Tasks({id, authorId, tasks, withRedactor = false}) {
+export default function Tasks({lessonId}) {
 
-    const [isTaskOpened, setTaskOpened] = useState(false);
-    const Tasks = tasks.map( (data, i) => <Task data={data} key={"task" + id + i} />);
+    const taskIds = useSelector( state => {
+        const lesson = state.lessons.lessons.find( lesson => lesson.id === lessonId);
+        return lesson.tasks ? lesson.tasks.map( task => task.id) : [];
+    }, shallowEqual);
 
-    const formRef = useRef(null);
-    const formName = `taskForm${id}`;
+    const withRedactor = useSelector( state => state.course.authorId === state.user.account.id);
 
-    useScrollTo(formRef, formName, ()=> setTaskOpened(true));
+    const { courseId } = useParams();
+
+    const tasks = taskIds.map( taskId => <Task taskId={taskId} lessonId={lessonId} courseId={courseId} key={"task" + taskId } />);
 
     return(
         <>
-            {Tasks}
+            {tasks}
             { withRedactor && 
-                <div className={"tasks-create-button-container"} ref={formRef}>
-                    <button className={"tasks-create-button"}
-                     onClick={()=> setTaskOpened(!isTaskOpened)}>
-                        {isTaskOpened ? " \u25BC Скрыть" : " \u25BA Добавить задание"}
-                    </button>
-                    { isTaskOpened &&
-                        <TaskForm data={{authorId, lessonId: id}} />
-                    }
-                </div>
-                
+                <CreateTask data={{ courseId, lessonId}} />
             }
         </>
     )

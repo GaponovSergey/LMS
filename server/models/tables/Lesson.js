@@ -7,10 +7,22 @@ export default function defineLesson(sequelize, DataTypes) {
             type: DataTypes.STRING
         },
         courseId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            references: {
+                model: "courses",
+                key: "id"
+            }
         },
         authorId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            references: {
+                model: "Profiles",
+                key: "id"
+            }
+        },
+        access: {
+            type: DataTypes.STRING,
+            defaultValue: "opened"
         },
         contentId: {
             type: DataTypes.INTEGER,

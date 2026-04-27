@@ -7,20 +7,30 @@ import "./lectureForm.css";
 
 export default function LectureForm({data, close = null}) {
 
-    const {title = "", authorId = null, courseId = null, lessonId = null, html = ""} = data;
+    const {title = "", authorId = null, courseId = null, lessonId = null, html = "", files = []} = data;
     const dispatch = useDispatch();
-    const to = "lecture";
 
     const redactorRef = useRef(null);
     
         const [titleState, setTitle] = useState(title);
+        const filesState = useState({
+            toDelete: [],
+            exists: [...files],
+            toCreate: [],
+            toRemove: []
+        })
     
         const handler = ( ) => {
             dispatch(fetchLessonForm({
                 lessonId, authorId, courseId,
                 title: titleState,
                 content: redactorRef.current.textContent,
-                html: redactorRef.current.innerHTML
+                html: redactorRef.current.innerHTML,
+                files: {
+                    toCreate: filesState[0].toCreate.map( file => file.id),
+                    toDelete: filesState[0].toDelete,
+                    toRemove: filesState[0].toRemove
+                }
             }) )
             if (close) close();
         }
@@ -35,7 +45,7 @@ export default function LectureForm({data, close = null}) {
         
             <div className={"task-form-redactor"}><Redactor ref={redactorRef} html={html} /></div>
                             <div className={"lecture-form-files-container"}>
-                                <Files to={to} /> 
+                                <Files  state={filesState}/> 
                             </div>
                         <div className={"lecture-form-button-container"}>
                             <button className={"lecture-form-create-button"} onClick={() => handler()}>Создать</button>

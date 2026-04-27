@@ -1,20 +1,20 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
-import { Lesson } from "../../models/sequelize.js";
+import { Task } from "../../models/sequelize.js";
 
 
-export default async function changeLesson(req, res) {
+export default async function changeTaskTitle(req, res) {
     try {
 
-        if (!req.body.lessonId) {
+        if (!req.body.taskId || !req.body.lessonId || !req.body.title) {
             throw new ValidationError("Нет id элемента")
         }
 
-        const lesson = await Lesson.update(req.body.toChange,
+        const lesson = await Task.update({title: req.body.title},
             {
                 where: {
-                    id: req.body.lessonId,
-                    authorId: req.body.authorId
+                    id: req.body.taskId,
+                    lessonId: req.body.lessonId
                 }
             }
         );
@@ -23,11 +23,11 @@ export default async function changeLesson(req, res) {
             throw new DataError("Элемент не найден")
         }
 
-        res.status(201);
-        res.json(await Lesson.findByPk(lesson[0]));
+        res.sendStatus(201);
 
     } catch(err) {
         res.status(400);
+        console.log(err)
         res.json({
             name: err.name,
             message: err.message

@@ -1,8 +1,8 @@
-import { Task, Content, ContentFile } from "../../models/sequelize.js";
+import { Task, TaskAccess, Group, Lesson} from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
 
 
-export default async function setTask(req, res, next) {
+export default async function setTask(req, res) {
         
     try {
 
@@ -10,44 +10,63 @@ export default async function setTask(req, res, next) {
             throw new ValidationError("Поля не заполнены")
         }
  
-        const {title = null, lessonId, content = null, html = null, files = []} = req.body;
+        const {title = null, groupsAccess = [], lessonId, contentId, deadline = null} = req.body;
         const task = {
-            title, lessonId,
-            content: {content, html, files},
-            authorId: req.session.user.id
+            title, lessonId, contentId,
+            authorId: req.session.user.id,
+            deadline
         };
 
-        const result = await Task.create(task,{include: [{
-                    model: Content
-                }]}).catch( err => {
+        console.log("taskAccess")
+        console.log(groupsAccess)
+        await checkGroups(req.body);
+
+        const createdTask = await Task.create(task).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
 
+        console.log("createdTask")
+        console.log(createdTask)
+        
+        const taskAccess = groupsAccess.map( group => {
+            group.taskId = createdTask.id; 
+            return group;
+        });
 
-        if (files.length) {
-            
-            const contentId = result.content.id;
+        const accesses = await TaskAccess.bulkCreate(taskAccess, {attributes: ["taskId", "groupId", "access"]})
 
-            const contentFiles = files.map( file => {
-                        file.contentId = contentId;
-                        return file;
-                    });
-            
-            await ContentFile.bulkCreate(contentFiles).catch( err => {
-                throw new DataError(`Создать элемент не удалось: ${err.message}`)
-            });
-
-            req.body.result = result.get({plain: true});
-            next();
-
-        }  else {
-            res.status(201);
-            res.json(result); 
-        }
+        const result = {...createdTask.get({plain: true})};
+        result.accesses = accesses;
+        result.content = req.body.result.content;
+        result.content.files = req.body.result.createdFiles || [];
+        
+        res.status(201);
+        res.json(result)
 
     } catch(err) {
         res.status(400);
         console.log(err);
         res.json(err);
     }
+}
+
+
+
+async function checkGroups({groupsAccess, lessonId, courseId}) {
+
+    const requestGroups = groupsAccess.map( group => group.groupId);
+
+    const course = await Lesson.findOne({where: {id: lessonId, courseId}, attributes: ["courseId"]});
+
+    if (!course.courseId) throw new ValidationError("Урока не существует"); 
+
+    const controlGroups = await Group.findAll({
+        where: {
+            id: requestGroups,
+            courseId
+        }, 
+        attributes: ["id"]
+    });
+
+    if (requestGroups.length !== controlGroups.length) throw new ValidationError("Группы не соответствуют курсу");
 }

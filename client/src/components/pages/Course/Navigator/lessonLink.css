@@ -7,7 +7,7 @@
 
 .lesson-link-button {
     display: flex;
-    background-color: darkgreen;
+    background-color: inherit;
     border-width: 0;
     border-radius: 0;
     padding: 0;
@@ -16,7 +16,7 @@
 
 .lesson-link-wrap {
     display: flex;
-
+    background-color: darkgreen;
     justify-content: space-between;
     align-items: center;
     min-height: 40px;

@@ -10,10 +10,19 @@ import defineAnswer from "./tables/Answer.js";
 import defineAnswerFile from "./tables/AnswerFile.js";
 import defineContentFile from "./tables/ContentFile.js";
 import defineContent from "./tables/Content.js";
-import defineStudent from "./tables/Student.js";
+import defineApplicant from "./tables/Applicant.js";
+import defineGroup from "./tables/Group.js";
+import defineGroupProfile from "./tables/GroupProfile.js";
+import defineTaskAccess from "./tables/TaskAccess.js";
+import defineCompletedCourse from "./tables/CompletedCourse.js";
 
 
-export const sequelize = new Sequelize("LMS", "administrator", "12345", { dialect: "postgres"});
+export const sequelize = new Sequelize("LMS", "administrator", "12345", { 
+  dialect: "postgres", 
+  dialectOptions: {
+    timezone: "UTC"
+  }
+});
 
 try {
   await sequelize.authenticate()
@@ -32,7 +41,11 @@ export const Task = await defineTask(sequelize, DataTypes);
 export const Content = await defineContent(sequelize, DataTypes);
 export const Answer = await defineAnswer(sequelize, DataTypes);
 export const AnswerFile = await defineAnswerFile(sequelize, DataTypes);
-export const Student = await defineStudent(sequelize, DataTypes);
+export const Applicant = await defineApplicant(sequelize, DataTypes);
+export const Group = await defineGroup(sequelize, DataTypes);
+export const GroupProfile = await defineGroupProfile(sequelize, DataTypes);
+export const TaskAccess = await defineTaskAccess(sequelize, DataTypes);
+export const CompletedCourse = await defineCompletedCourse(sequelize, DataTypes, Sequelize);
 
 User.hasMany(Course, {
   foreignKey: "authorId"
@@ -58,26 +71,56 @@ File.belongsTo(Profile, {
 Course.hasMany(Lesson);
 Lesson.belongsTo(Course);
 
-Task.belongsTo(Content);
+Course.hasMany(Content, {onDelete: "CASCADE"});
+Course.hasMany(File, {onDelete: "CASCADE"});
+
+Task.belongsTo(Content, {onDelete: "CASCADE"});
 Content.hasOne(Task);
 
-Lesson.belongsTo(Content);
+Lesson.belongsTo(Content, {onDelete: "CASCADE"});
 Content.hasOne(Lesson);
 
 
-
 Lesson.hasMany(Task);
-Task.belongsTo(Lesson);
-
-
+Task.belongsTo(Lesson, {onDelete: "CASCADE"});
 
 Content.belongsToMany(File, {through:  ContentFile});
 File.belongsToMany(Content, {through: ContentFile}); 
 
-Student.hasMany(Course);
-Student.hasMany(User, { foreignKey: "studentId" });
+Content.hasMany(ContentFile,  {onDelete: "CASCADE"})
+
+Course.hasMany(Applicant,  {onDelete: "CASCADE"});
+Applicant.belongsTo(Profile, { foreignKey: "userId" });
+
+Course.hasMany( Group);
+Group.belongsTo(Course);
+
+Group.belongsToMany(Profile, {through:  GroupProfile, as: "students"});
+Profile.belongsToMany(Group, {through: GroupProfile, foreignKey: "userId"}); 
+
+Group.hasMany(GroupProfile,  {onDelete: "CASCADE"});
+GroupProfile.belongsTo(Group);
+
+Task.hasMany(TaskAccess, {as: "accesses", onDelete: "CASCADE"});
+Group.hasMany(TaskAccess,  {as: "accesses", onDelete: "CASCADE"});
+TaskAccess.belongsTo( Group )
+TaskAccess.belongsTo(Task )
+
+Task.hasMany(Answer, {onDelete: "CASCADE"});
+Answer.belongsTo(Task);
+Answer.belongsTo(Profile, {as: "student", onDelete: "CASCADE"});
+Course.hasMany(Answer, {onDelete: "CASCADE"})
+
+Answer.hasMany( AnswerFile, {onDelete: "CASCADE"});
+Answer.belongsToMany( File, {through: AnswerFile});
+File.belongsToMany( Answer, {through: AnswerFile});
+File.hasMany(AnswerFile, {foreignKey: "fileId", onDelete: "CASCADE"})
+AnswerFile.belongsTo(File, {onDelete: "CASCADE"});
+AnswerFile.belongsTo(Answer, {onDelete: "CASCADE"})
+Profile.hasMany( Answer, {foreignKey: "studentId", onDelete: "CASCADE"}) 
+
+CompletedCourse.belongsTo( Profile, {onDelete: "CASCADE"})
+Profile.hasOne( CompletedCourse, {onDelete: "CASCADE"})
 
 sequelize.sync({alter: true}); 
-File.sync({force: true});
-ContentFile.sync({force: true});
 

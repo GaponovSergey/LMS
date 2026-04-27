@@ -1,28 +1,104 @@
-import React from "react";
+import React, { useState } from "react";
 import "./index.css";
 import { useSelector, useDispatch } from "react-redux";
-import { setFiles, uploadFiles } from "../../store/uploadSlice";
+import { setFiles, uploadFilesData } from "../../store/uploadSlice";
 import File from "./File";
 
 
-export default function Files({to}) {
+export default function Files({state, autoremove = false}) {
 
     const dispatch = useDispatch();
-    const upload = useSelector(state => state.upload);
+    const [filesState, setFilesState] = state; // fileState = {exists: [...], toCreate: [...], toDelete: [...]}
+    const [filesToUpload, setFilesToUpload] = useState([])
 
-    const getDroped = (e)=> {
-        e.preventDefault();
-        dispatch(setFiles({to, files: Array.from(e.dataTransfer.files)}));
-        dispatch(uploadFiles({to}));
+    const mapFileData = file => {
+            
+        return {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified
+        };
     };
 
-    const getInputed = (e)=> {
+    const getDroped = async (e)=> {
+        e.preventDefault();
+
+        const files = Array.from(e.dataTransfer.files)
+
+        setFilesToUpload([...filesToUpload, ...files]);
+
+        const filesData = files.map(mapFileData);
+
+        const result = await dispatch(uploadFilesData(filesData));
+        
+
+        setFilesState({
+            ...filesState,
+            toCreate: [...filesState.toCreate, ...result.payload]
+        });
+    };
+
+    const getInputed = async (e)=> {
         e.preventDefault();
         
-        dispatch(setFiles({to, files: Array.from(e.target.files)}));
-        dispatch(uploadFiles({to}));
+        const files = Array.from(e.target.files)
+
+        setFilesToUpload([...filesToUpload, ...files]);
+
+        const filesData = files.map(mapFileData);
+
+        const result = await dispatch(uploadFilesData(filesData));
+
+        setFilesState({
+            ...filesState,
+            toCreate: [...filesState.toCreate, ...result.payload]
+        });
+
         e.target.value = null;
     };
+
+    const deleteExistingFile = ({id, storeId})=>{
+        return (withRemoving) => {
+            const filteredState = filesState.exists.filter( file => file.storeId !== storeId);
+            setFilesState({
+                ...filesState,
+                toDelete: [...filesState.toDelete, id],
+                exists: [...filteredState],
+                toRemove: withRemoving ? [...filesState.toRemove, storeId] : [...filesState.toRemove]
+            })
+        }
+    }
+
+    const deleteCreatedFile = ({storeId}) => {
+        return (withRemoving) => {
+            const filteredState = filesState.toCreate.filter( file => file.storeId !== storeId);
+            setFilesState({
+                ...filesState,
+                toCreate: [...filteredState],
+                toRemove: withRemoving ? [...filesState.toRemove, storeId] : [...filesState.toRemove]
+            })
+        }
+    }
+
+    const findToUpload = (file) => {
+        return (fileToUpload) => {
+
+            console.log("findtoupload")
+            console.log(file)
+            console.log(fileToUpload)
+            const lastModified = new Date(file.lastModified)
+
+            if (
+                fileToUpload.name == file.name &&
+                fileToUpload.size == file.size &&
+                fileToUpload.lastModified == lastModified.getTime() &&
+                fileToUpload.type == file.type
+            ) {
+                return fileToUpload;
+            }
+        };
+    }
 
     return(
         <>
@@ -38,8 +114,16 @@ export default function Files({to}) {
             </label>
         </div>
         <div>
-            {upload[to].toCreate.map( (file, index) => <File data={{to, ...file}} key={"file" + index}/>) || null}
-            {upload[to].files.map( (file, index)  => <File data={{to, ...file}} key={"file" + index}/>) || null}
+            {
+                filesState.exists.map( file => <File data={file} autoremove={autoremove} deleteFile={deleteExistingFile(file)} key={"fileForm" + file.storeId}/>) || 
+                null
+            }
+            {
+                filesState.toCreate.map( file => <File data={file} autoremove={autoremove} 
+                    upload={filesToUpload.find(findToUpload(file))} 
+                    deleteFile={deleteCreatedFile(file)}  key={"fileForm" + file.storeId}/>) || 
+                null
+            }
         </div>
         </>
     )

@@ -3,50 +3,30 @@ import { ValidationError, DataError } from "../../models/Errors.js";
 
 
 
-export default async function setLesson(req, res, next) {
+export default async function setLesson(req, res) {
         
     try {
 
-        if ( !req.body.courseId) {
+        if ( !req.body.courseId, !req.body.contentId) {
             throw new ValidationError("Поля не заполнены")
         }
  
-        const {title = null, courseId, content = null, html = null, files = []} = req.body;
+        const {title, courseId, contentId} = req.body;
 
         const lesson = {
             title, courseId,
             authorId: req.session.user.id,
-            content: { content, html, files }
+            contentId
         };
 
-        const result = await Lesson.create(lesson, {include: [{
-                model: Content
-            }]
-        }).catch( err => {
-            throw new DataError(`Создать элемент не удалось: ${err.message}`)
-        });
+        const createdLesson = await Lesson.create(lesson);
 
-        const contentId = result.content.id;
-
-        const contentFiles = files.map( file => {
-            return {...file, contentId};
-        });
-
-        console.log(contentFiles)
-
-        await ContentFile.bulkCreate(contentFiles).catch( err => {
-            throw new DataError(`Создать элемент не удалось: ${err.message}`)
-        });
-
-        if(!files.length) {
-            res.status(201);
-            res.json(result)
-
-        } else {
-            req.body.result = result.get({plain: true});
-            next();
-        }
+        const result = {...createdLesson.get({plain: true})};
+        result.content = req.body.result.content;
+        result.content.files = req.body.result.createdFiles || [];
         
+        res.status(201);
+        res.json(result)
 
     } catch(err) {
         res.status(400);

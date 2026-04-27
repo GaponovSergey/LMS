@@ -2,6 +2,7 @@ import React from "react";
 import { createContext, useContext, useState, useEffect, useRef } from "react";
 import useOnClickOutside from "../../../../hooks/useOnClickOutside";
 
+
 const SelectContext = createContext();
 
 export function Select({style = null, className = null, children}) {
@@ -113,6 +114,7 @@ export function SelectString({
     const [options] = useContext(SelectContext).options;
 
     const [content, setContent] = useState(children);
+    
         
     useEffect( ()=> {
 
@@ -132,11 +134,14 @@ export function SelectString({
             }
         }
 
-    }, [outerValue, options]);
+    }, [outerValue]);
 
     useEffect( ()=> {
 
         if(!onChange) return;
+
+        console.log("innerValue")
+        console.log(onChange)
 
         onChange(innerValue.value);
         if (options.length) {

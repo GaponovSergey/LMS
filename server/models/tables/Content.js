@@ -8,6 +8,13 @@ export default function defineContent(sequelize, DataTypes) {
         },
         html: {
             type: DataTypes.TEXT
+        },
+        courseId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "courses",
+                key: "id"
+            }
         }
     }, {
         timestamps: false

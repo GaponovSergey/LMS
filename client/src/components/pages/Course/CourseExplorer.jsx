@@ -1,0 +1,51 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { fetchCourse } from "../../../store/courseSlice";
+import Lesson from "./Lesson/Lesson";
+import Navigator from "./Navigator";
+import ButtonApplyFor from "./ButtonApplyFor";
+import "./index.css";
+
+
+export default function CourseExplorer({userId}) {
+
+    const { courseId } = useParams();
+    const dispatch = useDispatch();
+    
+    console.log("courseExplorer")
+    
+    const course = useSelector( state => {
+        const {group, access} = state.course;
+        return {group, access}; 
+    }, shallowEqual);
+
+    const lessonIds = useSelector( state => state.lessons.lessons.map(lesson => lesson.id), shallowEqual);
+
+    const lessons = lessonIds.map( lessonId => <Lesson lessonId={lessonId} key={"lesson" + lessonId} />)
+
+    
+    return(
+        <>
+            
+                { (userId && !course.group.groupId ) && 
+                    <div className={"course-apply-button-container"}>
+                        <ButtonApplyFor courseId={courseId} />
+                    </div>
+                }
+                { course.group.groupId &&
+                    <div>Ваша группа: <strong>{course.group.groupName}</strong></div>
+                }
+                { course.access === "closed" &&
+                    <div>Извините, курс закрыт для просмотра.</div> }
+                {course.access === "groups only" &&
+                    (course.group?.groupId ? lessons :
+                        <div>Доступ к курсу ограничен. Чтобы просмотреть данный курс, необходимо подать заявку</div>)
+                }
+                {course.access === "opened" && lessons}
+               
+        </>
+    )
+}
+
+

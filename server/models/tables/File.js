@@ -16,14 +16,23 @@ export default function defineFile(sequelize, DataTypes, Sequelize) {
             type: DataTypes.DATE
         },
         authorId: {
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            references: {
+                model: "Profiles",
+                key: "id"
+            }
+        },
+        courseId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: "courses",
+                key: "id"
+            }
         },
         storeId: {
             type: DataTypes.UUID,
             unique: true,
             defaultValue: Sequelize.UUIDV4
         }
-    }, {
-        timestamps: false
     })
 }

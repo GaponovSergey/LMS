@@ -9,6 +9,10 @@ export default function defineCourse(sequelize, DataTypes) {
         description: {
             type: DataTypes.STRING
         },
+        access: {
+            type: DataTypes.STRING,
+            defaultValue: "opened"
+        },
         authorId: {
             type: DataTypes.INTEGER
         },

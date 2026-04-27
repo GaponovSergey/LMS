@@ -40,11 +40,11 @@ export default async function setUser(req, res) {
 
         
     
-        const path = join(__dirname, "/../../", "/store/", String(user.id));
+        /*const path = join(__dirname, "/../../", "/store/", String(user.id));
         console.log(user)
         if (!fs.existsSync(path)) {
             await fs.mkdir(path, (error)=> {if (error) throw new Error(error);});
-        }
+        }*/
         
 
         res.sendStatus(201);

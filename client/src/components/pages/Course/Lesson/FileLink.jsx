@@ -5,7 +5,7 @@ import "./fileLink.css";
 
 export default function FileLink({data}) {
 
-    let { name, size, lastModified, storeId, authorId, } = data;
+    let { name, size, createdAt, storeId, authorId, courseId } = data;
     const dispatch = useDispatch();
 
     const dateString = new Intl.DateTimeFormat("ru", {
@@ -20,9 +20,9 @@ export default function FileLink({data}) {
     return(
         
             <div className={"file-link-container"}>
-                <a className={"file-link"} href={`http://localhost:3001/store/${authorId}/${storeId}`} target={"_blank"}>{name}</a>
+                <a className={"file-link"} href={`http://localhost:3001/store/${courseId}/${storeId}`} target={"_blank"}>{name}</a>
                 <p>размер: <i>{defineSize(size)}</i></p>
-                <p>изменен: <i>{dateString.format(new Date(lastModified)) }</i></p>
+                <p>добавлен: <i>{dateString.format(new Date(createdAt)) }</i></p>
             </div>
         
     );

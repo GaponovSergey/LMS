@@ -1,8 +1,8 @@
 
 
-export default function defineStudent(sequelize, DataTypes) {
+export default function defineApplicant(sequelize, DataTypes) {
 
-    return sequelize.define("student", {
+    return sequelize.define("applicant", {
         courseId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -11,11 +11,11 @@ export default function defineStudent(sequelize, DataTypes) {
                 key: "id"
             }
         },
-        studentId: {
+        userId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             references: {
-                model: "Users",
+                model: "Profiles",
                 key: "id"
             }
         }

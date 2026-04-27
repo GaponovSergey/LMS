@@ -7,11 +7,13 @@ import { coursesRouter } from "./controllers/courses/courses.js";
 import { lessonsRouter } from "./controllers/lessons/lessons.js";
 import { tasksRouter } from "./controllers/tasks/tasks.js";
 import { fileRouter } from "./controllers/store/store.js";
+import { groupsRouter } from "./controllers/groups/groups.js";
 import setSession from "./models/session.js";
-import authentificate from "./controllers/auth.js";
+import authentificate from "./controllers/checking/auth.js";
 import checkUserAccess from "./controllers/users/checkUserAccess.js";
+import { answersRouter } from "./controllers/answers/answers.js";
 
-const app = express();
+export const app = express();
 
 const host = '127.0.0.1';
 const port = 3001;
@@ -28,8 +30,10 @@ app.use("/users", usersRouter);
 //app.use(checkAccess);
 
 app.use("/courses", coursesRouter);
+app.use("/groups", groupsRouter);
 app.use("/lessons", lessonsRouter);
 app.use("/tasks", tasksRouter);
+app.use("/answers", answersRouter);
 
 app.use("/store",  fileRouter)
 

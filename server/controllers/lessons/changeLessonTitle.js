@@ -3,30 +3,31 @@ import { ValidationError, DataError } from "../../models/Errors.js";
 import { Lesson } from "../../models/sequelize.js";
 
 
-export default async function deleteLesson(req, res) {
+export default async function changeLessonTitle(req, res) {
     try {
 
-        if (!req.body.lessonId) {
-            throw new ValidationError("Нет id урока")
+        if (!req.body.lessonId || !req.body.title) {
+            throw new ValidationError("Нет id элемента")
         }
 
-        const lesson = await Lesson.destroy(
+        const lesson = await Lesson.update({title: req.body.title},
             {
                 where: {
                     id: req.body.lessonId,
-                    authorId: req.body.authorId
+                    courseId: req.body.courseId
                 }
             }
         );
 
         if (!lesson) {
-            throw new DataError("Курс не найден")
+            throw new DataError("Элемент не найден")
         }
 
-        res.sendStatus(200);
+        res.sendStatus(201);
 
     } catch(err) {
         res.status(400);
+        console.log(err)
         res.json({
             name: err.name,
             message: err.message

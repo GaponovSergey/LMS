@@ -1,20 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toggleCourseLoading, pushLesson, pushTask } from "./courseSlice";
-import { uploadFiles } from "./uploadSlice";
+import { toggleCourseLoading,  } from "./courseSlice";
+import { pushLesson, pushTask } from "./lessonsSlice"
 import { setAlert } from "./alertSlice";
 import { triggerNavLoading } from "./navigatorSlice";
 
 export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
     
-    async (data, { dispatch, getState })=> {
+    async (data, { dispatch })=> {
         try {
 
-            const {upload} = getState();
 
             console.log("fetchlesson")
-            console.log(upload)
+            console.log(data)
 
-            data.files = upload.lecture.toCreate.map(({id}) => {return {fileId: id};});
+            
 
             const response = await fetch(`http://127.0.0.1:3001/lessons/`, {
                 headers: {
@@ -43,15 +42,9 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
 
 export const fetchTaskForm = createAsyncThunk("createLesson/fetchTaskForm",
     
-    async (data, { dispatch, getState})=> {
+    async (data, { dispatch })=> {
 
         try {
-
-            const { upload } = getState();
-
-            
-            
-            data.files = upload.task.toCreate.map(({id}) => {return {fileId: id};});
 
             const response = await fetch(`http://127.0.0.1:3001/tasks/`, {
                 headers: {
@@ -68,7 +61,7 @@ export const fetchTaskForm = createAsyncThunk("createLesson/fetchTaskForm",
             console.log(payload)
 
             dispatch(pushTask(payload));
-            dispatch(triggerNavLoading());
+            dispatch(triggerNavLoading()); 
 
             return payload;
         } catch(err) {

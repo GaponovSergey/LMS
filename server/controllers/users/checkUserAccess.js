@@ -36,6 +36,7 @@ export default async function checkUserAccess(req, res, next) {
 
         } catch(err) {
             const {name, message} = err;
+            console.log(err)
             res.status(401);
             res.json({
                 name, message

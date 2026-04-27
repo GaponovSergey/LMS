@@ -51,3 +51,8 @@
     display: block;
     width: 16%;
 }
+.course-apply-button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
