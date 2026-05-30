@@ -113,7 +113,7 @@ export default function Files({state, autoremove = false}) {
                 
             </label>
         </div>
-        <div>
+        <div className={"inputedfiles-container"}>
             {
                 filesState.exists.map( file => <File data={file} autoremove={autoremove} deleteFile={deleteExistingFile(file)} key={"fileForm" + file.storeId}/>) || 
                 null

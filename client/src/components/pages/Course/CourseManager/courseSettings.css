@@ -1,0 +1,52 @@
+.coursesettings-string {
+    width: 150px;
+    background-color: #fff;
+    border: 1px black solid;
+    border-radius: 4px 0 0 4px;
+    color: #000;
+    font-size: 16px;
+    height: 30px;
+}
+
+.coursesettings-options {
+    right: 24px;
+    width: 150px;
+    box-sizing: border-box;
+    border: 1px black solid;
+    border-radius: 3px;
+    position: absolute;
+    top: 30px; 
+    padding: 5px;
+    background-color:#DCE1E4;
+    
+}
+
+.coursesettings-options-inner {
+    display: flex;
+    flex-direction: column;
+    height: 5em;
+    gap: 1px;
+    overflow: auto;
+    scrollbar-width: thin;
+    padding: 0 2px;
+}
+
+.coursesettings-option {
+    background-color: #fff;
+    border: 1px black solid;
+    border-radius: 2px; 
+    height: 2.2em; 
+    font-size: 15px; 
+    padding: 3px 0; 
+}
+
+.coursesettings-deletebutton {
+    height: 35px;
+    padding: 0 15px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #bf4e1e;
+}

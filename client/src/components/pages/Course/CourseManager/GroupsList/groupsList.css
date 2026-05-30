@@ -1,0 +1,319 @@
+.groupslist-list {
+    display: flex;
+    flex-direction: column;
+    border: 2px #000 solid;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    height: 400px;
+    overflow: auto;
+}
+
+.groupslist-list-item {
+    width: 100%;
+    height: 35px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.groupslist-list-item-wrap {
+    width: 100%;
+}
+
+.groupslist-list-item-title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.groupslist-list-item-wrap:nth-child(odd) {
+    background-color: #8eb4ce;
+}
+
+.groupslist-group-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #cdd9e1;
+    box-sizing: border-box;
+    padding: 15px;
+    gap: 10px
+}
+
+.groupslist-list-item-button {
+    width: 35px;
+    height: 35px;
+    background-color: #639fc794;
+    border-width: 0;
+    border-radius: 0;
+    font-size: 12px;
+    font-family: Arial;
+    flex-shrink: 0;
+    padding: 0;
+}
+
+.groupslist-group-changename-input {
+    font-size: 14px;
+    font-family: Arial;
+    color: #000;
+    background-color: #ebfff1;
+    border: 2px #000 solid;
+    border-radius: 5px;
+    height: 2em;
+    width: 12em;
+    padding: 0 5px;
+}
+
+.groupslist-group-changename-container {
+    line-height: 2.1em;
+    width: 100%;
+    padding: 5px;
+}
+
+.groupslist-group-changename-container-opened {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+    background-color: #fff;
+    border: 2px dashed black;
+    border-radius: 5px;
+}
+
+.groupslist-group-changename-container-closed {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+}
+
+.groupslist-group-changename-input-disabled {
+    background-color: transparent;
+    color: #000;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 5px 0 0 5px;
+    border-right-width: 1px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.groupslist-group-changename-input-disabled p {
+    margin: 0;
+    padding: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.groupslist-group-changename-input:focus {
+  outline: 1px dashed black;
+  outline-offset: 1px;
+}
+
+.groupslist-group-changename-openbutton {
+    background-color: #408d01;
+    border: 2px black solid;
+    border-left-width: 0;
+    border-radius: 0 5px 5px 0;
+    padding: 0;
+    height: 2em;
+    width: 2em;
+    font-family: Arial;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.groupslist-group-changename-confirm-button {
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 0px 4px;
+  color: #fff;
+  height: 2em;
+  width: 2em;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.groupslist-group-changename-confirm-button-agree {
+  background-color:#3682fb;
+} 
+
+.groupslist-group-changename-confirm-button-disagree {
+  background-color:#bf4e1e;
+} 
+
+.groupslist-group-deletebutton {
+    height: 2em;
+    padding: 0 15px;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #fff;
+    background-color: #9b411b;
+    display: inline-block;
+}
+
+.groupslist-member {
+    display: flex;
+    min-height: 2.5em;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 0 5px;
+}
+
+.groupslist-member:nth-child(odd) {
+    background-color: #afcee8;
+}
+
+.groupslist-member p {
+    width: 50%;
+    margin: 5px 0;
+    padding: 0;
+}
+
+.groupslist-member-changegroup-button {
+    min-height: 2em;
+    width: 210px;
+    padding: 2px 15px;
+    color: #000;
+    background-color: #e7b82c;
+    font-weight: 500;
+    margin: 5px 0;
+}
+
+.groupslist-member-changegroup-button-wrap {
+    display: inline;
+    position: relative;
+} 
+
+.groupslist-member-changegroup-popup {
+    position: absolute;
+    background-color: #cdd6d3;
+    border: 1px #000 solid;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    top: 32px;
+    right: 0px;
+    box-sizing: border-box;
+}
+
+.groupslist-member-changegroup-confirmbutton {
+    background-color: #408d01;
+    border: 1px black solid;
+    border-radius: 3px;
+    padding: 0;
+    height: 2em;
+    width: 2em;
+    font-family: Arial;
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    box-sizing: border-box;
+    color: #fff;
+}
+
+.groupslist-creategroup-wrap {
+    display: flex;
+    flex-direction: column;
+    border: 3px #000 dashed;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px 0 0 0;
+    background-color: #cdd9e1;
+}
+
+.groupslist-creategroup-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px;
+}
+
+.groupslist-creategroup-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.groupslist-creategroup-title p {
+    margin: 0;
+    padding: 0;
+}
+
+.groupslist-creategroup-title input[type="text"] {
+    
+    max-width: 250px;
+    width: 100%;
+    height: 1.5em;
+    font-family: Arial;
+    font-size: 16px;
+    border: 2px #000 solid;
+    border-radius:  5px;
+}
+
+.groupslist-creategroup-createbutton {
+    color: white;
+    background-color: #408d01;
+    border: 1px black solid;
+    border-radius: 3px;
+    padding: 7px 10px;
+    margin: 0px;
+    font-family: Arial;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.groupslist-creategroup-button {
+    min-height: 2em;
+    width: 100%;
+    padding: 2px 15px;
+    color: #000;
+    background-color: transparent;
+    font-weight: 500;
+    font-size: 18px;
+    font-family: Arial;
+    border: 0;
+    text-align: start;
+}
+
+.groupslist-groupmembers-title {
+    margin: 0;
+    padding: 0 5px;
+}
+
+@media (max-width: 400px) {
+    .groupslist-group-container {
+        padding: 15px 0px;
+    }
+ }
+
+ @media (max-width: 450px) {
+    
+}
+
+ @media (max-width: 574px) {
+    .groupslist-member p {
+    width: 100%;
+}
+ }
+

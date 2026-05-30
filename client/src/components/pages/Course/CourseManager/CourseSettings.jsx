@@ -3,6 +3,7 @@ import {Select, SelectString, ToggleButton, Options, Option} from "../../../Form
 import { useDispatch } from "react-redux";
 import { changeAccess } from "../../../../store/courseSlice";
 import DeleteCourse from "./DeleteCourse";
+import "./courseSettings.css";
 
 
 export default function CourseSettings({course}) {
@@ -25,27 +26,31 @@ export default function CourseSettings({course}) {
     console.log(course.access)
 
     const accessList = accessOptions.map( ({title, value})=>
-        <Option value={value} className={"font-option"} isDefault={value == course.access} key={"accessOption" + value}>
+        <Option value={value} className={"coursesettings-option"} isDefault={value == course.access} key={"accessOption" + value}>
             <span >{title}</span>
         </Option>)    
      
 
     return(
+        <div className={"coursemanager-item-container"}>
         <div>
-        <div>
-            Разрешить доступ к курсу:
-            <Select>
-                <SelectString onChange={  value => {
+            <div>Разрешить доступ к курсу:&nbsp; 
+            <Select className={"selectgroup-container"}>
+                <SelectString  className={"coursesettings-string"} onChange={  value => {
                     if (course.id && value !== course.access) dispatch(changeAccess({courseId: course.courseId, access: value}));
                 }} valueOnly={false} >
                     <span>---</span>
                 </SelectString>
-                <ToggleButton />
-                <Options>
-                    {accessList}
-                </Options>
+                <ToggleButton className={"selectgroup-toggle"} />
+                <div className={"selectgroup-options-wrap"}>
+                    <Options className={'coursesettings-options'}>
+                        <div className={"coursesettings-options-inner"}>
+                            {accessList}
+                        </div>                       
+                    </Options>
+                </div>
             </Select>
-
+            </div>
         </div>
         <div>
             <DeleteCourse data={{courseId: course.courseId}} />

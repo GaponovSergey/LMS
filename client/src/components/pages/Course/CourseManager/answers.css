@@ -1,0 +1,157 @@
+.answers-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 5px;
+    border: 1px #000 solid;
+    justify-content: space-evenly;
+    height: 540px;
+    overflow: auto;
+}
+
+.answers-list-answer {
+    display: flex;
+    flex-direction: column;
+    border: 2px #000 solid;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+}
+
+.answers-list-string {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.answers-list-string-cell {
+    display: flex;
+    width: 55%;
+    align-items: center;
+    justify-content: left;
+    height: 2em;
+}
+
+.answers-list-string-cell:nth-child(odd) {
+    justify-content: right;
+    width: 35%;
+}
+
+.answers-list-string-cell:nth-child(even) {
+    text-align: left;
+}
+
+.answers-list-string:nth-child(odd) {
+    background-color: #8eb4ce;
+}
+
+.answers-list-string:nth-child(1) {
+    border-radius: 5px 5px 0 0;
+}
+
+.answers-list-fileswrap {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    background-color: #cdd9e1;
+}
+
+.answers-list-filescontainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    border: 1px #000 solid;
+    padding: 5px 0;
+    gap: 5px;
+    height: 245px;
+    overflow: auto;
+    align-items: flex-start;
+}
+
+.answers-list-value-container {
+    display: flex;
+    flex-direction: column;
+    border: 3px #000 solid;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    background-color: #ffffff;
+}
+
+.answers-list-value-button {
+    min-height: 2em;
+    width: 100%;
+    padding: 2px 15px;
+    color: #000;
+    background-color: transparent;
+    font-weight: 500;
+    font-size: 18px;
+    font-family: Arial;
+    border: 0;
+    text-align: center;
+}
+
+.answers-list-value-gradeslist {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+}
+
+.answers-list-value-gradeslist button {
+    color: white;
+    background-color: #408d01;
+    border: 1px black solid;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0px;
+    font-family: Arial;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    height: 2em;
+    width: 2em;
+}
+
+@media (max-width: 500px) {
+    .answers-list-string-cell {
+        
+        padding-left: 10px;
+        font-size: 14px;
+    }
+
+    .answers-list-string-cell:nth-child(odd) {
+        background-color: #8eb4ce;
+        justify-content: left;
+        width: 100%;
+    }
+
+    .answers-list-string-cell:nth-child(even) {
+        width: 100%;
+    }
+
+
+.answers-list-string:nth-child(odd) {
+    background-color: transparent;
+}
+
+.answers-list-fileswrap {
+    padding: 5px 0;
+}
+
+.answers-list {
+    padding: 5px 0;
+}
+
+.answers-list-fileswrap p {
+    padding: 0 5px;
+}
+
+.answers-list-filescontainer {
+    border-width: 1px 0;
+}
+}

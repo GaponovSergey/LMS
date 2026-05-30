@@ -6,7 +6,7 @@ import { fetchGroups } from "../../../../store/groupsSlice";
 import CreateLesson from "./CreateLesson";
 import CourseManager from "../CourseManager";
 import Lesson from "../Lesson/Lesson";
-//import "./index.css";
+import "./index.css";
 
 
 export default function CourseRedactor() {
@@ -30,13 +30,14 @@ export default function CourseRedactor() {
 
     return(
         <>
-            <div>
-                <button onClick={()=> {
+            <div className={"courseredactor-tabs-container"}>
+                <button className={"courseredactor-tabs-tab"} onClick={()=> {
                     setToggle("redactor");
                 }} disabled={ toggle === "redactor" ? "disabled" : false}>Редактор курса</button>
-                <button onClick={()=> {
+                <button className={"courseredactor-tabs-tab"} onClick={()=> {
                     setToggle("manager");
                 }} disabled={ toggle === "manager" ? "disabled" : false}>Управление курсом</button>
+                <div className={"courseredactor-tabs-crossline"}></div>
             </div>
             {   toggle === "manager" && 
                 <CourseManager />

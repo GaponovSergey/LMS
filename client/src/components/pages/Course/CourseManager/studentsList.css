@@ -1,0 +1,310 @@
+.studentslist-list {
+    display: flex;
+    flex-direction: column;
+    border: 1px #000 solid;
+    box-sizing: border-box;
+    height: 400px;
+    overflow: auto;
+}
+
+.studentslist-list-student, .studentslist-list-title {
+    display: flex;
+    flex-direction: row;
+    border: 1px #000 solid;
+    width: 100%;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+}
+
+.studentslist-list-title {
+    font-size: 12px;
+    background-color: #6fb2df;
+    font-weight: 600;
+}
+
+.studentslist-list-student-string, .studentslist-list-title-cell  {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 25%;
+}
+
+.studentslist-list-student-cell {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    min-height: 2em;
+    font-size: 14px;
+}
+
+.studentslist-list-student-string:nth-child(1), .studentslist-list-title-cell:nth-child(1) {
+    width:65%;
+}
+.studentslist-list-student-string:nth-child(2), .studentslist-list-title-cell:nth-child(2)  {
+    width:35%;
+}
+.studentslist-list-student-string:nth-child(3), .studentslist-list-title-cell:nth-child(3)  {
+    width:10%;
+}
+
+.studentslist-list-student-string:nth-child(2n+1), .studentslist-list-title-cell:nth-child(2n+1) {
+    background-color: #68a1c760;
+}
+
+.studentslist-list-student-cell:nth-child(odd) {
+    display: none;
+}
+
+.studentslist-list-student:nth-child(even) {
+    background-color: #8eb4ce;
+}
+
+.studentslist-list-student-profilebutton {
+  height: 25px;
+  padding: 0 8px;
+  font-weight: 500;
+  font-size: 13px;
+  border: 1px #000 solid;
+  border-radius: 3px;
+  color: #000;
+  background-color: #e7b82c;
+}
+
+.studentslist-profile-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    background-color: #cdd6d3;
+    box-sizing: border-box;
+    max-width: 600px;
+    width: 100%;
+    height: 90%;
+    overflow: auto;
+}
+
+.studentslist-profile-menu {
+    display: flex;
+    gap: 5px 10px;
+    padding: 10px;
+    flex-wrap: wrap;
+    align-content: stretch;
+    background-color: #DCE1E4;
+    border: 1px #000 solid;
+    border-radius: 10px;
+    align-self: center;
+}
+
+.studentslist-profile-title-container {
+    padding: 0;
+
+}
+
+.studentslist-profile-title-container p {
+    margin: 0;
+}
+
+.studentslist-profile-string {
+    font-size: 14px;
+    padding: 0;
+}
+
+.studentslist-profile-title {
+    font-size: 20px;
+    padding: 10px 0;
+}
+
+.studentslist-profile-button {
+    min-height: 2em;
+    padding: 5px 15px;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0px 0;
+    border: 1px #000 solid;
+    border-radius: 3px;
+}
+
+.studentslist-profile-changegroup-button {
+    color: #000;
+    background-color: #e7b82c;
+}
+
+.studentslist-profile-deletebutton {
+    color: #fff;
+    background-color: #9b411b;
+}
+
+.studentslist-profile-delete-container {
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #DCE1E4;
+    border: 1px #000 solid;
+    padding: 20px 10px;
+    gap: 10px;
+}
+
+.studentslist-profile-delete-container p {
+    align-self: center;
+    width: 80%;
+    min-width: 250px;
+    margin: 0;
+    text-align: left;
+}
+
+.studentslist-profile-delete-menu {
+    display: flex;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+.studentslist-profile-completebutton {
+    color: #fff;
+    background-color: #408d01;
+}
+
+.studentslist-profile-tasks-wrap {
+    padding: 0px;
+}
+
+.studentslist-profile-tasks-wrap p {
+    padding: 0px;
+    margin: 5px 0;
+}
+
+.studentslist-profile-tasks-container {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    background-color: #DCE1E4;
+    border: 1px #000 solid;
+    height: 300px;
+    overflow: auto;
+    gap: 5px;
+}
+
+.studentslist-profile-tasks-task {
+    display: flex;
+    flex-direction: column;
+    border: 1px #000 solid;
+    font-size: 14px;
+}
+
+.studentslist-profile-tasks-task-string {
+    display: flex;
+    min-height: 2em;
+    align-items: center;
+    gap: 10px;
+}
+
+.studentslist-profile-tasks-task-string:nth-child(odd) {
+    background-color: #8eb4ce;
+}
+
+.studentslist-profile-tasks-task-cell {
+    text-align: right;
+    width: 35%;
+}
+
+.studentslist-profile-tasks-task-cell:nth-child(even) {
+    text-align: left;
+    width: 65%;
+}
+
+.studentslist-profile-changegroup-wrap {
+    position: relative;
+}
+
+.studentslist-profile-changegroup-wrap > .groupslist-member-changegroup-popup {
+    right: -10px;
+}
+
+@media (max-width: 900px) {
+
+    .studentslist-list {
+        gap: 5px;
+        padding: 5px;
+    }
+    .studentslist-list-title {
+        display: none;
+    }
+
+    .studentslist-list-student {
+        flex-direction: column;
+        border: 1px #000 solid;
+        width: 100%;
+        box-sizing: border-box;
+        flex-wrap: wrap;
+    }
+
+    .studentslist-list-student:nth-child(2n) {
+        background-color: inherit;
+    }
+
+    .studentslist-list-student-profilebutton {
+        margin: 5px;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 900px) {
+
+
+
+    .studentslist-list-student-string:nth-child(n) {
+        width: 100%;
+        justify-content: space-around;
+    }
+
+    .studentslist-list-student-cell {
+        width: 65%;
+    }
+
+    .studentslist-list-student-cell:nth-child(odd) {
+        justify-content: right;
+        width: 25%;
+        display: flex;
+    }
+}
+
+@media (max-width: 400px) {
+
+
+    .studentslist-list-student-cell:nth-child(n) {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        padding: 3px 8px;
+    }
+
+    .studentslist-list-student-string:nth-child(n) {
+        width: 100%;
+        justify-content: space-around;
+        background-color: inherit;
+    }
+
+    .studentslist-list-student-cell:nth-child(odd) {
+        background-color: #8eb4ce;
+    }
+
+    .studentslist-list-student-cell:nth-child(even) {
+        background-color: #68a1c760;
+    }
+
+    .studentslist-list-student-string:last-child {
+        background-color: #cdd9e1;
+    }
+}
+
+@media (max-width: 599px) {
+
+    .studentslist-profile-menu {
+        flex-direction: column;
+        max-width: 235px;
+    }
+
+}

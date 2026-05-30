@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeCourseTitle } from "../../../../store/courseSlice";
-
+import "./changeCourse.css";
 
 export default function ChangeCourseTitle({children}) {
 
@@ -26,13 +26,18 @@ export default function ChangeCourseTitle({children}) {
         <>
             { isOpened ? 
                 <>
-                    <input type={"text"} value={newTitle} onChange={ e => setNewTitle(e.target.value)} />
-                    <button onClick={confirmHandler}>&#10004;</button>
-                    <button onClick={() => setOpened(false)}>&#10006;</button>
+                    <textarea autoFocus={true} value={newTitle} className={"changecourse-title-input"} 
+                        onFocus={(e)=> e.target.select()} 
+                        onChange={ e => setNewTitle(e.target.value)} />
+                    <div className={"changecourse-buttons-container"}>
+                        <button className={"changecourse-confirm-button changecourse-confirm-button-agree"} onClick={confirmHandler}>&#10004;</button>
+                        <button className={"changecourse-confirm-button changecourse-confirm-button-disagree"} onClick={() => setOpened(false)}>&#10006;</button>
+                    </div>
+                    
                 </> : 
                 <>
                 {children}
-                <button onClick={() => setOpened(true)}>&#128221;</button>
+                <button className={"changecourse-open-button"} onClick={() => setOpened(true)}>&#128221;</button>
                 </>
             }
         </>

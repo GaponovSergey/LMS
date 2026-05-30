@@ -19,9 +19,9 @@ export default function ChangeGroup({studentId, groupId, close}) {
     
     return(
        
-                <div ref={ref}>
+                <div className={"groupslist-member-changegroup-popup"} ref={ref}>
                     <SelectGroup setGroup={setGroup} outerValue={groupId} />
-                    <button onClick={async () => {
+                    <button className={"groupslist-member-changegroup-confirmbutton"} onClick={async () => {
                         console.log("GroupStudent")
                         console.log({
                             courseId,

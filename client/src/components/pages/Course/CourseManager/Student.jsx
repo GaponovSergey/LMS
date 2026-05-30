@@ -14,11 +14,22 @@ export default function Student({data}) {
     
 
     return(
-        <div>
-            <div>{`${name} ${surname} ${fathername}`}</div>
-            <div>{group.groupName}</div>
-            <div>Сдано работ: {answersCount + "/" + tasks.length}</div>
-            <button onClick={()=>setOpening(true)}>Подробности</button>
+        <div className={"studentslist-list-student"}>
+            <div className={"studentslist-list-student-string"}>
+                <div className={"studentslist-list-student-cell"}>ФИО:</div>
+                <div className={"studentslist-list-student-cell"}>{`${surname} ${name} ${fathername}`}</div>
+            </div>
+            <div className={"studentslist-list-student-string"}>
+                <div className={"studentslist-list-student-cell"}>Группа:</div>
+                <div className={"studentslist-list-student-cell"}>{group.groupName}</div>
+            </div>
+            <div className={"studentslist-list-student-string"}>
+                <div className={"studentslist-list-student-cell"}>Сдано работ:</div>
+                <div className={"studentslist-list-student-cell"}>{answersCount + "/" + tasks.length}</div>
+            </div>
+            <div className={"studentslist-list-student-string"}>
+                <button className={"studentslist-list-student-profilebutton"} onClick={()=>setOpening(true)}>Подробности</button>
+            </div>            
             {isOpened && <StudentProfile data={data} close={ ()=> setOpening(false)} />}
         </div>
     )
@@ -44,33 +55,59 @@ function StudentProfile({data, close}) {
     const tasksList = tasks.map( task => <StudentTask data={task} key={"studenttask" + name + surname + fathername + task.id}/>)
 
     return(
-        <div>
-            <button onClick={()=> close()}>X</button>
-            <h4>{`${name} ${surname} ${fathername}`}</h4>
-            <div>Группа: {groupName}</div>
-            <button onClick={()=> setChangeGroupOpening(true)}>Перевести в другую группу</button>
-            
-            {isChangeGroupOpened && <ChangeGroup studentId={data.id} groupId={groupId} close={()=> setChangeGroupOpening(false)}/>}
-            <button onClick={ ()=> setDeleteStudentOpening(true)}>Исключить ученика</button>
-            {isDeleteStudentOpened && 
-                <div><p>Подтвердите исключение ученика <strong>{`${name} ${surname} ${fathername}`}</strong> из курса.</p>
-                    <button onClick={ ()=> dispatch(deleteStudent({studentId: id, courseId}))}>Подтверждаю</button>
-                    <button onClick={()=> setDeleteStudentOpening(false)}>Отмена</button>
-                </div>
-
-            }
-            <button onClick={ ()=> setCompleteCourseOpening(true)}>Завершить обучение</button>
-            {isCompleteCourseOpened && 
-                <div><p>Ученик <strong>{`${name} ${surname} ${fathername}`}</strong> завершает обучение на курсе. Пожалуйста, выставите итоговую оценку:</p>
-                    <SetGrade initGradeChanging={setFinalGrade} />
-                    <button onClick={()=> setCompleteCourseOpening(false)}>Отмена</button>
-                </div>
-
-            }
-            <div>
-                <p>Задания:</p>
-                {tasksList}
+        <div className={"fixed-wrap"}>
+        <div className="studentslist-profile-container">
+            <button className={"closebutton"} onClick={()=> close()}>&#x2716;</button>
+            <div className={"studentslist-profile-title-container"}>
+                <p className={"studentslist-profile-string"}>Студент:</p>
+                <p className={"studentslist-profile-title"}><b>{`${surname} ${name} ${fathername}`}</b></p>
             </div>
+            <div className={"studentslist-profile-title-container"}>
+                <p className={"studentslist-profile-string"}>Группа:</p>
+                <p className={"studentslist-profile-title"}><b>{groupName}</b></p>
+            </div>
+            <div className="studentslist-profile-menu">
+                <div className={"studentslist-profile-changegroup-wrap"}>
+                    <button className={"studentslist-profile-button studentslist-profile-changegroup-button"} onMouseDown={()=> setChangeGroupOpening(!isChangeGroupOpened)}>Перевести в другую группу</button>            
+                    {isChangeGroupOpened && 
+                        <ChangeGroup studentId={data.id} groupId={groupId} close={()=> setChangeGroupOpening(false)}/>
+                    }
+                </div>
+                <button className={"studentslist-profile-button studentslist-profile-deletebutton"} onClick={ ()=> setDeleteStudentOpening(true)}>Исключить из курса</button>
+                {isDeleteStudentOpened &&
+                    <div className={"fixed-wrap"}> 
+                        <div className={"studentslist-profile-delete-container"}>
+                            <p>Подтвердите исключение  из курса студента:</p>
+                            <p> <strong>{`${surname} ${name} ${fathername}`}</strong>.</p>
+                            <div className="studentslist-profile-delete-menu">
+                                <button className={"studentslist-profile-button studentslist-profile-deletebutton"} onClick={ ()=> dispatch(deleteStudent({studentId: id, courseId}))}>Подтверждаю</button>
+                                <button className={"studentslist-profile-button studentslist-profile-completebutton"} onClick={()=> setDeleteStudentOpening(false)}>Отмена</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <button className={"studentslist-profile-button studentslist-profile-completebutton"} onClick={ ()=> setCompleteCourseOpening(true)}>Завершить обучение</button>
+                {isCompleteCourseOpened && 
+                <div className={"fixed-wrap"}> 
+                    <div className={"studentslist-profile-delete-container"}>
+                        <p>Студент <strong>{`${surname} ${name} ${fathername}`}</strong> завершает обучение на курсе.</p>
+                        <p> Пожалуйста, выставите итоговую оценку:</p>
+                        <SetGrade initGradeChanging={setFinalGrade} />
+                        <div className="studentslist-profile-delete-menu">
+                        <button className={"studentslist-profile-button studentslist-profile-deletebutton"} onClick={()=> setCompleteCourseOpening(false)}>Отмена</button>
+                        </div>
+                    </div>
+                </div>
+                }
+            </div>
+            
+            <div className={"studentslist-profile-tasks-wrap"}>
+                <p>Задания:</p>
+                <div className={"studentslist-profile-tasks-container"}>
+                    {tasksList}
+                </div>                
+            </div>
+        </div>
         </div>
     )
 }
@@ -78,12 +115,38 @@ function StudentProfile({data, close}) {
 function StudentTask({data}) {
     const {title, deadline, answers} = data;
 
+    const dateString = new Intl.DateTimeFormat("ru", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric"
+        });
+
+    const status = {
+        "none": "не сдано",
+        "pending": "на проверке",
+        "excepted": "принято"
+    }
+
     return(
-        <div>
-            <p>{title}</p>
-            <p>{deadline}</p>
-            <p>{answers[0] ? answers[0].status : "не сдано"}</p>
-            <p>{answers[0] && answers[0].grade ? answers[0].grade : "оценки нет"}</p>
+        <div className={"studentslist-profile-tasks-task"}>
+            <div className={"studentslist-profile-tasks-task-string"}>
+                <div className={"studentslist-profile-tasks-task-cell"}>Задание:</div>
+                <div className={"studentslist-profile-tasks-task-cell"}>{title}</div>
+            </div>
+            <div className={"studentslist-profile-tasks-task-string"}>
+                <div className={"studentslist-profile-tasks-task-cell"}>Срок сдачи:</div>
+                <div className={"studentslist-profile-tasks-task-cell"}>{deadline ? dateString.format( new Date(deadline)) : "не установлен"}</div>
+            </div>
+            <div className={"studentslist-profile-tasks-task-string"}>
+                <div className={"studentslist-profile-tasks-task-cell"}>Статус:</div>
+                <div className={"studentslist-profile-tasks-task-cell"}>{answers[0]?.status ? status[answers[0].status] : status["none"]}</div>
+            </div>
+            <div className={"studentslist-profile-tasks-task-string"}>
+                <div className={"studentslist-profile-tasks-task-cell"}>Оценка:</div>
+                <div className={"studentslist-profile-tasks-task-cell"}>{answers[0] && answers[0].grade ? answers[0].grade : "оценки нет"}</div>
+            </div>
         </div>
     )
 }

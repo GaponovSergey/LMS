@@ -8,7 +8,7 @@ export default async function login(req, res) {
     
     
     try {
-        if (req.session.user) {
+        if (req.session && req.session.user) {
                     throw new SessionError("Вы уже авторизованы");
                 }
         if (!req.body || !req.body.mail || !req.body.password) {
@@ -17,7 +17,7 @@ export default async function login(req, res) {
         
         const {rememberMe, ...signs} = req.body;
 
-        const prof = await Profile.findAll();
+        
         const user = await User.findOne({
             where: { mail: signs.mail },
             include: {
@@ -36,7 +36,7 @@ export default async function login(req, res) {
             throw new DataError(); 
         };
         console.log(user);
-        //console.log(prof);
+        
         const body = {
             account: {
                 id: user.id,
@@ -46,22 +46,25 @@ export default async function login(req, res) {
             },
             profile: user.Profile.dataValues
         }
-        if (rememberMe) {
+        //if (rememberMe) {
             res.cookie("token", generateJWT(body), {
                 maxAge: 60000 * 60 * 24 * 90
             });
-        }
+        //}
 
-        req.session.user = {
+        
+
+        /*req.session.user = {
             id: user.id,
             mail: user.mail,
             level: user.access,
             createdAt: user.createdAt
-        };
+        };*/
 
         res.json(body);
 
     } catch(error) {
+        console.log(error)
         res.status(400);
         res.json({
             name: error.name, 

@@ -1,0 +1,95 @@
+.changecourse-open-button {
+  background-color: #916f00;
+  border: 1px black solid;
+  border-radius: 3px;
+  margin: 10px 10px;
+  padding-left: 7px;
+  height: 40px;
+  width: 40px;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.changecourse-title-input {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 28px;
+  color: white;
+  max-width: 900px;
+  width: inherit;
+  height: 4em;
+  padding: 5px 10px;
+  margin: 10px 5px;
+  text-align: center;
+  line-height: 1.5em;
+  background-color: rgb(0, 126, 0);
+  border: 2px black solid;
+  border-radius: 3px;
+  resize: none;
+}
+
+.changecourse-title-input:focus, .changecourse-description-input:focus {
+  outline: 2px dashed black;
+  outline-offset: 1px;
+}
+
+.changecourse-description-input {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 18px;
+  color: #000;
+  max-width: 900px;
+  width: inherit;
+  height: 6em;
+  padding: 10px 10px;
+  margin: 10px 5px;
+  text-align: justify;
+  line-height: 1.3em;
+  background-color: #86ce48;
+  border: 2px black solid;
+  border-radius: 3px;
+  resize: none;
+}
+
+.changecourse-buttons-container {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 2px;
+  gap: 3px;
+}
+
+.changecourse-confirm-button {
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 0px 5px;
+  color: #fff;
+  height: 30px;
+  width: 30px;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.changecourse-confirm-button-agree {
+  background-color:#3682fb;
+} 
+
+.changecourse-confirm-button-disagree {
+  background-color:#bf4e1e;
+} 
+
+
+@media (max-width: 760px){
+    
+  .changecourse-title-input, .changecourse-description-input {
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 1.3em;
+        text-align: justify;
+        width: 75%;
+  }
+  .changecourse-open-button {
+    margin-right: 5px;
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {useDispatch} from "react-redux";
 
 export default function Input({type = "text", state, field, action}) {
@@ -10,3 +10,4 @@ export default function Input({type = "text", state, field, action}) {
         }))} />
     )
 }
+

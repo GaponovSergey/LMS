@@ -5,6 +5,7 @@ import StudentsList from "./StudentsList";
 import CourseSettings from "./CourseSettings";
 import { shallowEqual, useSelector } from "react-redux";
 import Answers from "./Answers";
+import "./index.css";
 
 
 export default function CourseManager() {
@@ -16,7 +17,9 @@ export default function CourseManager() {
 
 
     return(
-        <div>
+        <div className={"coursemanager-container"}>
+            
+            
             <ApplicantsList course={course}/>
             <CourseSettings course={course}/>
             <GroupsList course={course}/>
@@ -25,3 +28,12 @@ export default function CourseManager() {
         </div>
     )
 }
+
+/*
+<div><p>Настройки курса</p></div>
+            <div><p>Заявки</p></div>
+            <div><p>Группы</p></div>
+            <div><p>Ученики</p></div>
+            <div><p>Сданные работы</p></div>
+
+*/

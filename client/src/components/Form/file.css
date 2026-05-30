@@ -1,0 +1,122 @@
+.inputedfile-container {
+    min-width: 280px;
+    max-width: 30%;
+    border: 2px #000 solid;
+    border-radius: 20px;
+    background-color: #fff;
+    font-family: Arial;
+    font-size: 16px;
+    display: flex;
+    align-items: baseline;
+    padding: 10px;
+    box-sizing: border-box;
+    
+}
+
+.inputedfile-data {
+    gap: 5px;
+    display: flex;
+    flex-direction: column;
+    min-width: 230px;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+.inputedfile-data * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+.inputedfile-button-delete {
+    background-color: transparent;
+    border-width: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    width: 30px;
+    box-sizing: border-box;
+}
+
+.inputedfiles-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+    max-height: 200px;
+    overflow: auto;
+    box-sizing: border-box;
+}
+
+.inputedfile-confirmdeletion-container {
+    position: fixed;
+    top: 33%;
+    right: 33%;
+    left: 33%;
+    background-color: #DCE1E4;
+    border: 1px #000 solid;
+    padding: 20px 15px;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+
+}
+
+.inputedfile-confirmdeletion-container p {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.inputedfile-confirmdeletion-buttonscontainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.inputedfile-confirmdeletion-button {
+    height: 30px;
+    padding: 0 15px;
+    font-weight: 600;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.inputedfile-confirmdeletion-button-accept {
+    background-color: #408d01;
+}
+
+.inputedfile-confirmdeletion-button-reject {
+    background-color: #bf4e1e;
+}
+
+@media(max-width: 410px) {
+
+    .inputedfile-confirmdeletion-container {
+        left: 0;
+        right: 0;
+    }
+}
+
+@media (min-width: 410px) and (max-width: 760px ) {
+
+    .inputedfile-confirmdeletion-container {
+        left: 15%;
+        right: 15%;
+    }
+}
+
+@media(max-width: 640px) {
+    .inputedfiles-container {
+        justify-content: center;
+    }
+}

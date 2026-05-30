@@ -31,3 +31,62 @@ footer {
   background-color: rgb(40, 39, 39);
   box-sizing: border-box;
 }
+
+.checkbox-cell {
+    height: .81em;
+    width: 1.6em;
+    border: .2em gray solid;
+    border-radius: 1em;
+    padding: .09em;
+    display: inline-flex;
+    flex-direction: column;
+    font-size: inherit;
+    box-sizing: content-box;
+    background-color: transparent;
+}
+
+.checkbox-cell:disabled {
+  border-color: rgba(128, 128, 128, 0.738);
+}
+
+.checkbox-cell:disabled .checkbox-mark {
+  background-color: rgba(128, 128, 128, 0.738);
+}
+
+.checkbox-cell-on:disabled {
+  border-color: #66a42fb4;
+}
+
+.checkbox-cell-on:disabled .checkbox-mark-on {
+  background-color: #66a42fb4;
+}
+
+.checkbox-mark {
+    height: .8em;
+    width: .8em;
+    border-radius: 1em;
+    background-color: gray;
+    margin: 0;
+} 
+
+.checkbox-mark-on {
+    background-color: #65A42F;
+    align-self: flex-end;
+    
+}
+
+.checkbox-cell-on {
+    border-color: #65A42F;
+}
+
+.fixed-wrap {
+    position: fixed;
+    top:0%;
+    left: 0%;
+    right: 0%;
+    bottom: 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 60;
+}

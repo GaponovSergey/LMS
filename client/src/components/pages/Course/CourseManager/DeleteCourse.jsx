@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useDispatch } from "react-redux";
 import { deleteCourse } from "../../../../store/courseSlice";
+import "./courseSettings.css";
 
 
 export default function DeleteCourse({data}) {
@@ -10,14 +11,16 @@ export default function DeleteCourse({data}) {
 
     return(
         <>
-            <button onClick={()=> setOpened(true)}>Удалить</button>
+            <button className={"coursesettings-deletebutton"} onClick={()=> setOpened(true)}>Удалить курс</button>
             {isOpened &&
-                <div>
+                <div className={"deletecontent-container"}>
                     <p>Вы действительно желаете удалить данный курс?</p>
-                    <button onClick={()=> setOpened(false)}>Нет</button>
-                    <button onClick={ async ()=> {
-                        await dispatch(deleteCourse(data));
-                    }}>Да</button>
+                    <div className={"deletecontent-menu"}>
+                        <button className={"deletecontent-menu-button deletecontent-menu-button-decline"} onClick={()=> setOpened(false)}>Нет</button>
+                        <button className={"deletecontent-menu-button deletecontent-menu-button-accept"} onClick={ async ()=> {
+                            await dispatch(deleteCourse(data));
+                        }}>Да</button>
+                    </div>
                 </div>
             }
         </>

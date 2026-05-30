@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { changeLessonTitle } from "../../../../store/courseSlice";
+import "./changeTitle.css";
 
 
 export default function ChangeTitle({title, changeTitle, children}) {
@@ -24,13 +25,17 @@ export default function ChangeTitle({title, changeTitle, children}) {
         <>
             { isOpened ? 
                 <>
-                    <input type={"text"} value={newTitle} onChange={ e => setNewTitle(e.target.value)} />
-                    <button onClick={confirmHandler}>&#10004;</button>
-                    <button onClick={() => setOpened(false)}>&#10006;</button>
+                    <input className={"changetitle-input"} 
+                        onFocus={(e)=> e.target.select()}  autoFocus={true} type={"text"} value={newTitle} onChange={ e => setNewTitle(e.target.value)} />
+                    <div className={"changetitle-buttons-container"}>
+                        <button className={"changetitle-confirm-button changetitle-confirm-button-agree"} onClick={confirmHandler}>&#10004;</button>
+                        <button className={"changetitle-confirm-button changetitle-confirm-button-disagree"} onClick={() => setOpened(false)}>&#10006;</button>
+                    </div>
+                    
                 </> : 
                 <>
                 {children}
-                <button onClick={() => setOpened(true)}>&#128221;</button>
+                <button className={"changetitle-open-button"} onClick={() => setOpened(true)}>&#128221;</button>
                 </>
             }
         </>

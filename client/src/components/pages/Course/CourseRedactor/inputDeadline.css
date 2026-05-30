@@ -1,0 +1,14 @@
+.deadline-string {
+    width: 80%;
+    align-self: center;
+    font-size: 16px;
+    font-family: Arial;
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+}
+
+.deadline-string-disabled {
+    color: gray;
+} 
+

@@ -58,15 +58,21 @@ export default function Redactor({ref, html = ""}) {
 
         if (toggler.redactor) {
             const selection = document.getSelection().getRangeAt(0);
-            let y = selection.getBoundingClientRect().y;
+            let rect =  selection.getClientRects();
+            if (!rect.length) return;
+            let y = rect[0].y;
             const windowHeight = document.documentElement.clientHeight;
-
+            console.log("y")
+            console.log(y)
             if (y < 100) {
                 y = y >= 0 ? 0 - y : y; 
                 window.scrollBy( 0, y - 150);
             }
+
+            console.log("y1")
+            console.log(y, windowHeight)
             if (y > windowHeight - 50) {
-                window.scrollBy(0, y - windowHeight + 50);
+                window.scrollBy(0, y - windowHeight + 80);
             }
         }
         
@@ -85,7 +91,6 @@ export default function Redactor({ref, html = ""}) {
                     handler.virtualKeyboardHandler(e);
                 } else  handler.keyHandler(e);
             }}
-
 
             onPaste={ (e)=>{
                     e.preventDefault();

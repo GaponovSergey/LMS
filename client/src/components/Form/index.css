@@ -8,16 +8,21 @@ input[type=file] {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60vw;
-    min-width: 280px;
+    width: 100%;
+    min-width: 240px;
     height: 250px;
     border: 3px black;
     border-style: dashed;
     background-color: bisque;
     box-sizing: border-box;
+    padding: 20px;
+    font-family: Arial;
+    font-size: 14px;
+    text-align: justify;
 }
 
 .filesField {
     position: relative;
+    width: 100%;
     
 }

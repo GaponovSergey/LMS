@@ -1,7 +1,7 @@
 .file-link-container {
-    max-width: 350px;
-    min-width: 300px;
-    width: 28%;
+    max-width: 280px;
+    min-width: 250px;
+    width: 100%;
     border: 2px black solid;
     border-radius: 8px;
     background-color: rgb(255, 255, 255);

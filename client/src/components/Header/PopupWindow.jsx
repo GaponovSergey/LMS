@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { close } from "../../store/popupSlice";
 import Logup from "./Logup";
 import Login from "./Login";
-import CreateCourse from "./CreateCourse";
 
 
 export default function PopupWindow() {
@@ -14,11 +13,12 @@ export default function PopupWindow() {
     return(
         <>
         { isOpened && 
-            <div className="popup">
-                <button className="closebutton" onClick={()=> dispatch(close())}>&#x2716;</button>
-                { form === "logup" && <Logup /> }
-                { form === "login" && <Login /> }
-                { form === "courseForm" && <CreateCourse /> }
+            <div className="fixed-wrap">
+                <div className="popup">
+                    <button className="closebutton" onClick={()=> dispatch(close())}>&#x2716;</button>
+                    { form === "logup" && <Logup /> }
+                    { form === "login" && <Login /> }
+                </div>
             </div>
         }
         </>

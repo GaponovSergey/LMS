@@ -51,7 +51,7 @@ export function ToggleButton({className = null, disabled = false, children}) {
     const [isOpened, setOpened] = useContext(SelectContext).toggler;
     return(
         <button className={className} onClick={()=> setOpened(!isOpened)} disabled={disabled}>
-            {children || <>&or;</> }
+            {children || "\u25BC" }
         </button>
     )
 }

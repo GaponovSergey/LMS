@@ -32,7 +32,7 @@ export default function GroupAccessesList({accessesState, groupId = null, disabl
 
     const lessonsList = lessons.length ? lessons.map( lesson => {
 
-        const tasksList = lesson.tasks.map( task => {
+        const tasksList = lesson.tasks && lesson.tasks.map( task => {
 
             const accessesResult = accesses.find( state => state.taskId === task.id);
             const taskAccessesResult = task.accesses.find( state => state.groupId === groupId)
@@ -44,7 +44,7 @@ export default function GroupAccessesList({accessesState, groupId = null, disabl
             const access =  !groupId ? accessesResult?.access ?? true : accessesResult?.access ?? taskAccessesResult?.access;
 
             return(
-                <button disabled={disabled ? "disabled" : ""} key={"taskAccess" + task.id} onClick={ ()=> {
+                <div className={"groupaccesses-task-container"} key={"taskAccess" + task.id}><button disabled={disabled ? "disabled" : ""} className={`checkbox-cell ${access && "checkbox-cell-on"}`} onClick={ ()=> {
                     
                     if(groupId && (task.accesses.find( state => state.groupId === groupId))?.access === !access) {
                         return setAccesses(accesses.filter(state => state.taskId !== task.id));
@@ -65,14 +65,15 @@ export default function GroupAccessesList({accessesState, groupId = null, disabl
                         })
                         return newState;
                     })
-                }}>{access ? "galochka " : "net galochki "}{task.title}</button>
+                }}><div className={`checkbox-mark ${access && "checkbox-mark-on"}`}></div></button><p>{task.title}</p>
+                </div>
             );
         })
 
         return(
-            <div key={"lessonAccess" + lesson.id}>
-                <div>{lesson.title}</div>
-                <div>
+            <div className={"groupaccesses-lesson-container"} key={"lessonAccess" + lesson.id}>
+                <div className={"groupaccesses-lesson-title"}>Задания урока "{lesson.title}":</div>
+                <div className={"groupaccesses-lesson-tasks-container"}>
                     {tasksList}
                 </div>
             </div>

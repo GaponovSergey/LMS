@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import "./inputDeadline.css";
 
 
 
@@ -14,19 +15,22 @@ export default function InputDeadline({formState}) {
 
     return(
         <>
-            <p>
-                {isDisabled ?
-                    <button onClick={()=> {
-                        setDisabled(false)
-                        if (!state) {
-                            setState(deadline);
+            <p className={`deadline-string ${isDisabled && "deadline-string-disabled" }`}>
+                    <div onClick={()=> {
+                        if (isDisabled) {
+                           setDisabled(false)
+                            if (!state) {
+                                setState(deadline);
+                            } 
+                        } else {
+                            setDisabled(true);
+                            setState(null);
                         }
-                    }}>net galochka</button> :
-                    <button onClick={()=> {
-                        setDisabled(true);
-                        setState(null);
-                    }}>galochka</button>
-                }  установить срок сдачи: 
+                        
+                    }} className={`checkbox-cell ${!isDisabled && "checkbox-cell-on" }`}>
+                        <div className={`checkbox-mark ${!isDisabled && "checkbox-mark-on" }`}></div>
+                    </div> 
+                  &nbsp;Установить срок сдачи:&nbsp; 
                     <input type={"datetime-local"} defaultValue={deadline} onChange={(e)=> {
                         setDeadline(e.target.value);
                         setState(e.target.value);

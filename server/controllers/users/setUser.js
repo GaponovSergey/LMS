@@ -34,23 +34,20 @@ export default async function setUser(req, res) {
             include:["Profile"
             ]
         })
-            .catch(()=> { 
-                throw new DataError("такой пользователь уже существует");
-             }); 
-
-        
-    
-        /*const path = join(__dirname, "/../../", "/store/", String(user.id));
-        console.log(user)
-        if (!fs.existsSync(path)) {
-            await fs.mkdir(path, (error)=> {if (error) throw new Error(error);});
-        }*/
-        
 
         res.sendStatus(201);
 
     } catch(err) {
         console.log(err);
+
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            res.status(400);
+            res.json({
+                name: "Отказ в регистрации",
+                message: "Пользователь с таким адресом e-mail уже существует"
+            });
+            return;
+        }
         res.status(400);
         res.json({
             name: err.name,

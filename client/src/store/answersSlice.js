@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 
 export const fetchAnswers = createAsyncThunk("answers/fetchAnswers",
     
     async (data, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/answers/getAnswers?courseId=${data.courseId}`, {
+            const response = await fetch(`${path}/answers/getAnswers?courseId=${data.courseId}`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -25,7 +26,7 @@ export const changeGrade = createAsyncThunk("answers/changeGrade",
     
     async (data, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/answers/changeGrade`, {
+            const response = await fetch(`${path}/answers/changeGrade`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },

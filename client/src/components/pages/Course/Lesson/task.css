@@ -1,11 +1,11 @@
 .task-container {
-    width: 98.5%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     border: 2px black solid;
     border-radius: 6px;
-    margin: 0 12px 12px 0;
+    margin: 0 0 12px 0;
 }
 
 .task-title-container {
@@ -28,8 +28,7 @@
 }
 
 .task-content {
-    min-width: 385px;
-    width: 98%;
+    min-width: 280px;
     min-height: 200px;
     border: 1px black solid;
     padding: 2rem;
@@ -42,4 +41,27 @@
     display: flex;
     flex-wrap: wrap;
     padding: 10px;
+}
+
+.task-deadline-container {
+    border-bottom: 1px #000 solid;
+    min-height: 50px;
+    padding: 0 15px;
+}
+
+.task-deadline-string {
+    font-family: Arial;
+    font-size: 16px;
+} 
+
+@media(max-width: 760px) {
+    .task-container {
+        margin: 12px 0;
+    }
+
+    .task-content {
+        margin: 12px 0;
+        padding: .5rem;
+        border-width: 1px 0;
+    }
 }

@@ -1,0 +1,106 @@
+.completionform-submitbutton {
+    align-self: center;
+    padding: 8px 30px;
+    margin: 10px 0;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    background-color: #408d01;
+    border: 2px #000 solid;
+    border-radius: 4px;
+    text-align: center;
+
+}
+
+.completionform-popup-container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    right: 28%;
+    left: 28%;
+    top: 10%;
+    background-color: #DCE1E4;
+    border: 2px #000 solid;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.completionform-popup-buttonscontainer {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+.completionform-popup-button {
+    height: 30px;
+    padding: 0 15px;
+    font-weight: 600;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.completionform-popup-button-accept {
+    background-color: #408d01;
+}
+
+.completionform-popup-button-reject {
+    background-color: #bf4e1e;
+}
+
+.completionform-container {
+    width: 100%;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    border: 1px #000 solid;
+}
+
+.completionform-wrap {
+    align-self:center;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    font-family: Arial;
+    font-size: 16px;
+}
+
+.completionform-container-line {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 10px;
+}
+
+.completionform-container-line p {
+    margin: 0;
+    padding: 0;
+}
+
+.completionform-container-line:nth-child(odd) {
+    background-color: #8eb4ce;
+}
+
+@media(max-width: 500px) {
+
+    .completionform-popup-container {
+        left: 0;
+        right: 0;
+        padding: 1px;
+    }
+
+    .completionform-container-line {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 500px) and (max-width: 760px ) {
+
+    .completionform-popup-container {
+        left: 15%;
+        right: 15%;
+    }
+}

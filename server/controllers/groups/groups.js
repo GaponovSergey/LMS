@@ -27,5 +27,3 @@ groupsRouter.post("/completeCourse", completeCourse, deleteStudent, deleteFiles,
 groupsRouter.post("/deleteGroup", deleteGroup);
 groupsRouter.post("/deleteStudent", deleteStudent, deleteFiles, (_, res) => res.sendStatus(201));
 groupsRouter.put("/", changeGroup);
-
-groupsRouter.delete("/", ()=>{});

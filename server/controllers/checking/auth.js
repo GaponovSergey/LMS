@@ -3,13 +3,17 @@ import { SessionError } from "../../models/Errors.js";
 
 export default function authentificate(req, res, next) {
     try {
-        if (req.cookie?.token && !req.session.user) {
-            const user = verifyJWT(req.cookie.token);
+        console.log('req.cookie')
+        console.log(req.cookies)
+        if (req.cookies?.token && !req?.session?.user) {
+            const user = verifyJWT(req.cookies.token);
 
-            req.session.user = user;
+            req.session = {user};
+            console.log("req.session.user")
+            console.log(req.session.user)
             next();
         }
-        console.log(req.session.user)
+        //
         next()  
     } catch(err) {
         res.status(400);

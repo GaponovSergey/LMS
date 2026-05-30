@@ -1,0 +1,113 @@
+.groupaccesses-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    gap: 5px;
+}
+
+.groupaccesses-container p {
+    margin: 0;
+    padding: 0 5px;
+}
+
+.groupaccesses-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px #000 solid;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    max-height: 400px;
+    min-height: 10em;
+    overflow: auto;
+}
+
+.groupaccesses-lesson-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    box-sizing: border-box;
+
+}
+
+.groupaccesses-lesson-title {
+    height: 2em;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.groupaccesses-lesson-tasks-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    width: 85%;
+    margin: 5px;
+    align-self: center;
+}
+
+.groupaccesses-task-container {
+    display: flex;
+    align-items: center;
+    height: 2em;
+    width: 100%;
+    padding: 0 15px;
+    gap: 10px;
+    box-sizing: border-box;
+
+}
+
+.groupaccesses-task-container:nth-child(odd) {
+    background-color: #afcee8;
+}
+
+.groupaccesses-button {
+    height: 25px;
+    padding: 0 15px;
+    font-weight: 500;
+    font-size: 14px;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #000;
+    background-color: #e7b82c;
+}
+
+.groupaccesses-button-accept {
+    background-color: #408d01;
+    color: #fff;
+}
+
+.groupaccesses-button-reject {
+    background-color: #bf4e1e;
+    color: #fff;
+}
+
+.groupaccesses-buttons-container {
+    width: 185px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-self: flex-end;
+}
+
+@media (max-width: 400px) {
+    .groupaccesses-lesson-tasks-container {
+        width: 98%;
+        margin: 5px 0;
+    }
+
+    .groupaccesses-lesson-container {
+        padding: 10px 5px;
+    }
+
+    .groupaccesses-list {
+        border-width: 1px 0;
+    }
+}
+

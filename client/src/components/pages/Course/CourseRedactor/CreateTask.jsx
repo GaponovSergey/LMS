@@ -20,10 +20,7 @@ export default function CreateTask({data = { courseId: null, lessonId: null}}) {
                 {isTaskOpened ? " \u25BC Скрыть" : " \u25BA Добавить задание"}
             </button>
             {isTaskOpened &&
-                <div>
-                    
-                    <TaskForm data={{ courseId, lessonId}} close={()=> setTaskOpened(false)}/>
-                </div>
+                <TaskForm data={{ courseId, lessonId}} close={()=> setTaskOpened(false)}/>
             }
         </div>
         

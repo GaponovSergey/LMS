@@ -1,11 +1,11 @@
 .task-form-files-container {
     display: flex;
     flex-direction: column;
-    width: 60%;
-    padding: 20px;
+    width: 80%;
+    min-width: 280px;
     align-self: center;
     align-items: center;
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .task-form-wrap {
@@ -22,11 +22,10 @@
     font-family: Arial;
     display: flex;
     flex-direction: column;
-    padding: 20px;
-    min-width: 300px;
+    min-width: 240px;
     width: 80%;
     align-self: center;
-    box-sizing: border-box;
+    box-sizing: content-box;
 }
 
 .task-form-title * {
@@ -37,6 +36,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    padding: 15px 0;
 }
 
 .task-form-title input[type="text"] {
@@ -56,7 +56,7 @@
   border: 1px black solid;
   border-radius: 3px;
   padding: 7px 10px;
-  margin: 5px;
+  margin: 0px;
   font-family: Arial;
   font-weight: 700;
   font-size: 16px;
@@ -66,8 +66,8 @@
 .task-form-button-container {
     display: flex;
     flex-direction: row-reverse;
-    width: 60%;
-    min-width: 300px;
+    width: 80%;
+    min-width: 280px;
     align-self: center;
-    padding: 20px;
+    margin: 0 0 20px 0;
 }

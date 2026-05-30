@@ -1,7 +1,8 @@
 import React, {useEffect} from "react";
-import { fetchStudents } from "../../../../store/groupsSlice";
+import { fetchStudents, sortStudents } from "../../../../store/groupsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Student from "./Student";
+import "./studentsList.css";
 
 export default function StudentsList({course}) {
 
@@ -20,9 +21,22 @@ export default function StudentsList({course}) {
     const studentsList = students.map(data => <Student data={data} key={`studentList${data.id}`} />)
 
     return(
-        <div>
-            <h4>Список студентов:</h4>
-            <div>
+        <div className={"coursemanager-item-container"}>
+            <p>Список студентов:</p>
+            <div className={"studentslist-list"}>
+                <div className={"studentslist-list-title"}>
+                    <div className={"studentslist-list-title-cell"} onClick={ () => dispatch(sortStudents("surname"))}>
+                        ФИО:
+                    </div>
+                    <div className={"studentslist-list-title-cell"} onClick={ () => dispatch(sortStudents("groupName"))}>
+                        Группа:
+                    </div>
+                    <div className={"studentslist-list-title-cell"} onClick={ () => dispatch(sortStudents("answersCount"))}>
+                        Сдано работ:
+                    </div>
+                    <div className={"studentslist-list-title-cell"}>
+                    </div>
+                </div> 
                 {studentsList}
             </div>
             

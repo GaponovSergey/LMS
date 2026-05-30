@@ -1,0 +1,31 @@
+.form-input-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 2px;
+}
+
+
+.form-input-container input {
+    border-radius: 5px;
+    border: 2px #000 solid;
+    height: 1.5em;
+    font-size: 14px;
+    font-family: Arial;
+
+}
+
+.form-input-container-invalid input:focus {
+  outline: 2px solid rgb(173, 0, 0);
+  outline-offset: 2px;
+}
+
+.form-input-invalidmessage {
+    position: absolute;
+    bottom: -1.5em;
+    left: 0;
+    color: rgb(173, 0, 0);
+    font-size: 10px;
+    text-align: center;
+    background-color: inherit;
+}

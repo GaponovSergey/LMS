@@ -34,7 +34,7 @@ export default function CourseExplorer({userId}) {
                     </div>
                 }
                 { course.group.groupId &&
-                    <div>Ваша группа: <strong>{course.group.groupName}</strong></div>
+                    <div className={"course-groupname-container"}>Ваша группа: <strong>{course.group.groupName}</strong></div>
                 }
                 { course.access === "closed" &&
                     <div>Извините, курс закрыт для просмотра.</div> }

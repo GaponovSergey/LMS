@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAnswers, changeGrade } from "../../../../store/answersSlice";
 import FileLink from "../Lesson/FileLink";
+import "./answers.css";
 
 
 export default function Answers({courseId}) {
@@ -29,11 +30,12 @@ export default function Answers({courseId}) {
     })
 
     return(
-        <>
-            <h4>Работы на проверку:</h4>
-            <div>{newWorks}</div>
-            <div>{evaluatedWorks}</div>
-        </>
+        <div className={"coursemanager-item-container"}>
+            <p>Работы на проверку:</p>
+            <div className={"answers-list"}>{newWorks}</div>
+            <p>Проверенные работы:</p>
+            <div className={"answers-list"}>{evaluatedWorks}</div>
+        </div>
     )
 
 }
@@ -55,28 +57,54 @@ function Answer({data}) {
 
 
     return(
-        <div>
-            <div>
-                <p>Студент: <span>{`${student.surname} ${student.name}`}</span></p>
-                <p>Группа: <span>{student.groups[0].groupName}</span></p>
-                <p>Урок: <span>{task.lesson.title}</span></p>
-                <p>Задание: <span>{task.title}</span></p>
-                <div>Срок сдачи: { task.deadline ?  "до " + dateString.format(new Date(task.deadline)) : "не установлен"}</div> 
-                <div>Дата сдачи: {dateString.format(new Date(createdAt))}</div>
-                <div>Дата изменения: {dateString.format(new Date(updatedAt))}</div>
+        <div className={"answers-list-answer"}>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Студент:</div>
+                <div className="answers-list-string-cell">{`${student.surname} ${student.name}`}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Группа:</div>
+                <div className="answers-list-string-cell">{student.groups[0].groupName}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Урок:</div>
+                <div className="answers-list-string-cell">{task.lesson.title}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Задание:</div>
+                <div className="answers-list-string-cell">{task.title}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Срок сдачи:</div>
+                <div className="answers-list-string-cell">{ task.deadline ?  "до " + dateString.format(new Date(task.deadline)) : "не установлен"}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Дата сдачи:</div>
+                <div className="answers-list-string-cell">{dateString.format(new Date(createdAt))}</div>
+            </div>
+            <div className={"answers-list-string"}>
+                <div className="answers-list-string-cell">Дата изменения:</div>
+                <div className="answers-list-string-cell">{dateString.format(new Date(updatedAt))}</div>
+            </div>
+            <div  className={"answers-list-fileswrap"}>
                 <p>Прикрепленные файлы:</p>
-                <div>
+                <div  className={"answers-list-filescontainer"}>
                     {fileLinks}
                 </div>
-                {grade ? 
-                
-                    <div>
-                        <p>Оценка: {grade}</p>
-                        <EvaluationButton id={id} courseId={courseId}>Изменить оценку</EvaluationButton>
-                    </div> :
-                    <EvaluationButton id={id} courseId={courseId}>Поставить оценку</EvaluationButton>
-                }
             </div>
+            {grade ? 
+                
+                    <>
+                        <div className={"answers-list-string"}>
+                            <div className="answers-list-string-cell"><b>Оценка:</b></div> 
+                            <div className="answers-list-string-cell"><b>{grade}</b></div>
+                        </div>
+                        <EvaluationButton id={id} courseId={courseId}>Изменить оценку</EvaluationButton>
+                    </> :
+                    <EvaluationButton id={id} courseId={courseId}>Поставить оценку</EvaluationButton>
+            }
+                
+            
         </div>
     )
 }
@@ -95,27 +123,28 @@ function EvaluationButton({id, courseId, children}) {
     }
 
     return(
-        <>
-            <button onClick={()=> setOpened(true)}>{children}</button>
-            {isOpened &&
-                <div>
-                    <button onClick={ ()=> setOpened(false)}>Убрать</button>
+        <div className={"answers-list-value-container"}>
+            
+            {isOpened ?
+                <>
+                    <button className={"answers-list-value-button"} onClick={ ()=> setOpened(false)}>Убрать</button>
                     <SetGrade initGradeChanging={initGradeChanging} />
-                </div>
+                </> :
+                <button className={"answers-list-value-button"} onClick={()=> setOpened(true)}>{children}</button>
             }
-        </>
+        </div>
     )
 }
 
 export function SetGrade({initGradeChanging}) {
 
     return(
-        <>
+        <div className={"answers-list-value-gradeslist"}>
             <button onClick={ initGradeChanging(1)}>1</button>
             <button onClick={ initGradeChanging(2)}>2</button>
             <button onClick={ initGradeChanging(3)}>3</button>
             <button onClick={ initGradeChanging(4)}>4</button>
             <button onClick={ initGradeChanging(5)}>5</button>
-        </>
+        </div>
     )
 }

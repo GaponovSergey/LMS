@@ -1,12 +1,13 @@
 .menu {
   position: sticky;
   top: 44px;
+  bottom: 100px;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 3px;
   background-color: #cdd6d3;
-  min-width: 390px;
+  min-width: 280px;
   width: 80%;
   padding: 3px;
   border: 1px black solid;
@@ -18,12 +19,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 0;
   gap: 3px;
   
 }
 
 div[data-type="redactor"] {
-  min-width: 385px;
+  min-width: 280px;
   width: 80%;
   min-height: 500px;
   border: 1px black solid;

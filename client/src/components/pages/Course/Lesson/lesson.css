@@ -1,20 +1,23 @@
 .lesson-container {
-    min-width: 98%;
+    
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    justify-content: center;
     border: 2px black solid;
     border-radius: 6px;
     margin: 12px;
+    padding-bottom: 10px;
     background-color: rgb(192, 210, 188);
     box-sizing: border-box;
 }
 
 .lesson-wrap {
-    min-width: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     margin: 0;
+    box-sizing: border-box;
 }
 
 .lesson-title {
@@ -33,12 +36,10 @@
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
     padding: 0 20px;
-    width: 100%;
 }
 
 .lesson-content {
-    min-width: 385px;
-    width: 98%;
+    min-width: 280px;
     min-height: 200px;
     border: 1px black solid;
     padding: 2rem;
@@ -51,9 +52,64 @@
     display: flex;
     flex-wrap: wrap;
     padding: 8px;
+    justify-content: space-around ;
 }
 
 .lesson-tasks-container {
-    align-self: flex-end;
+    align-self: center;
     width: 94%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items:  flex-end;
+}
+
+.lesson-menu {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+    gap: 15px;
+    box-sizing: border-box;
+}
+
+.lesson-menu-button {
+    height: 30px;
+    padding: 0 10px;
+    border: 1px black solid;
+    border-radius: 5px;
+    font-weight: 800;
+    font-family: Arial;
+}
+
+.lesson-menu-edit-button {
+    background-color: #dcc902;
+    color: #000;
+    
+}
+
+.lesson-menu-delete-button {
+    background-color: #9e1500;
+    color: #fff;
+}
+
+.lesson-deletecontent-paragraph {
+    font-family: Arial;
+}
+
+@media(max-width: 760px) {
+    .lesson-container {
+        margin: 12px 0 2px;
+    }
+
+    .lesson-content {
+        padding: .5rem;
+        margin: 10px 0;
+        border-width: 1px 0;
+    }
+
+    .lesson-tasks-container {
+        align-self: center;
+        align-items: center;
+        width: 98%
+    }
 }

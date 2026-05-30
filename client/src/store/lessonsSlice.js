@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 
 export const changeLessonTitle = createAsyncThunk("lessons/changeLessonTitle",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/lessons/changeLessonTitle`, {
+            const response = await fetch(`${path}/lessons/changeLessonTitle`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -30,7 +31,7 @@ export const changeLessonTitle = createAsyncThunk("lessons/changeLessonTitle",
 export const changeTaskTitle = createAsyncThunk("lessons/changeTaskTitle",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/tasks/changeTaskTitle`, {
+            const response = await fetch(`${path}/tasks/changeTaskTitle`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -54,7 +55,7 @@ export const deleteContent = createAsyncThunk("lessons/deleteContent",
         try {
 
             const {courseId, contentId} = data;
-            const response = await fetch(`http://127.0.0.1:3001/courses/deleteContent`, {
+            const response = await fetch(`${path}/courses/deleteContent`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -76,7 +77,7 @@ export const deleteContent = createAsyncThunk("lessons/deleteContent",
 export const changeContent = createAsyncThunk("lessons/changeContent",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/changeContent`, {
+            const response = await fetch(`${path}/courses/changeContent`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -100,7 +101,7 @@ export const sendAnswer = createAsyncThunk("lessons/sendAnswer",
         try {
 
             
-            const response = await fetch(`http://127.0.0.1:3001/answers/setAnswer`, {
+            const response = await fetch(`${path}/answers/setAnswer`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -128,7 +129,7 @@ export const changeAnswer = createAsyncThunk("lessons/changeAnswer",
         try {
 
             
-            const response = await fetch(`http://127.0.0.1:3001/answers/changeAnswer`, {
+            const response = await fetch(`${path}/answers/changeAnswer`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },

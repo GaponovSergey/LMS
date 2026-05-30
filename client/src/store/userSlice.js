@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 const initialState = {
     account: {
@@ -15,7 +16,7 @@ export const fetchUser = createAsyncThunk("user/fetchUser",
     
     async ({mail, password}, { dispatch })=> {
         try {
-            const response = await fetch("http://127.0.0.1:3001/users/login/", {
+            const response = await fetch(`${path}/users/login/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -36,10 +37,40 @@ export const fetchUser = createAsyncThunk("user/fetchUser",
     
 })
 
+export const fetchLogup = createAsyncThunk('user/logup', async ({mail, 
+    password, 
+    name, 
+    surname, 
+    fathername}, {dispatch})=> {
+    try {
+        const response = await fetch(`${path}/users/logup/`, {
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            method: "POST",
+            body: JSON.stringify({
+                mail, 
+                password, 
+                name, 
+                surname, 
+                fathername
+            })
+        });
+
+        if( response.status >= 400) throw new Error((await response.json()).message);
+        
+        dispatch(close());
+    } catch(err) {
+                let content = err.message;
+                dispatch(setAlert({title: "Ошибка", content}));
+            }
+});
+
+
 export const fetchLogout = createAsyncThunk("user/fetchLogout",
     async (_, { dispatch })=> {
         try {
-            await fetch("http://127.0.0.1:3001/users/logout", {
+            await fetch(`${path}/users/logout`, {
                 credentials: "include",
                 method: "GET"
             });

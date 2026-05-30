@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
 import { setLessons } from "./lessonsSlice";
+import path from "./config.js";
 
 
 export const fetchCourse = createAsyncThunk("course/fetchCourse",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch("http://127.0.0.1:3001/courses/" + courseId, {
+            const response = await fetch(`${path}/courses/` + courseId, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -26,7 +27,7 @@ export const deleteCourse = createAsyncThunk("createCourse/deleteCourse",
     
     async (data, { dispatch })=> {
         try {
-            const response = await fetch("http://127.0.0.1:3001/courses/deleteCourse", {
+            const response = await fetch(`${path}/courses/deleteCourse`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -49,7 +50,7 @@ export const deleteCourse = createAsyncThunk("createCourse/deleteCourse",
 export const changeAccess = createAsyncThunk("course/changeAccess",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/changeAccess`, {
+            const response = await fetch(`${path}/courses/changeAccess`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -71,7 +72,7 @@ export const changeAccess = createAsyncThunk("course/changeAccess",
 export const changeCourseTitle = createAsyncThunk("course/changeCourseTitle",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/changeCourseTitle`, {
+            const response = await fetch(`${path}/courses/changeCourseTitle`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -93,7 +94,7 @@ export const changeCourseTitle = createAsyncThunk("course/changeCourseTitle",
 export const changeCourseDescription = createAsyncThunk("course/changeCourseDescription",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/changeCourseDescription`, {
+            const response = await fetch(`${path}/courses/changeCourseDescription`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -115,7 +116,7 @@ export const changeCourseDescription = createAsyncThunk("course/changeCourseDesc
 export const changeLessonTitle = createAsyncThunk("course/changeLessonTitle",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/lessons/changeLessonTitle`, {
+            const response = await fetch(`${path}/lessons/changeLessonTitle`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -140,7 +141,7 @@ export const changeLessonTitle = createAsyncThunk("course/changeLessonTitle",
 export const changeContent = createAsyncThunk("course/changeContent",
     async (data, {dispatch}) => {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/changeContent`, {
+            const response = await fetch(`${path}/courses/changeContent`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -188,13 +189,13 @@ const slice = createSlice({
 
         },
         setAccess(state, {payload}) {
-            state.access = payload.access;
+            state.access = payload;
         },
         setTitle(state, {payload}) {
-            state.title = payload.title;
+            state.title = payload;
         },
         setDescription(state, {payload}) {
-            state.title = payload.description;
+            state.description = payload;
         },
         pushLesson(state, action) {
             state.lessons.push(action.payload);

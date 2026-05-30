@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
 import { toggleCourseLoading } from "./courseSlice";
+import path from "./config";
 
 
 export const fetchGroups = createAsyncThunk("groups/fetchGroups",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/groups/${courseId}`, {
+            const response = await fetch(`${path}/groups/${courseId}`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -31,7 +32,7 @@ export const fetchStudents = createAsyncThunk("groups/fetchStudents",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/groups/${courseId}/students`, {
+            const response = await fetch(`${path}/groups/${courseId}/students`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -58,7 +59,7 @@ export const addGroup = createAsyncThunk("groups/addGroup",
 
             console.log("addgroup")
             console.log(data)
-            const response = await fetch(`http://127.0.0.1:3001/groups/`, {
+            const response = await fetch(`${path}/groups/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -84,7 +85,7 @@ export const deleteGroup = createAsyncThunk("groups/deleteGroup",
 
             console.log("deletegroup")
             console.log(data)
-            const response = await fetch(`http://127.0.0.1:3001/groups/deleteGroup`, {
+            const response = await fetch(`${path}/groups/deleteGroup`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -108,7 +109,7 @@ export const changeGroup = createAsyncThunk("groups/changeGroup",
     async (data, { dispatch })=> {
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/groups/`, {
+            const response = await fetch(`${path}/groups/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -132,7 +133,7 @@ export const changeGroupName = createAsyncThunk("groups/changeGroupName",
     async (data, { dispatch })=> {
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/groups/changeGroupName`, {
+            const response = await fetch(`${path}/groups/changeGroupName`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -156,7 +157,7 @@ export const changeGroupAccesses = createAsyncThunk("groups/changeGroupAccesses"
     async (data, { dispatch })=> {
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/groups/changeGroupAccesses`, {
+            const response = await fetch(`${path}/groups/changeGroupAccesses`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -180,7 +181,7 @@ export const deleteStudent = createAsyncThunk("groups/deleteStudent",
     async (data, { dispatch })=> {
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/groups/deleteStudent`, {
+            const response = await fetch(`${path}/groups/deleteStudent`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -205,7 +206,7 @@ export const completeCourse = createAsyncThunk("groups/completeCourse",
     async (data, { dispatch })=> {
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/groups/completeCourse`, {
+            const response = await fetch(`${path}/groups/completeCourse`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -236,7 +237,11 @@ const slice = createSlice({
             state.groups = payload;
         },
         setStudents( state, { payload } ) {
-            state.students = payload;
+            state.students = payload.map( student => {
+                return {
+                    ...student,
+                    groupName: student.group.groupName
+                };})
         },
         dropGroup( state, { payload } ) {
             state.groups = state.groups.filter( group => group.id !== payload.groupId);
@@ -244,6 +249,9 @@ const slice = createSlice({
         dropStudent( state, { payload } ) {
             state.students = state.students.filter( student => student.id !== payload.studentId);
 
+        },
+        sortStudents(state, {payload}) {
+            state.students = state.students.sort( (studentA, studentB) => studentA[payload] > studentB[payload])
         }
     }
     
@@ -251,6 +259,6 @@ const slice = createSlice({
 
 
 
-export const {setGroups, setStudents, dropGroup, dropStudent} = slice.actions;
+export const {setGroups, setStudents, dropGroup, dropStudent, sortStudents} = slice.actions;
 
 export default slice.reducer;

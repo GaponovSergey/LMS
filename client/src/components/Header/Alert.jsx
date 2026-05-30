@@ -11,11 +11,13 @@ export default function Alert() {
     return(
         <>
         {isOpened &&
+        <div className="fixed-wrap">
             <div className="popup">
                 <h3>{title}</h3>
                 <p>{content}</p>
                 <button className="header_button" onClick={ ()=> dispatch(close())}>принято</button>
             </div>
+        </div>
         }
         </>  
     )

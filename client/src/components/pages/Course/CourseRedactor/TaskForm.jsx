@@ -52,9 +52,9 @@ export default function TaskForm({data, close}) {
             </div> 
             <DualListBox accessState={accessState} />
             <InputDeadline formState={deadline} />
-            <div className={"task-form-redactor"}>
+            
                 <Redactor ref={redactorRef} html={""} />
-            </div>
+            
             <div className={"task-form-files-container"}>
                 <Files   state={filesState}/> 
             </div>

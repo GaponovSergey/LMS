@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CreateGroup from "./CreateGroup";
 import Group from "./Group";
+import "./groupsList.css";
 
 
 export default function GroupsList({course}) {
@@ -12,9 +13,9 @@ export default function GroupsList({course}) {
     const list = groups.map( group => <Group group={group} groupsCount={groups.length} key={`group${group.id}`}/>)
 
     return(
-        <div>
-            <div>Группы курса:</div>
-            <div>{list}</div>
+        <div className={"coursemanager-item-container"}>
+            <p>Группы курса:</p>
+            <div className="groupslist-list">{list}</div>
             <CreateGroup course={course} />
         </div>
     )

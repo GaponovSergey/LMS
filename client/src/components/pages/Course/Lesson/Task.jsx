@@ -14,6 +14,8 @@ import "./task.css";
 
 export default function Task({taskId, lessonId, courseId}) {
 
+    const [isChangeContentOpened, setChangeContentOpening] = useState(false);
+
     const data = useSelector( state => {
         const lesson = state.lessons.lessons.find( lesson => lesson.id === lessonId);
         console.log("taskdata")
@@ -65,27 +67,32 @@ export default function Task({taskId, lessonId, courseId}) {
                     <h3 className={"task-title"}>{title}</h3>
                 } 
             </div>
-            { userId === authorId ? 
-                <>
-                    <ChangeContent data={{authorId, content, courseId, lessonId, taskId, files: content.files}} key={"changeContent-lesson" + taskId}>
-                        <div className={"task-content"}>{reactContent}</div>
-                        <div  className={"task-files-container"}>{FileLinks}</div>
-                    </ChangeContent>
-                    <DeleteContent data={{courseId, contentId: content.id}} callback={ ()=> dispatch(dropTask({lessonId, taskId}))}>
-                        <p>Вы действительно хотите удалить задание "{title}"?</p>
-                    </DeleteContent>
-                </> :
+            { userId === authorId &&
+                <div className={"task-deadline-container"} >
+                    <p className={"task-deadline-string"}>Срок сдачи: <i>{ deadline ?  "до " + dateString.format(new Date(deadline)) : "не установлен"}</i></p>
+                </div>
+            }
+            {!isChangeContentOpened &&
                 <>
                     <div className={"task-content"}>{reactContent}</div>
                     <div  className={"task-files-container"}>{FileLinks}</div>
                 </>
             }
-            
-            {userId !== authorId ?
-                <TaskCompletionForm answer={answers[0]} deadline={deadline} lessonId={lessonId} taskId={taskId} /> :
-                <div>Срок сдачи: { deadline ?  "до " + dateString.format(new Date(deadline)) : "не установлен"}</div>
+            { userId === authorId && !isChangeContentOpened &&
+                <div className={"lesson-menu"}>
+                    <DeleteContent data={{courseId, contentId: content.id}} callback={ ()=> dispatch(dropTask({lessonId, taskId}))}>
+                        <p>Вы действительно хотите удалить задание "{title}"?</p>
+                    </DeleteContent>
+                    <button onClick={()=> {setChangeContentOpening(true)}} className={"lesson-menu-button lesson-menu-edit-button"}>Редактировать</button>
+                </div> 
             }
-            
+            { isChangeContentOpened &&
+                <ChangeContent data={{authorId, content, courseId, lessonId, taskId, files: content.files}} 
+                    close={() => setChangeContentOpening(false)} key={"changeTaskContent" + content.id}/>
+            }            
+            { userId !== authorId &&
+                <TaskCompletionForm answer={answers[0]} deadline={deadline} lessonId={lessonId} taskId={taskId} />                 
+            }            
         </div>
     )
 }

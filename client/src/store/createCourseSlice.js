@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 
 export const fetchCourseForm = createAsyncThunk("createCourse/fetchCourseForm",
     
     async (data, { dispatch })=> {
         try {
-            const response = await fetch("http://127.0.0.1:3001/courses/", {
+            const response = await fetch(`${path}/courses/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },

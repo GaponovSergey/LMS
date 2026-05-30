@@ -1,0 +1,61 @@
+.changetitle-open-button {
+  background-color: #916f00;
+  border: 1px black solid;
+  border-radius: 3px;
+  margin: 8px 10px;
+  padding-left: 5px;
+  height: 30px;
+  width: 30px;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.changetitle-input {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 5px;
+    color: #000;
+    border: 2px black solid;
+    border-radius: 3px;
+    background-color: #86ce48;
+    min-width: 200px;
+    max-width: 900px;
+    width: 58%;
+}
+
+.changetitle-input:focus {
+  outline: 2px dashed black;
+  outline-offset: 1px;
+}
+
+.changetitle-confirm-button {
+  border: 1px black solid;
+  border-radius: 3px;
+  padding: 0px 4px;
+  color: #fff;
+  height: 35px;
+  width: 35px;
+  font-family: Arial;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.changetitle-confirm-button-agree {
+  background-color:#3682fb;
+} 
+
+.changetitle-confirm-button-disagree {
+  background-color:#bf4e1e;
+} 
+
+.changetitle-buttons-container {
+    display: flex;
+    gap: 4px;
+    padding: 5px;
+    align-items: center;
+    margin: 0;
+}

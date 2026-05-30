@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
+import path from "./config.js";
 
 export const fetchCourses = createAsyncThunk("courses/fetchCourses",
     
     async (_, { dispatch })=> {
         try {
-            const response = await fetch("http://127.0.0.1:3001/courses");
+            const response = await fetch(`${path}/courses`, { method: "GET"});
             dispatch(addCourses(await response.json()));
             dispatch(toggleCoursesLoading( ) );
         } catch(err) {

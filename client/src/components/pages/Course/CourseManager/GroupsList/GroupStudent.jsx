@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import SelectGroup from "./SelectGroup";
@@ -16,14 +16,15 @@ export default function GroupStudent({student, groupId}) {
     const dispatch = useDispatch();
     
     return(
-        <div>
-            <div>
-                <span>{`${student.surname} ${student.name} ${student.fathername}`}</span>
-                <button onClick={()=> setOpening(!isOpened)}>Перевести в другую группу</button>
+        <div className={"groupslist-member"} >
+            <p>{`${student.surname} ${student.name} ${student.fathername}`}</p>
+            <div  className={"groupslist-member-changegroup-button-wrap"}>
+                <button className={"groupslist-member-changegroup-button"} onMouseDown={()=> {setOpening(!isOpened)}}>Перевести в другую группу</button>
+                {isOpened &&
+                    <ChangeGroup studentId={student.id} groupId={groupId} close={()=> setOpening(!isOpened)}/>
+                }
             </div>
-            {isOpened &&
-                <ChangeGroup studentId={student.id} groupId={groupId} close={()=> setOpening(false)}/>
-            }
-        </div> 
+            
+        </div>
     )
 }

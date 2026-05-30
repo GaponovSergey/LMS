@@ -1,0 +1,31 @@
+.courseredactor-tabs-container {
+    width: 100%;
+    margin: 0;
+    
+    height: 60px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.courseredactor-tabs-crossline {
+    border-bottom: 2px #000 solid;
+    width: 100%;
+    flex-shrink: 3;
+}
+
+.courseredactor-tabs-tab {
+    border: 2px #000 solid;
+    height: 45px;
+    width: 180px;
+    border-radius: 6px 6px 0 0;
+    flex-shrink: 1;
+    background-color: #3682fb;
+    color: #fff;
+
+}
+
+.courseredactor-tabs-tab:disabled {
+    border-bottom-width: 0;
+    background-color: inherit;
+    color: #000;
+}

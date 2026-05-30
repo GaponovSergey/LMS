@@ -6,26 +6,9 @@ import { useDispatch } from "react-redux";
 import { changeContent, updateContent } from "../../../../store/lessonsSlice";
 import "./lectureForm.css";
 
-const ChangeContent = ({data, children}) => {
-
-    const [isOpened, setOpened] = useState(false);
+const ChangeContent = ({data, close}) => {
 
     
-   return(
-        <>
-            { !isOpened ? 
-                <>
-                    {children}
-                    <button onClick={()=> setOpened(true)}>Редактировать</button>
-                </> :
-
-                <ContentForm data={data} close={ ()=> setOpened(false)}/>
-            }
-        </>
-    )
-}
-
-function ContentForm({data, close}) {
     const { authorId, courseId, content, lessonId, taskId = null,  files = []} = data;
     const dispatch = useDispatch();
 

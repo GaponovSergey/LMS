@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 
 
@@ -7,7 +8,7 @@ export const getCourseContent = createAsyncThunk("navigator/getCourseContent",
     async ({courseId}, {dispatch}) => {
         try {
 
-            const res = await fetch(`http://127.0.0.1:3001/courses/navigator?courseId=${courseId}`);
+            const res = await fetch(`${path}/courses/navigator?courseId=${courseId}`);
             const content = await res.json();
             console.log("content")
             console.log(content)

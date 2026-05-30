@@ -5,8 +5,19 @@ import "./fileLink.css";
 
 export default function FileLink({data}) {
 
+
+    return(
+        
+            <div className={"file-link-container"}>
+                <FileData data={data} />
+            </div>
+        
+    );
+}
+
+export function FileData({data}) {
+
     let { name, size, createdAt, storeId, authorId, courseId } = data;
-    const dispatch = useDispatch();
 
     const dateString = new Intl.DateTimeFormat("ru", {
         year: "numeric",
@@ -16,16 +27,16 @@ export default function FileLink({data}) {
         minute: "numeric"
     });
 
-
     return(
         
-            <div className={"file-link-container"}>
+            <>
                 <a className={"file-link"} href={`http://localhost:3001/store/${courseId}/${storeId}`} target={"_blank"}>{name}</a>
                 <p>размер: <i>{defineSize(size)}</i></p>
                 <p>добавлен: <i>{dateString.format(new Date(createdAt)) }</i></p>
-            </div>
+            </>
         
     );
+
 }
 
 function defineSize(size, i = 0) {

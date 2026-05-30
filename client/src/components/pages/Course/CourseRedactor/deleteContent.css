@@ -1,0 +1,72 @@
+.deletecontent-container {
+    position: fixed;
+    max-width: 700px;
+    top: 35%;
+    left: 35%;
+    right: 35%;
+    background-color: #cdd6d3;
+    border: 1px #000 solid;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.deletecontent-container p {
+    margin: 0;
+}
+
+.deletecontent-menu {
+    display: flex;
+    width: 150px;
+    justify-content: space-around;
+    
+}
+
+.deletecontent-menu-button {
+    height: 30px;
+    width: 50px;
+    text-align: center;
+    font-family: Arial;
+    font-weight: 800;
+    border: 1px #000 solid;
+    border-radius: 5px;
+}
+
+.deletecontent-menu-button-accept {
+    background-color: #408d01;
+    color: #fff;
+} 
+.deletecontent-menu-button-decline {
+    background-color: #9e1500;
+    color: #fff;
+} 
+
+@media(min-width: 556px) and (max-width: 775px) {
+    .deletecontent-container {
+        left: 15%;
+        right: 15%;
+    }
+}
+
+@media(min-width: 975px) and (max-width: 1290px) {
+    .deletecontent-container {
+        left: 30%;
+        right: 30%;
+    }
+}
+
+@media(min-width: 776px) and (max-width: 974px) {
+    .deletecontent-container {
+        left: 25%;
+        right: 25%;
+    }
+}
+
+@media (max-width: 555px) {
+    .deletecontent-container {
+        left: 2%;
+        right: 2%;
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import {Select, SelectString, ToggleButton, Options, Option} from "../../../../Form/Redactor/models/Select";
+import "./selectGroup.css";
 
 
 export default function SelectGroup({setGroup, defaultGroup = null, outerValue = "default"}) {
@@ -14,7 +15,7 @@ export default function SelectGroup({setGroup, defaultGroup = null, outerValue =
     }, [groups])
 
     const groupsList = groups.map(group => 
-                    <Option value={group.id} className={"font-option"} 
+                    <Option value={group.id} className={"selectgroup-option"} 
                         isDefault={group.id === (defaultGroup ? defaultGroup : groups[0].id)} 
                         key={"group" + group.id}>
                         <span >{group.groupName}</span>
@@ -22,14 +23,20 @@ export default function SelectGroup({setGroup, defaultGroup = null, outerValue =
 
     return(
         
-                <Select>
-                    <SelectString onChange={ groupId => setGroup(groupId)} valueOnly={false} outerValue={outerValue}>
+                <Select className={"selectgroup-container"}>
+                    <SelectString onChange={ groupId => setGroup(groupId)}  className={"selectgroup-string"} valueOnly={false} outerValue={outerValue}>
                         <span>---</span>
                     </SelectString>
-                    <ToggleButton />
-                    <Options>
-                        {groupsList}
-                    </Options>
+                    <ToggleButton className={"selectgroup-toggle"} />
+                    <div className={"selectgroup-options-wrap"}>
+                        <Options className={'selectgroup-options'}>
+                            <div className={"selectgroup-options-inner"}>
+                                {groupsList}
+                            </div>
+                            
+                        </Options>
+                    </div>
+                    
                 </Select>
             
     )

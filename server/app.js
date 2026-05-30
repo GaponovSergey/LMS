@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import * as dotenv from "dotenv";
 
 import { usersRouter } from "./controllers/users/users.js";
 import { coursesRouter } from "./controllers/courses/courses.js";
@@ -15,15 +16,29 @@ import { answersRouter } from "./controllers/answers/answers.js";
 
 export const app = express();
 
-const host = '127.0.0.1';
-const port = 3001;
+dotenv.config({path: "../.env"})
 
+const host = process.env.SERVER_HOST;
+const port = process.env.SERVER_PORT;
 
+console.log(host)
 app.set('trust proxy', 1);
-app.use(cors({maxAge: 86400, origin: 'http://localhost:3000', credentials: true, exposedHeaders: ['Set-Cookie', 'Date', 'ETag'] }));
+app.use((req, res, next) => {
+    console.log("req.headers")
+    console.log(req.headers.origin)
+    console.log(req.headers)
+    next()
+})
+app.use(cors({
+    maxAge: 86400, 
+    origin: [`http://${host}:3000`, 'http://localhost:3000'], 
+    credentials: true, 
+    exposedHeaders: ['Set-Cookie', 'Date', 'ETag'] }
+
+));
 app.use(express.json());
 app.use(cookieParser());
-app.use(setSession(), authentificate);
+app.use(authentificate);
 
 app.use("/users", usersRouter);
 

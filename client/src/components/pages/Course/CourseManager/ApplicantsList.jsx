@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApplicants } from "../../../../store/applySlice";
 import Applicant from "./Applicant";
 import SelectGroup from "./GroupsList/SelectGroup";
+import "./applicants.css"
 
 
 export default function ApplicantsList({course}) {
@@ -18,11 +19,11 @@ export default function ApplicantsList({course}) {
     const applicantsList = applicants.map((user )=> <Applicant user={user} groupId={groupId} course={course} key={`applicant${user.id}`}/>)
 
     return(
-        <div>
+        <div className={"coursemanager-item-container"}>
             <div><p>Принимающая группа:</p>
                 <SelectGroup setGroup={setGroup} />
             </div>
-            <div><div>Список заявок на вступление на курс:</div><div>{applicantsList}</div></div>
+            <div><p>Список заявок на вступление на курс:</p><div className={"applicants-list"}>{applicantsList}</div></div>
         </div>
     )
 }

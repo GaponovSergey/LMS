@@ -1,13 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
 import { fetchGroups } from "./groupsSlice";
+import path from "./config";
 
 
 export const applyForCourse = createAsyncThunk("apply/applyForCourse",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/${courseId}/setApplicant`, {
+            const response = await fetch(`${path}/${courseId}/setApplicant`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -27,7 +28,7 @@ export const withdrawCourseApplication = createAsyncThunk("apply/withdrawCourseA
     
     async ({ courseId }, { dispatch })=> {
         try {
-            await fetch(`http://127.0.0.1:3001/courses/${courseId}/deleteApplicant`, {
+            await fetch(`${path}/courses/${courseId}/deleteApplicant`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -44,7 +45,7 @@ export const fetchApplicationStatus = createAsyncThunk("apply/fetchApplicationSt
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/${courseId}/getApplicant`, {
+            const response = await fetch(`${path}/courses/${courseId}/getApplicant`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -63,7 +64,7 @@ export const fetchApplicants = createAsyncThunk("apply/fetchApplicants",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`http://127.0.0.1:3001/courses/${courseId}/getApplicants`, {
+            const response = await fetch(`${path}/courses/${courseId}/getApplicants`, {
                 credentials: 'include', 
                 method: "GET"
             });
@@ -87,7 +88,7 @@ export const acceptApplicant = createAsyncThunk("apply/acceptApplicant",
 
             console.log("authorId"); console.log(authorId);
 
-            await fetch(`http://127.0.0.1:3001/courses/${courseId}/acceptApplicant`, {
+            await fetch(`${path}/courses/${courseId}/acceptApplicant`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -110,7 +111,7 @@ export const declineApplicant = createAsyncThunk("apply/declineApplicant",
     async ({ courseId, authorId, userId }, { dispatch })=> {
         try {
 
-            await fetch(`http://127.0.0.1:3001/courses/${courseId}/declineApplicant`, {
+            await fetch(`${path}/courses/${courseId}/declineApplicant`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },

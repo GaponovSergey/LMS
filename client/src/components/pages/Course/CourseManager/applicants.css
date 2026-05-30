@@ -1,0 +1,71 @@
+
+.applicants-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 400px;
+    border: 1px #000 solid;
+    box-sizing: border-box;
+    font-family: Arial;
+    font-size: 16px;
+    overflow: auto;
+}
+
+.applicants-select-openbutton {
+    background-color: #dcc902;
+    border: 1px #000 solid;
+    border-radius: 3px;
+}
+
+.applicant-container {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
+    padding: 8px 15px;
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.applicant-container:nth-child(odd) {
+    background-color: #8eb4ce;
+}
+
+.applicant-container p {
+    margin: 0;
+    padding: 0;
+    width: 50%;
+}
+
+.applicant-buttonscontainer {
+    display: flex;
+    width: 210px;
+    justify-content: space-between;
+}
+
+.applicant-button {
+    height: 25px;
+    padding: 0 15px;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px #000 solid;
+    border-radius: 3px;
+    color: #fff;
+}
+
+.applicant-button-accept {
+    background-color: #408d01;
+}
+
+.applicant-button-reject {
+    background-color: #bf4e1e;
+}
+
+@media (max-width: 580px) {
+    .applicant-container {
+        font-size: 14px;
+    }
+}
+

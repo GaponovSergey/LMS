@@ -3,6 +3,7 @@ import { toggleCourseLoading,  } from "./courseSlice";
 import { pushLesson, pushTask } from "./lessonsSlice"
 import { setAlert } from "./alertSlice";
 import { triggerNavLoading } from "./navigatorSlice";
+import path from "./config";
 
 export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
     
@@ -15,7 +16,7 @@ export const fetchLessonForm = createAsyncThunk("createLesson/fetchLessonForm",
 
             
 
-            const response = await fetch(`http://127.0.0.1:3001/lessons/`, {
+            const response = await fetch(`${path}/lessons/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -46,7 +47,7 @@ export const fetchTaskForm = createAsyncThunk("createLesson/fetchTaskForm",
 
         try {
 
-            const response = await fetch(`http://127.0.0.1:3001/tasks/`, {
+            const response = await fetch(`${path}/tasks/`, {
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },

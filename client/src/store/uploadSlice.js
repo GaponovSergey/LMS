@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
+import path from "./config";
 
 export const uploadFilesData = createAsyncThunk( "upload/uploadFilesData",
     async (files, {dispatch, getState}) => {
@@ -30,7 +31,7 @@ export const uploadFilesData = createAsyncThunk( "upload/uploadFilesData",
             console.log("uploadFilesData")
             console.log(body)
 
-            const response = await fetch('http://127.0.0.1:3001/store/uploadFilesData', {
+            const response = await fetch(`${path}/store/uploadFilesData`, {
                     headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                     },
@@ -56,7 +57,7 @@ export const uploadFile = createAsyncThunk( "upload/uploadFile", async ({storeId
 
         console.log("uploadFile")
 
-        const response = await fetch(`http://127.0.0.1:3001/store/upload/uploadFile`, {
+        const response = await fetch(`${path}/store/upload/uploadFile`, {
             headers:{
                 "Content-Type": file.type,
                 "X-File-Id": storeId,
@@ -100,7 +101,7 @@ export const uploadFiles = createAsyncThunk(
             }
 
 
-            const response = await fetch('http://127.0.0.1:3001/store/upload', {
+            const response = await fetch(`${path}/store/upload`, {
                 headers: {
                 'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -112,7 +113,7 @@ export const uploadFiles = createAsyncThunk(
             const ids = await response.json();
 
             for(let i = 0; i < files.length; i++) {
-                await fetch(`http://127.0.0.1:3001/store/upload/${authorId}`, {
+                await fetch(`${path}/store/upload/${authorId}`, {
                     headers:{
                         "Content-Type": files[i].type,
                         "X-File-Id": ids[i].storeId   

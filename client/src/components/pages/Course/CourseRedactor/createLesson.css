@@ -5,7 +5,8 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    margin: 8px;
+    margin: 10px 0px;
+    gap: 20px;
 }
 
 .lessons-create-button {
