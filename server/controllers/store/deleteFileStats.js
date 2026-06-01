@@ -1,6 +1,7 @@
 import { File } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
 import { Op } from "sequelize";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function deleteFileStats(req, res, next) {
@@ -17,10 +18,6 @@ export default async function deleteFileStats(req, res, next) {
         next();
  
     } catch(err) {
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
 }

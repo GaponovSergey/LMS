@@ -1,5 +1,6 @@
 import { Profile, Group, GroupProfile, File, Answer } from "../../models/sequelize.js";
 import { ValidationError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function deleteStudent(req, res, next) {
@@ -36,8 +37,8 @@ export default async function deleteStudent(req, res, next) {
             where: {
                 courseId: req.body.courseId,
                 authorId: req.body.studentId
-            }
-        })
+            },
+            transaction: req.transaction || null})
 
         console.log(fileIds)
 
@@ -50,25 +51,20 @@ export default async function deleteStudent(req, res, next) {
                 where: {
                     studentId: req.body.studentId, 
                     courseId: req.body.courseId
-                }
-        })
+                },
+                transaction: req.transaction || null})
         
 
         await GroupProfile.destroy({
             where: {
                 userId: req.body.studentId
-            }
-        })
+            },
+            transaction: req.transaction || null})
 
         return next();
 
     } catch(err) {
-        res.status(400);
-        console.log(err);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
     
 }

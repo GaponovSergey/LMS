@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import "./fileLink.css";
+import path from "../../../../store/config";
 
 
 export default function FileLink({data}) {
@@ -30,7 +31,7 @@ export function FileData({data}) {
     return(
         
             <>
-                <a className={"file-link"} href={`http://localhost:3001/store/${courseId}/${storeId}`} target={"_blank"}>{name}</a>
+                <a className={"file-link"} href={`${path}/store/${courseId}/${storeId}`} target={"_blank"}>{name}</a>
                 <p>размер: <i>{defineSize(size)}</i></p>
                 <p>добавлен: <i>{dateString.format(new Date(createdAt)) }</i></p>
             </>

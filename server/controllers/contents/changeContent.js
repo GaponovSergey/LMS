@@ -1,5 +1,6 @@
 import { Content } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 export default async function changeContent(req, res, next) {
     try {
@@ -14,7 +15,7 @@ export default async function changeContent(req, res, next) {
                 id: contentId
             },
             returning: true
-        });
+        }, {transaction: req.transaction || null});
 
         console.log("changeContent")
         console.log(result)
@@ -24,12 +25,7 @@ export default async function changeContent(req, res, next) {
 
         next();
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err)
     }
     
 }

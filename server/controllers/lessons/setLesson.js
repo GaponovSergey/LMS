@@ -1,5 +1,6 @@
 import { Lesson, Content, ContentFile } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 
@@ -15,11 +16,13 @@ export default async function setLesson(req, res) {
 
         const lesson = {
             title, courseId,
-            authorId: req.session.user.id,
+            authorId: req.session.user.account.id,
             contentId
         };
 
-        const createdLesson = await Lesson.create(lesson);
+        const createdLesson = await Lesson.create(lesson, {transaction: req.transaction || null});
+
+        await req.transaction.commit();
 
         const result = {...createdLesson.get({plain: true})};
         result.content = req.body.result.content;
@@ -29,11 +32,6 @@ export default async function setLesson(req, res) {
         res.json(result)
 
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
 }

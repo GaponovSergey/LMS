@@ -7,7 +7,7 @@ export default async function getApplicant(req, res) {
     try {
 
         const courseId = req.params.courseId;
-        const userId = req.session.user.id;
+        const userId = req.session.user.account.id;
         
         const data = await Applicant.findOne({
             where: { courseId, userId } 

@@ -1,6 +1,7 @@
 
 import { ValidationError, DataError } from "../../models/Errors.js";
 import { Applicant, ContentFile, Course, File, Group, GroupProfile, Lesson, Task, TaskAccess, Content } from "../../models/sequelize.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function deleteCourse(req, res, next) {
@@ -25,8 +26,9 @@ export default async function deleteCourse(req, res, next) {
             {
                 where: {
                     id: req.body.courseId,
-                    authorId: req.session.user.id
-                }
+                    authorId: req.session.user.account.id
+                }, 
+                transaction: req.transaction
             }
         );
 
@@ -34,7 +36,7 @@ export default async function deleteCourse(req, res, next) {
             throw new DataError("Курс не найден")
         }
 
-        const checking = [
+        /*const checking = [
             await Lesson.findAll({raw: true}),
             await Task.findAll({raw: true}),
             await Content.findAll({raw: true}),
@@ -50,17 +52,14 @@ export default async function deleteCourse(req, res, next) {
         console.log("checkingdelete")
         console.log(...checking)
 
-        req.body.res = checking;
+        req.body.res = checking;*/
 
         if (req.body.files.toRemove.length) return next();
-
         
+        await req.transaction.commit();
+        res.sendStatus(200);
 
     } catch(err) {
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err)
     }
 }

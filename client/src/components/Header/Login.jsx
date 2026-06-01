@@ -15,7 +15,7 @@ export default function Login() {
         <div className="popup_form">
             <h3>Вход</h3>
             <div className="popup_form">
-                <p><span>e-mail: </span><InputText type={"mail"} setState={setMailState} validation={{
+                <p><span>e-mail: </span><InputText type={"email"} setState={setMailState} validation={{
                         minLength: 5,
                         mask: new RegExp(/^\w+@\w+\.\w+$/), 
                         maskError: "введенная строка не является e-mail"

@@ -11,6 +11,7 @@ import checkCourseDataRights from "../checking/checkCourseDataRights.js";
 import deleteStudent from "./deleteStudent.js";
 import deleteFiles from "../store/deleteFiles.js";
 import completeCourse from "./completeCourse.js";
+import { startTransaction, completeTransaction } from "../checking/transaction.js";
 
 export const groupsRouter = Router();
 
@@ -20,10 +21,10 @@ groupsRouter.get("/:courseId", getGroups);
 
 groupsRouter.use(checkCourseChangeRights);
 
-groupsRouter.post("/", setGroup);
+groupsRouter.post("/", startTransaction, setGroup);
 groupsRouter.put("/changeGroupAccesses", changeGroupAccesses);
 groupsRouter.put("/changeGroupName", changeGroupName);
-groupsRouter.post("/completeCourse", completeCourse, deleteStudent, deleteFiles, (_, res) => res.sendStatus(201));
+groupsRouter.post("/completeCourse", startTransaction, completeCourse, deleteStudent, deleteFiles, completeTransaction);
 groupsRouter.post("/deleteGroup", deleteGroup);
-groupsRouter.post("/deleteStudent", deleteStudent, deleteFiles, (_, res) => res.sendStatus(201));
+groupsRouter.post("/deleteStudent", startTransaction, deleteStudent, deleteFiles, completeTransaction);
 groupsRouter.put("/", changeGroup);

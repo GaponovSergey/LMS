@@ -1,20 +1,16 @@
 import { User } from "../../models/sequelize.js";
 import argon2 from "argon2";
 import { DataError, ValidationError, SessionError } from "../../models/Errors.js";
-import fs from "fs";
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
+
+
 
 export default async function setUser(req, res) {
-
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = dirname(__filename);
 
     console.log(req.body);
     
     try{
 
-        if (req.session.user) {
+        if (req.session?.user) {
             throw new SessionError("Вы уже авторизованы");
         }
         if (!req.body || !req.body.mail || !req.body.password) {

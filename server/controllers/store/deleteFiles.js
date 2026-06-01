@@ -3,6 +3,7 @@ import { ValidationError, DataError } from "../../models/Errors.js";
 import fs from "fs";
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function deleteFiles(req, res, next) {
@@ -29,11 +30,6 @@ export default async function deleteFiles(req, res, next) {
         next(); 
 
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err);
     }
 }

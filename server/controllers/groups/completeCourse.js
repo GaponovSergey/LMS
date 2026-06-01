@@ -1,4 +1,5 @@
 import { CompletedCourse, Course, Lesson, Answer, Task } from "../../models/sequelize.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 
@@ -24,23 +25,18 @@ export default async function completeCourse(req, res, next) {
                 }],
                 required: false
             }]
-        })
+        });
 
         await CompletedCourse.create({
             id: req.body.studentId,
             course: JSON.stringify(course),
             finalGrade: req.body.finalGrade
-        })
+        }, {transaction: req.transaction || null});
 
         return next();
 
     } catch(err) {
-        res.status(400);
-        console.log(err);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
     
 }

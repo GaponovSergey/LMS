@@ -1,6 +1,7 @@
 
 import { GroupProfile } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function acceptApplicant(req, res, next) {
@@ -10,6 +11,8 @@ export default async function acceptApplicant(req, res, next) {
         
         await GroupProfile.create({
             groupId, userId  
+        }, {
+            transaction: req.transaction || null
         }).catch((err)=> {
             throw new DataError(`Найти заявку не удалось: ${err.message}`)
         });
@@ -18,10 +21,6 @@ export default async function acceptApplicant(req, res, next) {
         next();
          
     } catch(err) {
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err)
     }
 }

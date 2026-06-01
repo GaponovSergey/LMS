@@ -1,6 +1,7 @@
 
 import { Applicant, Course } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function setApplicant(req, res) {
@@ -10,7 +11,7 @@ export default async function setApplicant(req, res) {
 
         console.log("req.session")
         console.log(req.session.user)
-        const userId = req.session.user.id;
+        const userId = req.session.user.account.id;
 
         console.log("courseId")
         console.log(courseId)
@@ -34,11 +35,6 @@ export default async function setApplicant(req, res) {
         res.json({ appliedStatus });
          
     } catch(err) {
-        console.log(err)
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
 }

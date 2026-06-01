@@ -34,7 +34,7 @@ export default async function getCourse(req, res) {
             return res.json(course);
         }
 
-        if (req.session.user.id === course.authorId) {
+        if (req.session.user.account.id === course.authorId) {
             await getCourseAsAuthor(course);
             return res.json(course);
         } 
@@ -48,7 +48,7 @@ export default async function getCourse(req, res) {
         
         course.group = await GroupProfile.findOne({
             where: {
-                userId: req.session.user.id,                },
+                userId: req.session.user.account.id,                },
                 attributes: [ "groupId", [sequelize.col("group.groupName"), "groupName"], [sequelize.col("group->course.id"), "courseId"]],
             include: [{
                 model: Group,
@@ -67,14 +67,14 @@ export default async function getCourse(req, res) {
 
         if (course.access === "groups only") {
             if (course.group) {
-                await getCourseAsGroupMember(course, req.session.user.id)
+                await getCourseAsGroupMember(course, req.session.user.account.id)
             }
             return res.json(course);
         }
 
         if (course.access === "opened") {
             if (course.group) {
-                await getCourseAsGroupMember(course, req.session.user.id)
+                await getCourseAsGroupMember(course, req.session.user.account.id)
             } else {
                 await getCourseAsGuest(course);
             }

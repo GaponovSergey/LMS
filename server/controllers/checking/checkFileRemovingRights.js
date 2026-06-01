@@ -14,7 +14,7 @@ export default async function checkFileRemovingRights(req, res, next) {
         attributes: ["id"], 
         where: {
             storeId: req.body.files.toRemove,
-            authorId: req.session.user.id
+            authorId: req.session.user.account.id
         }
     })
 

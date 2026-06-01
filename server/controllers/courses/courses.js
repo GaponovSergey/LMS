@@ -16,7 +16,7 @@ import dropFilesDependencies from "../contents/dropFilesDependencies.js";
 import deleteContent from "../contents/deleteContent.js";
 import deleteFiles from "../store/deleteFiles.js";
 import checkFileRemovingRights from "../checking/checkFileRemovingRights.js";
-
+import { startTransaction, completeTransaction } from "../checking/transaction.js";
 
 
 
@@ -29,13 +29,14 @@ coursesRouter.use("/", applicantsRouter);
 coursesRouter.get("/:courseId", getCourse);
 coursesRouter.get("/", getCourses);
 
-coursesRouter.post("/", checkAccess, setCourse);
+coursesRouter.post("/", checkAccess, startTransaction, setCourse);
 
 coursesRouter.use(checkCourseChangeRights);
 
 coursesRouter.put("/changeAccess", changeAccess);
-coursesRouter.put("/changeContent", changeContent, setFilesDependencies, dropFilesDependencies, checkFileRemovingRights, deleteFiles, (req, res) => res.json(req.body.result));
+coursesRouter.put("/changeContent", startTransaction, changeContent, 
+    setFilesDependencies, dropFilesDependencies, checkFileRemovingRights, deleteFiles, completeTransaction);
 coursesRouter.post("/deleteContent", deleteContent)
 coursesRouter.put("/changeCourseTitle", changeCourseTitle);
 coursesRouter.put("/changeCourseDescription", changeCourseDescription);
-coursesRouter.post("/deleteCourse", deleteCourse, deleteFiles, (req, res) => res.status(200).json(req.body.res));
+coursesRouter.post("/deleteCourse", startTransaction, deleteCourse, deleteFiles, completeTransaction);

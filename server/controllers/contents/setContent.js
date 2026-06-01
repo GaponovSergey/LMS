@@ -1,5 +1,6 @@
 import { Content } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 export default async function setContent(req, res, next) {
     try {
@@ -9,7 +10,7 @@ export default async function setContent(req, res, next) {
         } 
         
         const {content, html, courseId} = req.body
-        const result = await Content.create({content, html, courseId});
+        const result = await Content.create({content, html, courseId}, {transaction: req.transaction || null});
         
         req.body.contentId = result.id;
         req.body.result = req.body.result ?? { };
@@ -17,12 +18,7 @@ export default async function setContent(req, res, next) {
 
         next();
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err);
     }
     
 }

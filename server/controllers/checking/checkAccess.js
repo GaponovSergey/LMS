@@ -14,10 +14,10 @@ export default async function checkAccess(req, res, next) {
             if (!req.session.user) {
                 throw new SessionError("Пользователь не авторизован");
             }
-            if (req.session.user.access === 2 && req.session.user.id !== req.body.authorId) {
+            if (req.session.user.account.access === 2 && req.session.user.account.id !== req.body.authorId) {
                 throw new SessionError("Пользователь не имеет прав доступа");
             }
-            if (req.session.user.access < 3 ) {
+            if (req.session.user.account.access < 3 ) {
                 throw new SessionError("Пользователь не имеет прав доступа");
             }
 

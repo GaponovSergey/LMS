@@ -1,5 +1,6 @@
 import { ContentFile, File } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 export default async function dropFilesDependencies(req, res, next) {
     try {
@@ -23,7 +24,8 @@ export default async function dropFilesDependencies(req, res, next) {
             where: {
                 fileId: files.toDelete,
                 contentId
-            }
+            }, 
+            transaction: req.transaction || null
         })
 
         req.body.result.deletedFiles = req.body.files.toDelete
@@ -31,12 +33,7 @@ export default async function dropFilesDependencies(req, res, next) {
         next();
 
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err)
     }
     
 }

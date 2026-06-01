@@ -1,5 +1,6 @@
 import { File } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function setFiles(req, res) {
@@ -15,10 +16,6 @@ export default async function setFiles(req, res) {
         res.json(files);
  
     } catch(err) {
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err);
     }
 }

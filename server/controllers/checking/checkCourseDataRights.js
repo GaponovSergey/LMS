@@ -12,7 +12,7 @@ export default async function checkCourseDataRights(req, res, next) {
         const isAuthor = await Course.findOne({
             where:{
                 id: req.params.courseId,
-                authorId: req.session.user.id
+                authorId: req.session.user.account.id
             }
         });
 

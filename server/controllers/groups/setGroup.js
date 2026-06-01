@@ -1,6 +1,7 @@
 
 import { Group, TaskAccess } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function setGroup(req, res) {
@@ -10,10 +11,11 @@ export default async function setGroup(req, res) {
             throw new ValidationError("Поля не заполнены");
         }
         console.log(req.body);
+
         const group = await Group.create({
             groupName: req.body.groupName,
             courseId: req.body.courseId,
-        }).catch((err)=> {
+        }, {transaction: req.transaction || null}).catch((err)=> {
             throw new DataError(`Создать группу не удалось: ${err.message}`)
         });
 
@@ -22,15 +24,11 @@ export default async function setGroup(req, res) {
             return task;
         })
 
-        await TaskAccess.bulkCreate(taskAccesses);
+        await TaskAccess.bulkCreate(taskAccesses, {transaction: req.transaction || null});
 
         res.sendStatus(201);
  
     } catch(err) {
-        res.status(400);
-        res.json({
-            name: err.name,
-            message: err.message
-        })
+        errorHandler(req, res, err)
     }
 }

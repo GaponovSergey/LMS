@@ -11,9 +11,9 @@ export default function authentificate(req, res, next) {
             req.session = {user};
             console.log("req.session.user")
             console.log(req.session.user)
-            next();
+            return next();
         }
-        //
+        
         next()  
     } catch(err) {
         res.status(400);

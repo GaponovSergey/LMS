@@ -52,15 +52,6 @@ export default async function login(req, res) {
             });
         //}
 
-        
-
-        /*req.session.user = {
-            id: user.id,
-            mail: user.mail,
-            level: user.access,
-            createdAt: user.createdAt
-        };*/
-
         res.json(body);
 
     } catch(error) {

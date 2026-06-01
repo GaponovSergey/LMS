@@ -15,15 +15,15 @@ export default async function checkCourseChangeRights(req, res, next) {
             if (!req.session.user) {
                 throw new SessionError("Пользователь не авторизован");
             }
-            if (req.session.user.access === 2 ) {
+            if (req.session.user.account.access === 2 ) {
                 const course = await Course.findOne({where: {
                     id: req.body.courseId,
-                    authorId: req.session.user.id
+                    authorId: req.session.user.account.id
                 }}).catch((err => {throw new SessionError("Пользователь не имеет прав доступа к данному курсу")}));
 
                 if (!course) throw new SessionError("Пользователь не имеет прав доступа к данному курсу")
             }
-            if (req.session.user.access < 3 ) {
+            if (req.session.user.account.access < 3 ) {
                 throw new SessionError("Пользователь не имеет прав доступа");
             }
 

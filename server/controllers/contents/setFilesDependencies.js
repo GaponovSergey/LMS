@@ -1,5 +1,6 @@
 import { ContentFile, File } from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 export default async function setFilesDependencies(req, res, next) {
     try {
@@ -27,7 +28,7 @@ export default async function setFilesDependencies(req, res, next) {
         console.log(contentFiles)
         console.log(req.body.result)
 
-        await ContentFile.bulkCreate(contentFiles, {raw: true}).catch( err => {
+        await ContentFile.bulkCreate(contentFiles, {transaction: req.transaction || null}).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
 
@@ -44,12 +45,7 @@ export default async function setFilesDependencies(req, res, next) {
         next();
 
     } catch(err) {
-        res.status(400);
-        console.log(err)
-        res.json({
-            name: err.name,
-            message: err.message
-        });
+        errorHandler(req, res, err);
     }
     
 }

@@ -1,5 +1,6 @@
 import { Task, TaskAccess, Group, Lesson} from "../../models/sequelize.js";
 import { ValidationError, DataError } from "../../models/Errors.js";
+import errorHandler from "../../models/errorHandler.js";
 
 
 export default async function setTask(req, res) {
@@ -13,7 +14,7 @@ export default async function setTask(req, res) {
         const {title = null, groupsAccess = [], lessonId, contentId, deadline = null} = req.body;
         const task = {
             title, lessonId, contentId,
-            authorId: req.session.user.id,
+            authorId: req.session.user.account.id,
             deadline
         };
 
@@ -21,7 +22,7 @@ export default async function setTask(req, res) {
         console.log(groupsAccess)
         await checkGroups(req.body);
 
-        const createdTask = await Task.create(task).catch( err => {
+        const createdTask = await Task.create(task, {transaction: req.transaction || null}).catch( err => {
             throw new DataError(`Создать элемент не удалось: ${err.message}`)
         });
 
@@ -33,7 +34,12 @@ export default async function setTask(req, res) {
             return group;
         });
 
-        const accesses = await TaskAccess.bulkCreate(taskAccess, {attributes: ["taskId", "groupId", "access"]})
+        const accesses = await TaskAccess.bulkCreate(taskAccess, {
+            attributes: ["taskId", "groupId", "access"], 
+            transaction: req.transaction || null
+        })
+
+        if (req.transaction) await req.transaction.commit();
 
         const result = {...createdTask.get({plain: true})};
         result.accesses = accesses;
@@ -44,9 +50,7 @@ export default async function setTask(req, res) {
         res.json(result)
 
     } catch(err) {
-        res.status(400);
-        console.log(err);
-        res.json(err);
+        errorHandler(req, res, err);
     }
 }
 
