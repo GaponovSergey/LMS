@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { close } from "./popupSlice";
 import { setAlert } from "./alertSlice";
-import path from "./config";
+import path from "./config.js";
 
 
 export const fetchCourseForm = createAsyncThunk("createCourse/fetchCourseForm",

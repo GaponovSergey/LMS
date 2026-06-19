@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { fetchCourse } from "../../../store/courseSlice";
 import Lesson from "./Lesson/Lesson";
-import Navigator from "./Navigator";
 import ButtonApplyFor from "./ButtonApplyFor";
+import SubscribeButton from "./SubscribeButton";
 import "./index.css";
 
 
 export default function CourseExplorer({userId}) {
 
     const { courseId } = useParams();
-    const dispatch = useDispatch();
+    
     
     console.log("courseExplorer")
     
@@ -34,7 +33,9 @@ export default function CourseExplorer({userId}) {
                     </div>
                 }
                 { course.group.groupId &&
-                    <div className={"course-groupname-container"}>Ваша группа: <strong>{course.group.groupName}</strong></div>
+                    <div className={"course-groupname-container"}>Ваша группа: <strong>{course.group.groupName}</strong>
+                    <SubscribeButton groupId={course.group.groupId} subscribed={course.group.subscribed} />
+                    </div>
                 }
                 { course.access === "closed" &&
                     <div>Извините, курс закрыт для просмотра.</div> }
@@ -43,9 +44,12 @@ export default function CourseExplorer({userId}) {
                         <div>Доступ к курсу ограничен. Чтобы просмотреть данный курс, необходимо подать заявку</div>)
                 }
                 {course.access === "opened" && lessons}
+                
                
         </>
     )
 }
+
+
 
 

@@ -17,6 +17,8 @@ import deleteContent from "../contents/deleteContent.js";
 import deleteFiles from "../store/deleteFiles.js";
 import checkFileRemovingRights from "../checking/checkFileRemovingRights.js";
 import { startTransaction, completeTransaction } from "../checking/transaction.js";
+import subscribePush from "./subscribePush.js";
+import subscribeCourse from "./subscribeCourse.js";
 
 
 
@@ -30,6 +32,7 @@ coursesRouter.get("/:courseId", getCourse);
 coursesRouter.get("/", getCourses);
 
 coursesRouter.post("/", checkAccess, startTransaction, setCourse);
+coursesRouter.post("/subscribePush", startTransaction, subscribePush, subscribeCourse, completeTransaction);
 
 coursesRouter.use(checkCourseChangeRights);
 

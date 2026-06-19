@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import * as dotenv from "dotenv";
+import {EventEmitter} from "node:events";
+
+console.log("app.js")
 
 import { usersRouter } from "./controllers/users/users.js";
 import { coursesRouter } from "./controllers/courses/courses.js";
@@ -14,19 +16,18 @@ import { answersRouter } from "./controllers/answers/answers.js";
 
 export const app = express();
 
-dotenv.config({path: "../.env"})
 
 const host = process.env.SERVER_HOST;
 const port = process.env.SERVER_PORT;
 
 console.log(host)
 app.set('trust proxy', 1);
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
     console.log("req.headers")
     console.log(req.headers.origin)
     console.log(req.headers)
     next()
-})
+})*/
 app.use(cors({
     maxAge: 86400, 
     origin: [`http://${host}:3000`, 'http://localhost:3000'], 
@@ -54,6 +55,8 @@ app.get("/", (req, res)=> {
 })
 
 app.listen(port, host, ()=> console.log("сервер запущен"));
+
+
 
 
 

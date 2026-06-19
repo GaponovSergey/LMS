@@ -13,13 +13,13 @@ export default function GroupAccessesList({accessesState, groupId = null, disabl
         if (!groupId) {
 
             const tasksAccesses = lessons.map( lesson => {
-                return lesson.tasks.map( task => {
+                return lesson?.tasks?.map( task => {
                     return {
                         taskId: task.id,
                         groupId,
                         access: true
                     }
-                })
+                }) || []
             });
 
             setAccesses([].concat(...tasksAccesses));

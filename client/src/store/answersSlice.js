@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
-import path from "./config";
+import path from "./config.js";
 
 
 export const fetchAnswers = createAsyncThunk("answers/fetchAnswers",

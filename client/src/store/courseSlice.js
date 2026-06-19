@@ -160,7 +160,26 @@ export const changeContent = createAsyncThunk("course/changeContent",
     }
 );
 
+export const subscribePush = createAsyncThunk("course/subscribePush",
+    
+    async (data, { dispatch })=> {
+        try {
+            const response = await fetch(`${path}/courses/subscribePush` , {
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                credentials: 'include', 
+                method: "POST",
+                body: JSON.stringify(data)
+            });
 
+            dispatch(changeSubscribe());
+            
+        } catch(err) {
+            let content = err.message;
+            dispatch(setAlert({title: "Ошибка", content}));
+        }
+})
 
 const slice = createSlice({
     name: "course",
@@ -173,7 +192,8 @@ const slice = createSlice({
         loadingTrigger: false, 
         group: {
             groupId: null,
-            groupName: null
+            groupName: null,
+            subscribed: false
         }
     }, 
     reducers: {
@@ -234,6 +254,9 @@ const slice = createSlice({
                 ...state.lessons[index], ...payload
             }
         },
+        changeSubscribe( state) {
+            state.group.subscribed = !state.group.subscribed;
+        },
         toggleCourseLoading( state ) {
             state.loadingTrigger = !state.loadingTrigger
         }
@@ -243,6 +266,6 @@ const slice = createSlice({
 
 
 
-export const { setCourse, toggleCourseLoading, pushLesson, pushTask, setAccess, setTitle, setDescription, changeLesson, updateContent } = slice.actions;
+export const { setCourse, toggleCourseLoading, pushLesson, pushTask, setAccess, setTitle, setDescription, changeLesson, updateContent, changeSubscribe } = slice.actions;
 
 export default slice.reducer;

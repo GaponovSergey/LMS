@@ -1,5 +1,4 @@
-const SERVER_HOST = '46.187.40.199'
-const SERVER_PORT = '3001'
 
-const path = `http://${SERVER_HOST}:${SERVER_PORT}`
+
+const path = `http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}`
 export default path;

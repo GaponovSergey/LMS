@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { setAlert } from "./alertSlice";
 import { fetchGroups } from "./groupsSlice";
-import path from "./config";
+import path from "./config.js";
 
 
 export const applyForCourse = createAsyncThunk("apply/applyForCourse",
     
     async ({ courseId }, { dispatch })=> {
         try {
-            const response = await fetch(`${path}/${courseId}/setApplicant`, {
+            const response = await fetch(`${path}/courses/${courseId}/setApplicant`, {
                 credentials: 'include', 
                 method: "GET"
             });

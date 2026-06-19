@@ -9,6 +9,17 @@
     min-width: 200px;
 }
 
+.course-subscribebutton {
+    font-family: Arial;
+    font-size: 15px;
+    padding: 6px 15px;
+    color: #000;
+    font-weight: 600;
+    background-color: #dfbe00;
+    border: 1px #000 solid;
+    border-radius: 6px;
+    margin: 6px 0;
+}
 
 .course-title-container, .course-description-container {
     width: 100%;

@@ -3,7 +3,7 @@ import { ValidationError, DataError } from "../../models/Errors.js";
 import errorHandler from "../../models/errorHandler.js";
 
 
-export default async function setTask(req, res) {
+export default async function setTask(req, res, next) {
         
     try {
 
@@ -34,20 +34,23 @@ export default async function setTask(req, res) {
             return group;
         });
 
+        req.body.taskId = createdTask.id;
+
         const accesses = await TaskAccess.bulkCreate(taskAccess, {
             attributes: ["taskId", "groupId", "access"], 
             transaction: req.transaction || null
         })
 
-        if (req.transaction) await req.transaction.commit();
 
         const result = {...createdTask.get({plain: true})};
         result.accesses = accesses;
         result.content = req.body.result.content;
         result.content.files = req.body.result.createdFiles || [];
         
-        res.status(201);
-        res.json(result)
+        
+        res.locals = result;
+
+        next();
 
     } catch(err) {
         errorHandler(req, res, err);

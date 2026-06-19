@@ -48,8 +48,9 @@ export default async function getCourse(req, res) {
         
         course.group = await GroupProfile.findOne({
             where: {
-                userId: req.session.user.account.id,                },
-                attributes: [ "groupId", [sequelize.col("group.groupName"), "groupName"], [sequelize.col("group->course.id"), "courseId"]],
+                userId: req.session.user.account.id,                
+            },
+                attributes: [ "groupId", "subscribed", [sequelize.col("group.groupName"), "groupName"], [sequelize.col("group->course.id"), "courseId"]],
             include: [{
                 model: Group,
                 attributes: [],
@@ -64,6 +65,7 @@ export default async function getCourse(req, res) {
         
         console.log("group.toJSON()");
         console.log(course.group);
+
 
         if (course.access === "groups only") {
             if (course.group) {

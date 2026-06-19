@@ -40,4 +40,12 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js")
+
+    }
+    console.log("window.pushManager")
+    console.log(window["PushManager"])
+  </script>
 </html>

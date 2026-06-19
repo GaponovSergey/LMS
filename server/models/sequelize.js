@@ -15,9 +15,13 @@ import defineGroup from "./tables/Group.js";
 import defineGroupProfile from "./tables/GroupProfile.js";
 import defineTaskAccess from "./tables/TaskAccess.js";
 import defineCompletedCourse from "./tables/CompletedCourse.js";
+import definePushSubscribers from "./tables/PushSubscribers.js";
+import defineDeferredNotifications from "./tables/DeferredNotifications.js";
+
+console.log("sequelize.js")
 
 
-export const sequelize = new Sequelize("LMS", "administrator", "12345", { 
+export const sequelize = new Sequelize("LMS", process.env.DB_USER, process.env.DB_PASSWORD, { 
   dialect: "postgres", 
   dialectOptions: {
     timezone: "UTC"
@@ -46,6 +50,8 @@ export const Group = await defineGroup(sequelize, DataTypes);
 export const GroupProfile = await defineGroupProfile(sequelize, DataTypes);
 export const TaskAccess = await defineTaskAccess(sequelize, DataTypes);
 export const CompletedCourse = await defineCompletedCourse(sequelize, DataTypes, Sequelize);
+export const PushSubscribers = await definePushSubscribers(sequelize, DataTypes);
+export const DeferredNotifications = await defineDeferredNotifications(sequelize, DataTypes);
 
 User.hasMany(Course, {
   foreignKey: "authorId"
@@ -93,7 +99,7 @@ Course.hasMany(Applicant,  {onDelete: "CASCADE"});
 Applicant.belongsTo(Profile, { foreignKey: "userId" });
 
 Course.hasMany( Group);
-Group.belongsTo(Course);
+Group.belongsTo(Course, {foreignKey: "courseId"});
 
 Group.belongsToMany(Profile, {through:  GroupProfile, as: "students"});
 Profile.belongsToMany(Group, {through: GroupProfile, foreignKey: "userId"}); 
@@ -122,5 +128,9 @@ Profile.hasMany( Answer, {foreignKey: "studentId", onDelete: "CASCADE"})
 CompletedCourse.belongsTo( Profile, {onDelete: "CASCADE"})
 Profile.hasOne( CompletedCourse, {onDelete: "CASCADE"})
 
+DeferredNotifications.hasMany( TaskAccess, { foreignKey: "taskId"})
+
 sequelize.sync({alter: true}); 
+
+
 

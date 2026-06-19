@@ -21,7 +21,7 @@ groupsRouter.get("/:courseId", getGroups);
 
 groupsRouter.use(checkCourseChangeRights);
 
-groupsRouter.post("/", startTransaction, setGroup);
+groupsRouter.post("/", startTransaction, setGroup, completeTransaction);
 groupsRouter.put("/changeGroupAccesses", changeGroupAccesses);
 groupsRouter.put("/changeGroupName", changeGroupName);
 groupsRouter.post("/completeCourse", startTransaction, completeCourse, deleteStudent, deleteFiles, completeTransaction);

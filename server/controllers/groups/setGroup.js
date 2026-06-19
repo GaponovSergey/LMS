@@ -4,7 +4,7 @@ import { ValidationError, DataError } from "../../models/Errors.js";
 import errorHandler from "../../models/errorHandler.js";
 
 
-export default async function setGroup(req, res) {
+export default async function setGroup(req, res, next) {
     try {
 
         if (!req.body || !req.body.groupName || !req.body.courseId || !req.body.accesses) {
@@ -26,7 +26,7 @@ export default async function setGroup(req, res) {
 
         await TaskAccess.bulkCreate(taskAccesses, {transaction: req.transaction || null});
 
-        res.sendStatus(201);
+        next()
  
     } catch(err) {
         errorHandler(req, res, err)

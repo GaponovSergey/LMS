@@ -17,6 +17,10 @@ export default function defineGroupProfile(sequelize, DataTypes) {
                 model: "Profiles",
                 key: "id"
             }
+        },
+        subscribed: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
         
     }, {

@@ -13,5 +13,9 @@ export async function completeTransaction(req, res) {
 
     await req.transaction.commit();
 
+    if (Object.keys(res.locals).length) {
+        return res.status(201).json(res.locals);
+    }
+
     res.sendStatus(200);
 }

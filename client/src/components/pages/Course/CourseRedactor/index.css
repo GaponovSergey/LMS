@@ -17,9 +17,13 @@
     border: 2px #000 solid;
     height: 45px;
     width: 180px;
+    font-family: Arial;
+    padding: 0 5px;
     border-radius: 6px 6px 0 0;
     flex-shrink: 1;
-    background-color: #3682fb;
+    background-color: #373b41;
+    font-weight: 500;
+    box-sizing: border-box;
     color: #fff;
 
 }
